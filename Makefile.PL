@@ -9,7 +9,7 @@ WriteMakefile(
     ($] >= 5.005 ?     ## Add these new keywords supported since 5.005
       (ABSTRACT_FROM  => 'lib/ZOOM.pm', # retrieve abstract from module
        AUTHOR         => 'Mike Taylor <mike@>') : ()),
-    LIBS              => ['-lyaz '], # e.g., '-lm'
+    LIBS              => ['-lyaz -lxml2 '], # e.g., '-lm'
     DEFINE            => '', # e.g., '-DHAVE_SOMETHING'
 	# Insert -I. if you add *.h files later:
     INC               => '', # e.g., '-I/usr/include/other'
