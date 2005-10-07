@@ -2,5 +2,5 @@ Revision history for Perl extension ZOOM.
 
 0.01  Fri Oct  7 16:14:20 2005
 	- original version; created by h2xs 1.23 with options
-		--name=ZOOM --compat-version=5.8.0 --omit-constant --skip-exporter --skip-ppport --autogen-xsubs yaz/zoom.h -lyaz
+		--name=ZOOM --compat-version=5.8.0 --omit-constant --skip-exporter --skip-ppport --autogen-xsubs yaz/zoom.h -lyaz -lxml2
 
