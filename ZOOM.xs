@@ -7,6 +7,8 @@
 
 MODULE = ZOOM		PACKAGE = ZOOM		
 
+PROTOTYPES: ENABLE
+
 
 const char *
 ZOOM_connection_addinfo(c)
