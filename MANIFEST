@@ -6,3 +6,4 @@ typemap
 ZOOM.xs
 t/ZOOM.t
 lib/ZOOM.pm
+MANIFEST.SKIP
