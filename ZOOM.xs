@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.6 2005-10-11 11:36:08 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.7 2005-10-11 12:11:17 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -7,7 +7,7 @@
 #include <yaz/zoom.h>
 
 
-MODULE = Net::Z3950::ZOOM		PACKAGE = Net::Z3950::ZOOM		
+MODULE = Net::Z3950::ZOOM		PACKAGE = Net::Z3950::ZOOM		PREFIX=ZOOM_
 
 PROTOTYPES: ENABLE
 
