@@ -1,4 +1,4 @@
-package ZOOM;
+package Net::Z3950::ZOOM; 
 
 use 5.008;
 use strict;
@@ -10,7 +10,7 @@ our @ISA = qw();
 our $VERSION = '0.01';
 
 require XSLoader;
-XSLoader::load('ZOOM', $VERSION);
+XSLoader::load('Net::Z3950::ZOOM', $VERSION);
 
 # Preloaded methods go here.
 
@@ -22,16 +22,16 @@ __END__
 
 =head1 NAME
 
-ZOOM - Perl extension for blah blah blah
+Net::Z3950::ZOOM - Perl extension for blah blah blah
 
 =head1 SYNOPSIS
 
-  use ZOOM;
+  use Net::Z3950::ZOOM;
   blah blah blah
 
 =head1 DESCRIPTION
 
-Stub documentation for ZOOM, created by h2xs. It looks like the
+Stub documentation for Net::Z3950::ZOOM, created by h2xs. It looks like the
 author of the extension was negligent enough to leave the stub
 unedited.
 
