@@ -5,7 +5,7 @@
 #include <yaz/zoom.h>
 
 
-MODULE = ZOOM		PACKAGE = ZOOM		
+MODULE = Net::Z3950::ZOOM		PACKAGE = Net::Z3950::ZOOM		
 
 PROTOTYPES: ENABLE
 

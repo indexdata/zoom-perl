@@ -4,6 +4,6 @@ MANIFEST
 README
 typemap
 ZOOM.xs
-t/ZOOM.t
-lib/ZOOM.pm
+t/Net-Z3950-ZOOM.t
+lib/Net/Z3950/ZOOM.pm
 MANIFEST.SKIP
