@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.7 2005-10-11 12:11:17 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.8 2005-10-11 15:44:33 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -12,6 +12,8 @@ MODULE = Net::Z3950::ZOOM		PACKAGE = Net::Z3950::ZOOM		PREFIX=ZOOM_
 PROTOTYPES: ENABLE
 
 
+# TESTED
+#
 # It seems that when one of these functions is called from Perl with
 # a string-constant argument, that is not recognised as suitable to
 # be mapped onto a "const char*" argument.  The only fix I can find is
@@ -34,6 +36,8 @@ ZOOM_connection_connect(c, host, portnum)
 	const char *	host
 	int	portnum
 
+# TESTED
+#
 void
 ZOOM_connection_destroy(c)
 	ZOOM_connection	c
@@ -43,6 +47,8 @@ ZOOM_connection_option_get(c, key)
 	ZOOM_connection	c
 	const char *	key
 
+# TESTED
+#
 void
 ZOOM_connection_option_set(c, key, val)
 	ZOOM_connection	c
@@ -56,6 +62,8 @@ ZOOM_connection_option_setl(c, key, val, len)
 	const char *	val
 	int	len
 
+# TESTED
+#
 # The reference parameters, `cp' and `addinfo', need to already have
 # values when this function is called, otherwise an "uninitialised
 # value" warning is generated.  As far as I can see, there is no way
@@ -115,15 +123,19 @@ ZOOM_connection_search(arg0, q)
 	ZOOM_connection	arg0
 	ZOOM_query	q
 
+# TESTED
+#
 # "const" discarded from type of `q'
 ZOOM_resultset
 ZOOM_connection_search_pqf(c, q)
-	ZOOM_connection	c
+	ZOOM_connection c
 	char *q
 
+# TESTED
+#
 void
 ZOOM_resultset_destroy(r)
-	ZOOM_resultset	r
+	ZOOM_resultset r
 
 const char *
 ZOOM_resultset_option_get(r, key)
@@ -136,9 +148,11 @@ ZOOM_resultset_option_set(r, key, val)
 	const char *	key
 	const char *	val
 
+# TESTED
+#
 size_t
 ZOOM_resultset_size(r)
-	ZOOM_resultset	r
+	ZOOM_resultset r
 
 void
 ZOOM_resultset_records(r, recs, start, count)
@@ -147,6 +161,8 @@ ZOOM_resultset_records(r, recs, start, count)
 	size_t	start
 	size_t	count
 
+# TESTED
+#
 ZOOM_record
 ZOOM_resultset_record(s, pos)
 	ZOOM_resultset	s
@@ -161,11 +177,18 @@ void
 ZOOM_resultset_cache_reset(r)
 	ZOOM_resultset	r
 
+# TESTED
+#
+# "const" discarded from type of `type'
+# See "typemap" for discussion of the "const char *" return-type.
 const char *
 ZOOM_record_get(rec, type, len)
-	ZOOM_record	rec
-	const char *	type
-	int *	len
+	ZOOM_record rec
+	char* type
+	int &len
+	OUTPUT:
+		RETVAL
+		len
 
 void
 ZOOM_record_destroy(rec)
