@@ -1,4 +1,4 @@
-# $Id: Net-Z3950-ZOOM.t,v 1.2 2005-10-11 11:36:52 mike Exp $
+# $Id: Net-Z3950-ZOOM.t,v 1.3 2005-10-11 11:44:48 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl Net-Z3950-ZOOM.t'
@@ -15,20 +15,22 @@ BEGIN { use_ok('Net::Z3950::ZOOM') };
 # Insert your test code below, the Test::More module is use()ed here so read
 # its man page ( perldoc Test::More ) for help writing this test script.
 
-my $host = "localhost";
-my $port = 3950;
+my $host = "indexdata.com/gils";
+my $port = 0;
 my $errcode;
 my($errmsg, $addinfo) = ("dummy", "dummy");
 
 my $conn = Net::Z3950::ZOOM::ZOOM_connection_new($host, $port);
-if (($errcode = Net::Z3950::ZOOM::ZOOM_connection_error($conn, $errmsg, $addinfo)) != 0) {
+$errcode = Net::Z3950::ZOOM::ZOOM_connection_error($conn, $errmsg, $addinfo);
+if ($errcode != 0) {
     die("Can't connect to host '$host', port '$port': ",
 	"errcode='$errcode', errmsg='$errmsg', addinfo='$addinfo'");
 }
 
 my $query = '@attr 1=4 taylor';
 my $rs = Net::Z3950::ZOOM::ZOOM_connection_search_pqf($conn, $query);
-if (($errcode = Net::Z3950::ZOOM::ZOOM_connection_error($conn, $errmsg, $addinfo)) != 0) {
+$errcode = Net::Z3950::ZOOM::ZOOM_connection_error($conn, $errmsg, $addinfo);
+if ($errcode != 0) {
     die("Can't search for '$query': ",
 	"errcode='$errcode', errmsg='$errmsg', addinfo='$addinfo'");
 }
