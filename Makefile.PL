@@ -1,3 +1,5 @@
+# $Id: Makefile.PL,v 1.4 2005-10-11 11:35:47 mike Exp $
+
 use 5.008;
 use ExtUtils::MakeMaker;
 # See lib/ExtUtils/MakeMaker.pm for details of how to influence

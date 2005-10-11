@@ -1,3 +1,5 @@
+# $Id: typemap,v 1.2 2005-10-11 11:36:33 mike Exp $
+
 ZOOM_connection					T_PTROBJ
 ZOOM_connection *				T_PTROBJ
 ZOOM_options					T_PTROBJ

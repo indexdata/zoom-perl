@@ -1,3 +1,5 @@
+# $Id: ZOOM.pm,v 1.2 2005-10-11 11:37:07 mike Exp $
+
 package Net::Z3950::ZOOM; 
 
 use 5.008;
