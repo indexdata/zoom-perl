@@ -1,4 +1,4 @@
-# $Id: 1-Net-Z3950-ZOOM.t,v 1.1 2005-10-12 09:48:05 mike Exp $
+# $Id: 1-Net-Z3950-ZOOM.t,v 1.2 2005-10-12 11:56:31 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl Net-Z3950-ZOOM.t'
@@ -46,15 +46,12 @@ if ($errcode != 0) {
 }
 
 my $n = Net::Z3950::ZOOM::resultset_size($rs);
-print STDERR "Result count: $n\n";
 
 for (my $i = 0; $i < $n; $i++) {
     my $rec = Net::Z3950::ZOOM::resultset_record($rs, $i);
     my $len = 0;
     my $data = Net::Z3950::ZOOM::record_get($rec, "render", $len);
-    print STDERR "=== record ", $i+1, " of $n ===\n", $data;
     my $raw = Net::Z3950::ZOOM::record_get($rec, "raw", $len);
-    print STDERR "--- raw version ---\n", $raw;
 }
 
 Net::Z3950::ZOOM::resultset_destroy($rs);

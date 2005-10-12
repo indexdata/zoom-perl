@@ -1,4 +1,4 @@
-# $Id: 2-ZOOM.t,v 1.1 2005-10-12 09:48:21 mike Exp $
+# $Id: 2-ZOOM.t,v 1.2 2005-10-12 11:56:27 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl ZOOM.t'
@@ -32,14 +32,11 @@ my $query = '@attr 1=4 minerals';
 my $rs = $conn->search_pqf($query);
 
 my $n = $rs->size($rs);
-print STDERR "Result count: $n\n";
 
 for (my $i = 0; $i < $n; $i++) {
     my $rec = $rs->record($i);
     my $data = $rec->render();
-    print STDERR "=== record ", $i+1, " of $n ===\n", $data;
     my $raw = $rec->raw();
-    print STDERR "--- raw version ---\n", $raw;
 }
 
 $rs->destroy();
