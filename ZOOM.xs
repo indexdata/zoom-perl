@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.8 2005-10-11 15:44:33 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.9 2005-10-12 09:45:36 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -42,18 +42,20 @@ void
 ZOOM_connection_destroy(c)
 	ZOOM_connection	c
 
+# TESTED
+#
 const char *
 ZOOM_connection_option_get(c, key)
 	ZOOM_connection	c
-	const char *	key
+	const char *key
 
 # TESTED
 #
 void
 ZOOM_connection_option_set(c, key, val)
 	ZOOM_connection	c
-	const char *	key
-	const char *	val
+	const char *key
+	const char *val
 
 void
 ZOOM_connection_option_setl(c, key, val, len)
