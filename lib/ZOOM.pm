@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.4 2005-10-12 09:44:46 mike Exp $
+# $Id: ZOOM.pm,v 1.5 2005-10-12 14:33:40 mike Exp $
 
 use strict;
 use warnings;
@@ -23,6 +23,37 @@ use Net::Z3950::ZOOM;
 
 # ----------------------------------------------------------------------------
 
+# The "Error" package contains constants returned as error-codes.
+package ZOOM::Error;
+sub NONE { Net::Z3950::ZOOM::ERROR_NONE }
+sub CONNECT { Net::Z3950::ZOOM::ERROR_CONNECT }
+sub MEMORY { Net::Z3950::ZOOM::ERROR_MEMORY }
+sub ENCODE { Net::Z3950::ZOOM::ERROR_ENCODE }
+sub DECODE { Net::Z3950::ZOOM::ERROR_DECODE }
+sub CONNECTION_LOST { Net::Z3950::ZOOM::ERROR_CONNECTION_LOST }
+sub INIT { Net::Z3950::ZOOM::ERROR_INIT }
+sub INTERNAL { Net::Z3950::ZOOM::ERROR_INTERNAL }
+sub TIMEOUT { Net::Z3950::ZOOM::ERROR_TIMEOUT }
+sub UNSUPPORTED_PROTOCOL { Net::Z3950::ZOOM::ERROR_UNSUPPORTED_PROTOCOL }
+sub UNSUPPORTED_QUERY { Net::Z3950::ZOOM::ERROR_UNSUPPORTED_QUERY }
+sub INVALID_QUERY { Net::Z3950::ZOOM::ERROR_INVALID_QUERY }
+
+# The "Event" package contains constants returned by last_event()
+package ZOOM::Event;
+sub NONE { Net::Z3950::ZOOM::EVENT_NONE }
+sub CONNECT { Net::Z3950::ZOOM::EVENT_CONNECT }
+sub SEND_DATA { Net::Z3950::ZOOM::EVENT_SEND_DATA }
+sub RECV_DATA { Net::Z3950::ZOOM::EVENT_RECV_DATA }
+sub TIMEOUT { Net::Z3950::ZOOM::EVENT_TIMEOUT }
+sub UNKNOWN { Net::Z3950::ZOOM::EVENT_UNKNOWN }
+sub SEND_APDU { Net::Z3950::ZOOM::EVENT_SEND_APDU }
+sub RECV_APDU { Net::Z3950::ZOOM::EVENT_RECV_APDU }
+sub RECV_RECORD { Net::Z3950::ZOOM::EVENT_RECV_RECORD }
+sub RECV_SEARCH { Net::Z3950::ZOOM::EVENT_RECV_SEARCH }
+
+
+# ----------------------------------------------------------------------------
+
 package ZOOM::Exception;
 
 sub new {
@@ -38,17 +69,17 @@ sub new {
 
 sub code {
     my $this = shift();
-    return $this->code();
+    return $this->{code};
 }
 
 sub message {
     my $this = shift();
-    return $this->message();
+    return $this->{message};
 }
 
 sub addinfo {
     my $this = shift();
-    return $this->addinfo();
+    return $this->{addinfo};
 }
 
 
