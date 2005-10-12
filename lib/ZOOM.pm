@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.3 2005-10-11 16:23:32 mike Exp $
+# $Id: ZOOM.pm,v 1.4 2005-10-12 09:44:46 mike Exp $
 
 use strict;
 use warnings;
@@ -7,13 +7,15 @@ use Net::Z3950::ZOOM;
 
 # Member naming convention: hash-element names which begin with an
 # underscore represent underlying ZOOM-C object descriptors; those
-# which do not represent Perl's ZOOM objects.  (The same convention is
-# used in naming local variables.)
+# which lack them represent Perl's ZOOM objects.  (The same convention
+# is used in naming local variables where appropriate.)
 #
 # So, for example, the ZOOM::Connection class has an {_conn} element,
 # which is a pointer to the ZOOM-C Connection object; but the
 # ZOOM::ResultSet class has a {conn} element, which is a reference to
-# the Perl-level Connection object by which it was created.
+# the Perl-level Connection object by which it was created.  (It may
+# be that we find we have no need for these references, but for now
+# they are retained.)
 #
 # To get at the underlying ZOOM-C connection object of a result-set
 # (if you ever needed to do such a thing, which you probably don't)
@@ -74,14 +76,22 @@ sub new {
 sub _conn {
     my $this = shift();
 
-    return $this->{_conn};
+    my $_conn = $this->{_conn};
+    die "{_conn} undefined: has this ResultSet been destroy()ed?"
+	if !defined $_conn;
+
+    return $_conn;
 }
 
-sub option_set {
+sub option {
     my $this = shift();
     my($key, $value) = @_;
 
-    Net::Z3950::ZOOM::connection_option_set($this->_conn(), $key, $value);
+    my $oldval = Net::Z3950::ZOOM::connection_option_get($this->_conn(), $key);
+    Net::Z3950::ZOOM::connection_option_set($this->_conn(), $key, $value)
+	if defined $value;
+
+    return $oldval;
 }
 
 sub search_pqf {
@@ -95,6 +105,13 @@ sub search_pqf {
     die new ZOOM::Exception($errcode, $errmsg, $addinfo) if $errcode;
 
     return _new ZOOM::ResultSet($this, $query, $_rs);
+}
+
+sub destroy {
+    my $this = shift();
+
+    Net::Z3950::ZOOM::connection_destroy($this->_conn());
+    $this->{_conn} = undef;
 }
 
 
@@ -123,7 +140,11 @@ sub _new {
 sub _rs {
     my $this = shift();
 
-    return $this->{rs};
+    my $_rs = $this->{_rs};
+    die "{_rs} undefined: has this ResultSet been destroy()ed?"
+	if !defined $_rs;
+
+    return $_rs;
 }
 
 sub size {
@@ -138,7 +159,18 @@ sub record {
 
     my $_rec = Net::Z3950::ZOOM::resultset_record($this->_rs(), $which);
     ### Check for error -- but how?
-    return _new ZOOM::Record($this, $which, $_rec);
+
+    # For some reason, I have to use the explicit "->" syntax in order
+    # to invoke the ZOOM::Record constructor here, even though I don't
+    # have to do the same for _new ZOOM::ResultSet above.  Weird.
+    return ZOOM::Record->_new($this, $which, $_rec);
+}
+
+sub destroy {
+    my $this = shift();
+
+    Net::Z3950::ZOOM::resultset_destroy($this->_rs());
+    $this->{_rs} = undef;
 }
 
 
@@ -162,3 +194,35 @@ sub _new {
 	_rec => $_rec,
     }, $class;
 }
+
+# PRIVATE within this class
+sub _rec {
+    my $this = shift();
+
+    return $this->{_rec};
+}
+
+sub render {
+    my $this = shift();
+
+    my $len = 0;
+    my $string = Net::Z3950::ZOOM::record_get($this->_rec(), "render", $len);
+    # I don't think we need '$len' at all.  ### Probably the Perl-to-C
+    # glue code should use the value of `len' as well as the opaque
+    # data-pointer returned, to ensure that the SV contains all of the
+    # returned data and does not stop at the first NUL character in
+    # binary data.  Carefully check the ZOOM_record_get() documentation.
+    return $string;
+}
+
+sub raw {
+    my $this = shift();
+
+    my $len = 0;
+    my $string = Net::Z3950::ZOOM::record_get($this->_rec(), "raw", $len);
+    # See comment about $len in render()
+    return $string;
+}
+
+
+1;
