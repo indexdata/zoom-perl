@@ -1,4 +1,4 @@
-# $Id: Net-Z3950-ZOOM.t,v 1.4 2005-10-11 15:48:15 mike Exp $
+# $Id: Net-Z3950-ZOOM.t,v 1.5 2005-10-12 09:47:11 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl Net-Z3950-ZOOM.t'
@@ -7,6 +7,7 @@
 
 # change 'tests => 1' to 'tests => last_test_to_print';
 
+use strict;
 use Test::More tests => 1;
 BEGIN { use_ok('Net::Z3950::ZOOM') };
 
@@ -16,6 +17,7 @@ BEGIN { use_ok('Net::Z3950::ZOOM') };
 # its man page ( perldoc Test::More ) for help writing this test script.
 
 my $host = "indexdata.com/gils";
+$host = "localhost:3950";
 my $port = 0;
 my $errcode;
 my($errmsg, $addinfo) = ("dummy", "dummy");
@@ -27,8 +29,13 @@ if ($errcode != 0) {
 	"errcode='$errcode', errmsg='$errmsg', addinfo='$addinfo'");
 }
 
+my $syntax = "usmarc";
 Net::Z3950::ZOOM::connection_option_set($conn,
-					preferredRecordSyntax => "usmarc");
+					preferredRecordSyntax => $syntax);
+my $val = Net::Z3950::ZOOM::connection_option_get($conn,
+						  "preferredRecordSyntax");
+die "set preferredRecordSyntax to '$syntax' but got '$val'"
+    if $val ne $syntax;
 
 my $query = '@attr 1=4 minerals';
 my $rs = Net::Z3950::ZOOM::connection_search_pqf($conn, $query);
