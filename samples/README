@@ -1,0 +1,30 @@
+$Id: README,v 1.1 2005-10-12 11:53:49 mike Exp $
+
+This area contains sample programs that exercise all three of the APIs
+supported by this module.  The programs for each API are contained in
+separate subdirectories:
+
+net-z3950-zoom -- Test programs using the low-level Net::Z3950::ZOOM
+	API, which is an as-literal-as-possible translation of the
+	ZOOM-C API.  You should almost certainly not bother reading
+	these programs: they are for the benefit of the module
+	maintainers.
+
+zoom -- Test programs using the object-oriented ZOOM interface, which
+	is a nice, Perlish interpretation of the ZOOM abstract API as
+	documented at http://zoom.z3950.org/api/
+
+net-z3950 -- Test programs using the obsolescent Net::Z3950 interface,
+	which is provided by this distribution as a plug-compatible
+	replacement for the old Net::Z3950 module.  There is no reason
+	to use this API unless you are maintaining an existing
+	application that uses Net::Z3950.
+
+In general, each sample program exists in a different version in all
+three directories, under the same name in each.  The programs are:
+
+zoomtst1.pl -- A direct translation of the "zoomtst.c" application
+	from the YAZ distribution, except that these versions go on to
+	fetch the records that they find, whereas the C version is
+	satisfied just to get the hit count.
+
