@@ -1,4 +1,4 @@
-# $Id: zoomtst1.pl,v 1.1 2005-10-12 11:53:11 mike Exp $
+# $Id: zoomtst1.pl,v 1.2 2005-10-12 14:35:58 mike Exp $
 #
 # See ../README for a description of this program.
 # perl -I../../blib/lib -I../../blib/arch zoomtst1.pl <target> <query>
@@ -32,6 +32,8 @@ die("Can't search for '$query': ",
     if $errcode != 0;
 
 my $n = Net::Z3950::ZOOM::resultset_size($rs);
+print "Query '$query' found $n records\n";
+
 for my $i (0..$n-1) {
     my $rec = Net::Z3950::ZOOM::resultset_record($rs, $i);
     print "=== Record ", $i+1, " of $n ===\n";

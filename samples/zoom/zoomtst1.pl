@@ -1,4 +1,4 @@
-# $Id: zoomtst1.pl,v 1.2 2005-10-12 13:44:05 mike Exp $
+# $Id: zoomtst1.pl,v 1.3 2005-10-12 14:35:23 mike Exp $
 #
 # See ../README for a description of this program.
 # perl -I../../blib/lib -I../../blib/arch zoomtst1.pl <target> <query>
@@ -19,6 +19,7 @@ eval {
     $conn->option(preferredRecordSyntax => "usmarc");
     my $rs = $conn->search_pqf($query);
     my $n = $rs->size();
+    print "Query '$query' found $n records\n";
     for my $i (0..$n-1) {
 	my $rec = $rs->record($i);
 	print "=== Record ", $i+1, " of $n ===\n";

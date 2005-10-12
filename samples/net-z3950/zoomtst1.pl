@@ -1,4 +1,4 @@
-# $Id: zoomtst1.pl,v 1.1 2005-10-12 11:53:00 mike Exp $
+# $Id: zoomtst1.pl,v 1.2 2005-10-12 14:35:46 mike Exp $
 #
 # See ../README for a description of this program.
 # perl -I../../blib/lib -I../../blib/arch zoomtst1.pl <target> <query>
@@ -30,6 +30,7 @@ $conn->option(elementSetName => "F");
 my $rs = $conn->search(-prefix => $query)
     or die "can't search for '$query': ", $conn->errmsg();
 my $n = $rs->size();
+print "Query '$query' found $n records\n";
 
 ### Note that the record-index is 1-based here, 0-based in ZOOM-C
 for my $i (1..$n) {
