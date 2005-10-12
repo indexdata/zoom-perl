@@ -1,4 +1,4 @@
-# $Id: MANIFEST,v 1.4 2005-10-11 11:39:54 mike Exp $
+# $Id: MANIFEST,v 1.5 2005-10-12 14:32:42 mike Exp $
 
 Changes
 Makefile.PL
@@ -6,7 +6,13 @@ MANIFEST
 README
 typemap
 ZOOM.xs
-t/Net-Z3950-ZOOM.t
+t/1-Net-Z3950-ZOOM.t
+t/2-ZOOM.t
 lib/Net/Z3950/ZOOM.pm
+lib/ZOOM.pm
 MANIFEST.SKIP
 META.yml                                 Module meta-data (added by MakeMaker)
+samples/README
+samples/net-z3950-zoom/zoomtst1.pl
+samples/net-z3950/zoomtst1.pl
+samples/zoom/zoomtst1.pl
