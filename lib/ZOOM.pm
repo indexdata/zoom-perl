@@ -1,8 +1,16 @@
-# $Id: ZOOM.pm,v 1.5 2005-10-12 14:33:40 mike Exp $
+# $Id: ZOOM.pm,v 1.6 2005-10-12 16:13:20 mike Exp $
 
 use strict;
 use warnings;
 use Net::Z3950::ZOOM;
+
+
+package ZOOM;
+
+sub diag_str {
+    my($code) = @_;
+    return Net::Z3950::ZOOM::diag_str($code);
+}
 
 
 # Member naming convention: hash-element names which begin with an
