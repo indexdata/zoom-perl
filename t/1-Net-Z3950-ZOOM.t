@@ -1,4 +1,4 @@
-# $Id: 1-Net-Z3950-ZOOM.t,v 1.3 2005-10-12 13:26:26 mike Exp $
+# $Id: 1-Net-Z3950-ZOOM.t,v 1.4 2005-10-12 14:36:17 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl Net-Z3950-ZOOM.t'
@@ -43,7 +43,7 @@ ok($errcode == Net::Z3950::ZOOM::ERROR_INVALID_QUERY,
    "search for invalid query '$query' fails");
 
 $query = '@attr 1=4 minerals';
-my $rs = Net::Z3950::ZOOM::connection_search_pqf($conn, $query);
+$rs = Net::Z3950::ZOOM::connection_search_pqf($conn, $query);
 $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
 ok($errcode == 0, "search for '$query' OK");
 
