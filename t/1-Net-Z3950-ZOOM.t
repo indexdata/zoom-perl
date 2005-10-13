@@ -1,4 +1,4 @@
-# $Id: 1-Net-Z3950-ZOOM.t,v 1.6 2005-10-13 13:31:11 mike Exp $
+# $Id: 1-Net-Z3950-ZOOM.t,v 1.7 2005-10-13 13:32:00 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl Net-Z3950-ZOOM.t'
@@ -8,7 +8,7 @@
 # change 'tests => 1' to 'tests => last_test_to_print';
 
 use strict;
-use Test::More tests => 12;
+use Test::More tests => 15;
 BEGIN { use_ok('Net::Z3950::ZOOM') };
 
 #########################
