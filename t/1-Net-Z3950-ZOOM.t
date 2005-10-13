@@ -1,4 +1,4 @@
-# $Id: 1-Net-Z3950-ZOOM.t,v 1.5 2005-10-12 16:13:34 mike Exp $
+# $Id: 1-Net-Z3950-ZOOM.t,v 1.6 2005-10-13 13:31:11 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl Net-Z3950-ZOOM.t'
@@ -30,7 +30,20 @@ ok($errcode == Net::Z3950::ZOOM::ERROR_CONNECT && $addinfo eq $host,
 $host = "indexdata.com/gils";
 $conn = Net::Z3950::ZOOM::connection_new($host, 0);
 $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
-ok($errcode == 0, "connection to '$host' OK");
+ok($errcode == 0, "connection to '$host'");
+
+Net::Z3950::ZOOM::connection_destroy($conn);
+ok(1, "destroyed connection");
+
+my $options = Net::Z3950::ZOOM::options_create();
+print STDERR "options='$options'\n";
+
+$conn = Net::Z3950::ZOOM::connection_create($options);
+$errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
+ok($errcode == 0, "unconnected connection object created");
+Net::Z3950::ZOOM::connection_connect($conn, $host, 0);
+$errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
+ok($errcode == 0, "delayed connection to '$host'");
 
 my $syntax = "usmarc";
 Net::Z3950::ZOOM::connection_option_set($conn,
@@ -48,7 +61,7 @@ ok($errcode == Net::Z3950::ZOOM::ERROR_INVALID_QUERY,
 $query = '@attr 1=4 minerals';
 $rs = Net::Z3950::ZOOM::connection_search_pqf($conn, $query);
 $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
-ok($errcode == 0, "search for '$query' OK");
+ok($errcode == 0, "search for '$query'");
 
 my $n = Net::Z3950::ZOOM::resultset_size($rs);
 ok($n == 1, "found 1 record as expected");

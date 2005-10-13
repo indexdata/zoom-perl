@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.10 2005-10-12 16:13:00 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.11 2005-10-13 13:30:52 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -12,8 +12,6 @@ MODULE = Net::Z3950::ZOOM		PACKAGE = Net::Z3950::ZOOM		PREFIX=ZOOM_
 PROTOTYPES: ENABLE
 
 
-# TESTED
-#
 # It seems that when one of these functions is called from Perl with
 # a string-constant argument, that is not recognised as suitable to
 # be mapped onto a "const char*" argument.  The only fix I can find is
@@ -21,15 +19,18 @@ PROTOTYPES: ENABLE
 # overriding the auto-generated prototyping with PROTOTYPE: $$
 # doesn't help (and indeed seems to make no difference at all).
 #
+# TESTED
 ZOOM_connection
 ZOOM_connection_new(host, portnum)
 	char* host
 	int portnum
 
+# TESTED
 ZOOM_connection
 ZOOM_connection_create(options)
 	ZOOM_options	options
 
+# TESTED
 void
 ZOOM_connection_connect(c, host, portnum)
 	ZOOM_connection	c
@@ -37,20 +38,17 @@ ZOOM_connection_connect(c, host, portnum)
 	int	portnum
 
 # TESTED
-#
 void
 ZOOM_connection_destroy(c)
 	ZOOM_connection	c
 
 # TESTED
-#
 const char *
 ZOOM_connection_option_get(c, key)
 	ZOOM_connection	c
 	const char *key
 
 # TESTED
-#
 void
 ZOOM_connection_option_set(c, key, val)
 	ZOOM_connection	c
@@ -64,8 +62,6 @@ ZOOM_connection_option_setl(c, key, val, len)
 	const char *	val
 	int	len
 
-# TESTED
-#
 # The reference parameters, `cp' and `addinfo', need to already have
 # values when this function is called, otherwise an "uninitialised
 # value" warning is generated.  As far as I can see, there is no way
@@ -78,6 +74,7 @@ ZOOM_connection_option_setl(c, key, val, len)
 # support for const char**, but who can blame it?  If you ask me, the
 # whole "const" thing was well-intentioned by ghastly mistake.
 #
+# TESTED
 int
 ZOOM_connection_error(c, cp, addinfo)
 	ZOOM_connection	c
@@ -113,7 +110,6 @@ ZOOM_connection_addinfo(c)
 	ZOOM_connection	c
 
 # TESTED
-#
 const char *
 ZOOM_diag_str(error)
 	int	error
@@ -127,16 +123,15 @@ ZOOM_connection_search(arg0, q)
 	ZOOM_connection	arg0
 	ZOOM_query	q
 
-# TESTED
-#
 # "const" discarded from type of `q'
+#
+# TESTED
 ZOOM_resultset
 ZOOM_connection_search_pqf(c, q)
 	ZOOM_connection c
 	char *q
 
 # TESTED
-#
 void
 ZOOM_resultset_destroy(r)
 	ZOOM_resultset r
@@ -153,7 +148,6 @@ ZOOM_resultset_option_set(r, key, val)
 	const char *	val
 
 # TESTED
-#
 size_t
 ZOOM_resultset_size(r)
 	ZOOM_resultset r
@@ -166,7 +160,6 @@ ZOOM_resultset_records(r, recs, start, count)
 	size_t	count
 
 # TESTED
-#
 ZOOM_record
 ZOOM_resultset_record(s, pos)
 	ZOOM_resultset	s
@@ -181,10 +174,10 @@ void
 ZOOM_resultset_cache_reset(r)
 	ZOOM_resultset	r
 
-# TESTED
-#
 # "const" discarded from type of `type'
 # See "typemap" for discussion of the "const char *" return-type.
+#
+# TESTED
 const char *
 ZOOM_record_get(rec, type, len)
 	ZOOM_record rec
@@ -299,6 +292,7 @@ ZOOM_options_set_callback(opt, c, handle)
 	ZOOM_options_callback	c
 	void *	handle
 
+# TESTING
 ZOOM_options
 ZOOM_options_create()
 
