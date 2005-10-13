@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.11 2005-10-13 13:30:52 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.12 2005-10-13 13:48:08 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -28,14 +28,14 @@ ZOOM_connection_new(host, portnum)
 # TESTED
 ZOOM_connection
 ZOOM_connection_create(options)
-	ZOOM_options	options
+	ZOOM_options options
 
 # TESTED
 void
 ZOOM_connection_connect(c, host, portnum)
 	ZOOM_connection	c
-	const char *	host
-	int	portnum
+	const char* host
+	int portnum
 
 # TESTED
 void
@@ -112,7 +112,7 @@ ZOOM_connection_addinfo(c)
 # TESTED
 const char *
 ZOOM_diag_str(error)
-	int	error
+	int error
 
 int
 ZOOM_connection_last_event(cs)
@@ -162,8 +162,8 @@ ZOOM_resultset_records(r, recs, start, count)
 # TESTED
 ZOOM_record
 ZOOM_resultset_record(s, pos)
-	ZOOM_resultset	s
-	size_t	pos
+	ZOOM_resultset s
+	size_t pos
 
 ZOOM_record
 ZOOM_resultset_record_immediate(s, pos)
