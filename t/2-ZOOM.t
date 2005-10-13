@@ -1,4 +1,4 @@
-# $Id: 2-ZOOM.t,v 1.4 2005-10-12 16:13:38 mike Exp $
+# $Id: 2-ZOOM.t,v 1.5 2005-10-13 13:27:27 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl ZOOM.t'
@@ -28,7 +28,7 @@ ok($@ && $@->isa("ZOOM::Exception") &&
 
 $host = "indexdata.com/gils";
 eval { $conn = new ZOOM::Connection($host, 0) };
-ok(!$@, "connection to '$host' OK");
+ok(!$@, "connection to '$host'");
 
 my $syntax = "usmarc";
 $conn->option(preferredRecordSyntax => $syntax);
@@ -44,7 +44,7 @@ ok($@ && $@->isa("ZOOM::Exception") &&
 
 $query = '@attr 1=4 minerals';
 eval { $rs = $conn->search_pqf($query) };
-ok(!$@, "search for '$query' OK");
+ok(!$@, "search for '$query'");
 
 my $n = $rs->size($rs);
 ok($n == 1, "found 1 record as expected");
