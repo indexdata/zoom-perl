@@ -1,4 +1,4 @@
-# $Id: 1-Net-Z3950-ZOOM.t,v 1.7 2005-10-13 13:32:00 mike Exp $
+# $Id: 1-Net-Z3950-ZOOM.t,v 1.8 2005-10-13 13:33:55 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl Net-Z3950-ZOOM.t'
@@ -36,8 +36,6 @@ Net::Z3950::ZOOM::connection_destroy($conn);
 ok(1, "destroyed connection");
 
 my $options = Net::Z3950::ZOOM::options_create();
-print STDERR "options='$options'\n";
-
 $conn = Net::Z3950::ZOOM::connection_create($options);
 $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
 ok($errcode == 0, "unconnected connection object created");
