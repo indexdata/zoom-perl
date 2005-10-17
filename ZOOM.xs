@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.13 2005-10-17 13:42:43 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.14 2005-10-17 13:44:52 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -69,7 +69,7 @@ ZOOM_connection_option_set(c, key, val)
 
 # In ZOOM-C, the `val' parameter is const char*.  However, our typemap
 # treats this as T_PV, i.e. it's "known" that it points to a
-# NUL-terminated string.  Instead, then, I here use const void*, which
+# NUL-terminated string.  Instead, then, I here use opaquechar*, which
 # is an opaque pointer.  The underlying C function can then use this
 # along with `len' to Do The Right Thing.
 #
