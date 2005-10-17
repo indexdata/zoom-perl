@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.6 2005-10-12 16:13:20 mike Exp $
+# $Id: ZOOM.pm,v 1.7 2005-10-17 13:47:25 mike Exp $
 
 use strict;
 use warnings;
@@ -67,6 +67,7 @@ package ZOOM::Exception;
 sub new {
     my $class = shift();
     my($code, $message, $addinfo) = @_;
+    ### support diag-set, too
 
     return bless {
 	code => $code,
@@ -93,6 +94,25 @@ sub addinfo {
 
 # ----------------------------------------------------------------------------
 
+package ZOOM::Options;
+
+sub new {
+    my $class = shift();
+    ### Should use create_with_parent{,2}() depending on arguments
+
+    return bless {
+	_opts => Net::Z3950::ZOOM::options_create(),
+    }, $class;
+}
+
+sub _opts {
+    my $this = shift();
+
+    return $this->{_opts};
+}
+
+# ----------------------------------------------------------------------------
+
 package ZOOM::Connection;
 
 sub new {
@@ -111,6 +131,18 @@ sub new {
     };
 }
 
+sub create {
+    my $class = shift();
+    my($options) = @_;
+
+    my $_conn = Net::Z3950::ZOOM::connection_create($options->_opts());
+    return bless {
+	host => undef,
+	port => undef,
+	_conn => $_conn,
+    };
+}
+
 # PRIVATE within this class
 sub _conn {
     my $this = shift();
@@ -120,6 +152,42 @@ sub _conn {
 	if !defined $_conn;
 
     return $_conn;
+}
+
+sub error_x {
+    my $this = shift();
+
+    my($errcode, $errmsg, $addinfo, $diagset) = (undef, "dummy", "dummy", "d");
+    $errcode = Net::Z3950::ZOOM::connection_error_x($this->_conn(), $errmsg,
+						    $addinfo, $diagset);
+    return ($errcode, $errmsg, $addinfo, $diagset);
+}
+
+sub errcode {
+    my $this = shift();
+    return Net::Z3950::ZOOM::connection_errcode($this->_conn());
+}
+
+sub errmsg {
+    my $this = shift();
+    return Net::Z3950::ZOOM::connection_errmsg($this->_conn());
+}
+
+sub addinfo {
+    my $this = shift();
+    return Net::Z3950::ZOOM::connection_addinfo($this->_conn());
+}
+
+sub connect {
+    my $this = shift();
+    my($host, $port) = @_;
+
+    Net::Z3950::ZOOM::connection_connect($this->_conn(), $host, $port);
+    my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
+    $errcode = Net::Z3950::ZOOM::connection_error($this->_conn(),
+						  $errmsg, $addinfo);
+    die new ZOOM::Exception($errcode, $errmsg, $addinfo) if $errcode;
+    # No return value
 }
 
 sub option {
@@ -132,6 +200,21 @@ sub option {
 
     return $oldval;
 }
+
+sub option_binary {
+    my $this = shift();
+    my($key, $value) = @_;
+
+    my $dummylen = 0;
+    my $oldval = Net::Z3950::ZOOM::connection_option_getl($this->_conn(),
+							  $key, $dummylen);
+    Net::Z3950::ZOOM::connection_option_setl($this->_conn(), $key,
+					     $value, length($value))
+	if defined $value;
+
+    return $oldval;
+}
+
 
 sub search_pqf {
     my $this = shift();
