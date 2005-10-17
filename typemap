@@ -1,4 +1,4 @@
-# $Id: typemap,v 1.4 2005-10-13 16:01:48 mike Exp $
+# $Id: typemap,v 1.5 2005-10-17 13:48:08 mike Exp $
 
 ZOOM_connection					T_PTROBJ
 ZOOM_connection *				T_PTROBJ
@@ -28,6 +28,7 @@ const __sigset_t *				T_PTROBJ
 # longer have to discard the "const" qualfiers from the arguments to
 # the functions in the .xs file.
 const char *					T_PV
+opaquechar *					T_OPAQUECHAR
 const char **					T_PTROBJ
 const struct timespec *				T_PTROBJ
 div_t						T_OPAQUE_STRUCT
@@ -50,6 +51,7 @@ unsigned short int *				T_PTROBJ
 void ( * __func ) ( int __status, void * __arg )	T_PTROBJ
 void ( * __func ) ( void )			T_PTROBJ
 void **						T_PTROBJ
+struct datachunk				T_DATACHUNK
 #############################################################################
 INPUT
 T_OPAQUE_STRUCT
@@ -64,7 +66,13 @@ T_OPAQUE_STRUCT
 	}
 	else
 	    croak(\"$var is not of type ${ntype}\")
+T_OPAQUECHAR
+	int _unused_len;
+	$var = ($type) SvPV($arg, _unused_len);
+
 #############################################################################
 OUTPUT
 T_OPAQUE_STRUCT
 	sv_setref_pvn($arg, \"${ntype}\", (char *)&$var, sizeof($var));
+T_DATACHUNK
+	sv_setpvn($arg, $var.data, $var.len);
