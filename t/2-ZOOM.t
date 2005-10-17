@@ -1,4 +1,4 @@
-# $Id: 2-ZOOM.t,v 1.5 2005-10-13 13:27:27 mike Exp $
+# $Id: 2-ZOOM.t,v 1.6 2005-10-17 13:50:06 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl ZOOM.t'
@@ -8,7 +8,7 @@
 # change 'tests => 1' to 'tests => last_test_to_print';
 
 use strict;
-use Test::More tests => 12;
+use Test::More tests => 21;
 BEGIN { use_ok('ZOOM') };
 
 #########################
@@ -30,9 +30,27 @@ $host = "indexdata.com/gils";
 eval { $conn = new ZOOM::Connection($host, 0) };
 ok(!$@, "connection to '$host'");
 
+$conn->destroy();
+ok(1, "destroyed connection");
+
+my $options = new ZOOM::Options();
+eval { $conn = create ZOOM::Connection($options) };
+ok(!$@, "unconnected connection object created");
+eval { $conn->connect($host, 0) };
+ok(!$@, "delayed connection to '$host'");
+
+my $val1 = "foo";
+my $val2 = "$val1\0bar";
+$conn->option(xyz => $val2);
+my $val = $conn->option("xyz");
+ok($val eq $val1, "option() treats value as NUL-terminated");
+$conn->option_binary(xyz => $val2, length($val2));
+$val = $conn->option_binary("xyz");
+ok($val eq $val2, "option_setl() treats value as opaque chunk, val='$val'");
+
 my $syntax = "usmarc";
 $conn->option(preferredRecordSyntax => $syntax);
-my $val = $conn->option("preferredRecordSyntax");
+$val = $conn->option("preferredRecordSyntax");
 ok($val eq $syntax, "preferred record syntax set to '$val'");
 
 my $query = '@attr @and 1=4 minerals';
@@ -41,6 +59,17 @@ eval { $rs = $conn->search_pqf($query) };
 ok($@ && $@->isa("ZOOM::Exception") &&
    $@->code() == ZOOM::Error::INVALID_QUERY,
    "search for invalid query '$query' fails");
+
+my($xcode, $xmsg, $xinfo, $xset) = $conn->error_x();
+ok($xcode == $@->code() && $xmsg eq $@->message() && $xinfo eq $@->addinfo() &&
+   $xset eq "ZOOM", "error_x() consistent with exception");
+ok($conn->errcode() == $@->code(),
+   "errcode() consistent with exception");
+ok($conn->errmsg() eq $@->message(),
+   "errmsg() consistent with exception");
+ok($conn->addinfo() eq $@->addinfo(),
+   "addinfo() consistent with exception");
+### No $conn->diagset() yet, due to lack of underlying support
 
 $query = '@attr 1=4 minerals';
 eval { $rs = $conn->search_pqf($query) };
