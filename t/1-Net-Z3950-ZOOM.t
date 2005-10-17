@@ -1,4 +1,4 @@
-# $Id: 1-Net-Z3950-ZOOM.t,v 1.8 2005-10-13 13:33:55 mike Exp $
+# $Id: 1-Net-Z3950-ZOOM.t,v 1.9 2005-10-17 13:49:23 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl Net-Z3950-ZOOM.t'
@@ -8,7 +8,7 @@
 # change 'tests => 1' to 'tests => last_test_to_print';
 
 use strict;
-use Test::More tests => 15;
+use Test::More tests => 21;
 BEGIN { use_ok('Net::Z3950::ZOOM') };
 
 #########################
@@ -43,11 +43,20 @@ Net::Z3950::ZOOM::connection_connect($conn, $host, 0);
 $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
 ok($errcode == 0, "delayed connection to '$host'");
 
+my $val1 = "foo";
+my $val2 = "$val1\0bar";
+Net::Z3950::ZOOM::connection_option_set($conn, xyz => $val2);
+my $val = Net::Z3950::ZOOM::connection_option_get($conn, "xyz");
+ok($val eq $val1, "option_set() treats value as NUL-terminated");
+Net::Z3950::ZOOM::connection_option_setl($conn, xyz => $val2, length($val2));
+my $vallen = 0;
+$val = Net::Z3950::ZOOM::connection_option_getl($conn, "xyz", $vallen);
+ok($val eq $val2, "option_setl() treats value as opaque chunk, val='$val'");
+
 my $syntax = "usmarc";
 Net::Z3950::ZOOM::connection_option_set($conn,
 					preferredRecordSyntax => $syntax);
-my $val = Net::Z3950::ZOOM::connection_option_get($conn,
-						  "preferredRecordSyntax");
+$val = Net::Z3950::ZOOM::connection_option_get($conn, "preferredRecordSyntax");
 ok($val eq $syntax, "preferred record syntax set to '$val'");
 
 my $query = '@attr @and 1=4 minerals';
@@ -55,6 +64,18 @@ my $rs = Net::Z3950::ZOOM::connection_search_pqf($conn, $query);
 $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
 ok($errcode == Net::Z3950::ZOOM::ERROR_INVALID_QUERY,
    "search for invalid query '$query' fails");
+
+my($xcode, $xmsg, $xinfo, $xset) = (undef, "dummy", "dummy", "dummy");
+$xcode = Net::Z3950::ZOOM::connection_error_x($conn, $xmsg, $xinfo, $xset);
+ok($xcode == $errcode && $xmsg eq $errmsg && $xinfo eq $addinfo &&
+   $xset eq "ZOOM", "error_x() consistent with error()");
+ok(Net::Z3950::ZOOM::connection_errcode($conn) == $errcode,
+   "errcode() consistent with error()");
+ok(Net::Z3950::ZOOM::connection_errmsg($conn) eq $errmsg,
+   "errmsg() consistent with error()");
+ok(Net::Z3950::ZOOM::connection_addinfo($conn) eq $addinfo,
+   "addinfo() consistent with error()");
+### These is no ZOOM_connection_diagset() -- surely that's a mistake?
 
 $query = '@attr 1=4 minerals';
 $rs = Net::Z3950::ZOOM::connection_search_pqf($conn, $query);
