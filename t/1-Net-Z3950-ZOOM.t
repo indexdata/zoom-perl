@@ -1,20 +1,12 @@
-# $Id: 1-Net-Z3950-ZOOM.t,v 1.10 2005-10-17 16:18:27 mike Exp $
+# $Id: 1-Net-Z3950-ZOOM.t,v 1.11 2005-10-18 16:27:58 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 1-Net-Z3950-ZOOM.t'
 
-#########################
-
-# change 'tests => 1' to 'tests => last_test_to_print';
-
 use strict;
+use warnings;
 use Test::More tests => 21;
 BEGIN { use_ok('Net::Z3950::ZOOM') };
-
-#########################
-
-# Insert your test code below, the Test::More module is use()ed here so read
-# its man page ( perldoc Test::More ) for help writing this test script.
 
 my $msg = Net::Z3950::ZOOM::diag_str(Net::Z3950::ZOOM::ERROR_INVALID_QUERY);
 ok($msg eq "Invalid query", "diagnostic string lookup works");
