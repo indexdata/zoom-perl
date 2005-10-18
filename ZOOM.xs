@@ -1,10 +1,11 @@
-/* $Id: ZOOM.xs,v 1.14 2005-10-17 13:44:52 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.15 2005-10-18 17:00:28 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
 
 #include <yaz/zoom.h>
+#include <yaz/xmalloc.h>
 
 /* Used by the *_setl() functions */
 typedef char opaquechar;
@@ -14,6 +15,64 @@ struct datachunk {
 	char *data;
 	int len;
 };
+
+/* Used to package Perl function-pointer and user-data together */
+struct callback_block {
+	SV *function;
+	SV *handle;
+};
+
+/* The callback function used for ZOOM_options_set_callback().  I do
+ * not claim to fully understand all the stack-hacking magic, and less
+ * still the reference-counting/mortality stuff.  Accordingly, the
+ * memory management here is best characterised as What I Could Get To
+ * Work, More Or Less.
+ */
+const char *__ZOOM_option_callback (void *handle, const char *name)
+{
+	struct callback_block *cb = (struct callback_block*) handle;
+	int count;
+	SV *ret;
+	char *s;
+	char *res;
+
+	dSP;
+
+	ENTER;
+	SAVETMPS;
+
+	PUSHMARK(SP);
+	XPUSHs(cb->handle);
+	XPUSHs(sv_2mortal(newSVpv(name, 0)));
+	PUTBACK;
+	/* Perl_sv_dump(0, cb->function); */
+
+	count = call_sv(cb->function, G_SCALAR);
+
+	SPAGAIN;
+
+	if (count != 1)
+		croak("callback function for ZOOM_options_get() returned %d values: should have returned exactly one", count);
+
+	ret = POPs;
+	if (SvPOK(ret)) {
+		s = SvPV_nolen(ret);
+		/* ### `res' never gets freed!  I think it is
+		 * impossible to solve this problem "correctly"
+		 * because the ZOOM-C option callback interface is
+		 * inadequate. */
+		res = xstrdup(s);
+	} else {
+		res = 0;
+	}
+
+	PUTBACK;
+	FREETMPS;
+	LEAVE;
+
+	return res;
+}
+
 
 MODULE = Net::Z3950::ZOOM		PACKAGE = Net::Z3950::ZOOM		PREFIX=ZOOM_
 
@@ -53,12 +112,14 @@ ZOOM_connection_option_get(c, key)
 struct datachunk
 ZOOM_connection_option_getl(c, key, len)
 	ZOOM_connection	c
-	const char *key
+	const char* key
 	int &len
 	CODE:
-		RETVAL.data = (char*) ZOOM_connection_option_getl(c, key, &RETVAL.len);
+		RETVAL.data = (char*) ZOOM_connection_option_getl(c, key, &len);
+		RETVAL.len = len;
 	OUTPUT:
 		RETVAL
+		len
 
 # TESTED
 void
@@ -217,7 +278,7 @@ ZOOM_resultset_cache_reset(r)
 # See "typemap" for discussion of the "const char *" return-type.
 #
 # TESTED
-### but should use datachunk
+### but should use datachunk for in some (not all!) cases.
 const char *
 ZOOM_record_get(rec, type, len)
 	ZOOM_record rec
@@ -346,81 +407,104 @@ ZOOM_resultset_sort(r, sort_type, sort_spec)
 	const char *	sort_type
 	const char *	sort_spec
 
-# UNTESTED
-ZOOM_options_callback
-ZOOM_options_set_callback(opt, c, handle)
-	ZOOM_options	opt
-	ZOOM_options_callback	c
-	void *	handle
+# We ignore the return value of ZOOM_options_set_callback(), since it
+# is always just the address of the __ZOOM_option_callback() function.
+# The information that we actually want -- the address of the Perl
+# function in the callback_block -- is unavailable to us, as the
+# underlying C function doesn't give the block back.
+#
+# TESTED
+void
+ZOOM_options_set_callback(opt, function, handle)
+	ZOOM_options opt
+	SV* function;
+	SV* handle;
+	CODE:
+		/* The tiny amount of memory allocated here is never
+	         * released, as options_destroy() doesn't do anything
+	         * to the callback information.  Not a big deal.
+		 */
+		struct callback_block *block = (struct callback_block*)
+			xmalloc(sizeof *block);
+		block->function = function;
+		block->handle = handle;
+		ZOOM_options_set_callback(opt, __ZOOM_option_callback,
+					  (void*) block);
 
 # TESTED
 ZOOM_options
 ZOOM_options_create()
 
-# UNTESTED
+# TESTED
 ZOOM_options
 ZOOM_options_create_with_parent(parent)
-	ZOOM_options	parent
+	ZOOM_options parent
 
-# UNTESTED
+# TESTED
 ZOOM_options
 ZOOM_options_create_with_parent2(parent1, parent2)
-	ZOOM_options	parent1
-	ZOOM_options	parent2
+	ZOOM_options parent1
+	ZOOM_options parent2
 
-# UNTESTED
+# TESTED
 const char *
 ZOOM_options_get(opt, name)
-	ZOOM_options	opt
-	const char *	name
+	ZOOM_options opt
+	const char* name
 
-# UNTESTED
-const char *
+# TESTED
+struct datachunk
 ZOOM_options_getl(opt, name, len)
-	ZOOM_options	opt
-	const char *	name
-	int	&len
+	ZOOM_options opt
+	const char* name
+	int &len
+	CODE:
+		RETVAL.data = (char*) ZOOM_options_getl(opt, name, &len);
+		RETVAL.len = len;
+	OUTPUT:
+		RETVAL
+		len
 
-# UNTESTED
+# TESTED
 void
 ZOOM_options_set(opt, name, v)
-	ZOOM_options	opt
-	const char *	name
-	const char *	v
+	ZOOM_options opt
+	const char* name
+	const char* v
 
-# UNTESTED
+# TESTED
 void
 ZOOM_options_setl(opt, name, value, len)
-	ZOOM_options	opt
-	const char *	name
-	const char *	value
-	int	len
+	ZOOM_options opt
+	const char* name
+	opaquechar* value
+	int len
 
-# UNTESTED
+# TESTED
 void
 ZOOM_options_destroy(opt)
-	ZOOM_options	opt
+	ZOOM_options opt
 
-# UNTESTED
+# TESTED
 int
 ZOOM_options_get_bool(opt, name, defa)
-	ZOOM_options	opt
-	const char *	name
-	int	defa
+	ZOOM_options opt
+	const char* name
+	int defa
 
-# UNTESTED
+# TESTED
 int
 ZOOM_options_get_int(opt, name, defa)
-	ZOOM_options	opt
-	const char *	name
-	int	defa
+	ZOOM_options opt
+	const char* name
+	int defa
 
-# UNTESTED
+# TESTED
 void
 ZOOM_options_set_int(opt, name, value)
-	ZOOM_options	opt
-	const char *	name
-	int	value
+	ZOOM_options opt
+	const char* name
+	int value
 
 # UNTESTED
 int
