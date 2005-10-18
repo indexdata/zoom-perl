@@ -1,20 +1,12 @@
-# $Id: 2-ZOOM.t,v 1.6 2005-10-17 13:50:06 mike Exp $
+# $Id: 2-ZOOM.t,v 1.7 2005-10-18 16:27:29 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
-# `make test'. After `make install' it should work as `perl ZOOM.t'
-
-#########################
-
-# change 'tests => 1' to 'tests => last_test_to_print';
+# `make test'. After `make install' it should work as `perl 2-ZOOM.t'
 
 use strict;
+use warnings;
 use Test::More tests => 21;
 BEGIN { use_ok('ZOOM') };
-
-#########################
-
-# Insert your test code below, the Test::More module is use()ed here so read
-# its man page ( perldoc Test::More ) for help writing this test script.
 
 my $msg = ZOOM::diag_str(ZOOM::Error::INVALID_QUERY);
 ok($msg eq "Invalid query", "diagnostic string lookup works");
