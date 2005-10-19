@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.7 2005-10-17 13:47:25 mike Exp $
+# $Id: ZOOM.pm,v 1.8 2005-10-19 13:53:35 mike Exp $
 
 use strict;
 use warnings;
@@ -98,18 +98,94 @@ package ZOOM::Options;
 
 sub new {
     my $class = shift();
-    ### Should use create_with_parent{,2}() depending on arguments
+    my($p1, $p2) = @_;
+
+    my $opts;
+    if (@_ == 0) {
+	$opts = Net::Z3950::ZOOM::options_create();
+    } elsif (@_ == 1) {
+	$opts = Net::Z3950::ZOOM::options_create_with_parent($p1->_opts());
+    } elsif (@_ == 2) {
+	$opts = Net::Z3950::ZOOM::options_create_with_parent2($p1->_opts(),
+							      $p2->_opts());
+    } else {
+	die "can't make $class object with more than 2 parents";
+    }
 
     return bless {
-	_opts => Net::Z3950::ZOOM::options_create(),
+	_opts => $opts,
     }, $class;
 }
 
 sub _opts {
     my $this = shift();
 
-    return $this->{_opts};
+    my $_opts = $this->{_opts};
+    die "{_opts} undefined: has this Options block been destroy()ed?"
+	if !defined $_opts;
+
+    return $_opts;
 }
+
+sub option {
+    my $this = shift();
+    my($key, $value) = @_;
+
+    my $oldval = Net::Z3950::ZOOM::options_get($this->_opts(), $key);
+    Net::Z3950::ZOOM::options_set($this->_opts(), $key, $value)
+	if defined $value;
+
+    return $oldval;
+}
+
+sub option_binary {
+    my $this = shift();
+    my($key, $value) = @_;
+
+    my $dummylen = 0;
+    my $oldval = Net::Z3950::ZOOM::options_getl($this->_opts(),
+						$key, $dummylen);
+    Net::Z3950::ZOOM::options_setl($this->_opts(), $key,
+				   $value, length($value))
+	if defined $value;
+
+    return $oldval;
+}
+
+# This is a bit stupid, since the scalar values that Perl returns from
+# option() can be used as a boolean; but it's just possible that some
+# applications will rely on ZOOM_options_get_bool()'s idiosyncratic
+# interpretation of what constitutes truth.
+#
+sub bool {
+    my $this = shift();
+    my($key, $default) = @_;
+
+    return Net::Z3950::ZOOM::options_get_bool($this->_opts(), $key, $default);
+}
+
+# .. and the next two are even more stupid
+sub int {
+    my $this = shift();
+    my($key, $default) = @_;
+
+    return Net::Z3950::ZOOM::options_get_int($this->_opts(), $key, $default);
+}
+
+sub set_int {
+    my $this = shift();
+    my($key, $value) = @_;
+
+    Net::Z3950::ZOOM::options_set_int($this->_opts(), $key, $value);
+}
+
+sub destroy {
+    my $this = shift();
+
+    Net::Z3950::ZOOM::options_destroy($this->_opts());
+    $this->{_opts} = undef;
+}
+
 
 # ----------------------------------------------------------------------------
 
