@@ -1,7 +1,7 @@
-# $Id: 11-option-callback.t,v 1.1 2005-10-18 17:01:55 mike Exp $
+# $Id: 11-option-callback.t,v 1.2 2005-10-19 15:14:26 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
-# `make test'. After `make install' it should work as `perl 10-options.t'
+# `make test'. After `make install' it should work as `perl 11-option-callback.t'
 
 use strict;
 use warnings;
@@ -10,8 +10,8 @@ BEGIN { use_ok('Net::Z3950::ZOOM') };
 
 # This callback function provides values only options whose names
 # begin with consonants, in which case the value is the option name
-# concatenated with a hyphen and the the value of the user-data that
-# was lodged along with the callback.
+# concatenated with a hyphen and the value of the user-data that was
+# lodged along with the callback.
 #
 sub f_option {
     my($udata, $name) = @_;
