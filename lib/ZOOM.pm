@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.8 2005-10-19 13:53:35 mike Exp $
+# $Id: ZOOM.pm,v 1.9 2005-10-24 16:42:16 mike Exp $
 
 use strict;
 use warnings;
@@ -179,6 +179,30 @@ sub set_int {
     Net::Z3950::ZOOM::options_set_int($this->_opts(), $key, $value);
 }
 
+#   ###	Feel guilty.  Feel very, very guilty.  I've not been able to
+#	get the callback memory-management right in "ZOOM.xs", with
+#	the result that the values of $function and $udata passed into
+#	this function, which are on the stack, have sometimes been
+#	freed by the time they're used by __ZOOM_option_callback(),
+#	with hilarious results.  To avoid this, I copy the values into
+#	module-scoped globals, and pass _those_ into the extension
+#	function.  To avoid overwriting those globals by subsequent
+#	calls, I keep all the old ones, pushed onto the @_function and
+#	@_udata arrays, which means that THIS FUNCTION LEAKS MEMORY
+#	LIKE IT'S GOING OUT OF FASHION.  Not nice.  One day, I should
+#	fix this, but for now there's more important fish to fry.
+#
+my(@_function, @_udata);
+sub set_callback {
+    my $o1 = shift();
+    my($function, $udata) = @_;
+
+    push @_function, $function;
+    push @_udata, $udata;
+    Net::Z3950::ZOOM::options_set_callback($o1->_opts(),
+					   $_function[-1], $_udata[-1]);
+}
+
 sub destroy {
     my $this = shift();
 
@@ -310,6 +334,26 @@ sub destroy {
 
     Net::Z3950::ZOOM::connection_destroy($this->_conn());
     $this->{_conn} = undef;
+}
+
+
+# ----------------------------------------------------------------------------
+
+package ZOOM::Query;
+
+sub new {
+    my $class = shift();
+    die "You can't create $class objects: it's a virtual base class";
+
+}
+
+
+package ZOOM::Query::RPN;
+
+sub new {
+    my $class = shift();
+
+    ### Er ...
 }
 
 
