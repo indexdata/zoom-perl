@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.15 2005-10-18 17:00:28 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.16 2005-10-24 16:39:55 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -423,11 +423,16 @@ ZOOM_options_set_callback(opt, function, handle)
 		/* The tiny amount of memory allocated here is never
 	         * released, as options_destroy() doesn't do anything
 	         * to the callback information.  Not a big deal.
+		 * Also, I have no idea how to drive the Perl "mortal"
+		 * reference-counting stuff, so I am just allocating
+		 * copies which also never get released.  Don't sue!
 		 */
 		struct callback_block *block = (struct callback_block*)
 			xmalloc(sizeof *block);
 		block->function = function;
 		block->handle = handle;
+		SvREFCNT(block->function);
+		SvREFCNT(block->handle);
 		ZOOM_options_set_callback(opt, __ZOOM_option_callback,
 					  (void*) block);
 
