@@ -1,11 +1,11 @@
-# $Id: 12-query.t,v 1.1 2005-10-26 16:25:50 mike Exp $
+# $Id: 12-query.t,v 1.2 2005-10-26 16:31:39 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 12-query.t'
 
 use strict;
 use warnings;
-use Test::More tests => 19;
+use Test::More tests => 15;
 BEGIN { use_ok('Net::Z3950::ZOOM') };
 
 my $q = Net::Z3950::ZOOM::query_create();
@@ -50,7 +50,7 @@ my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
 $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
 ok($errcode == 0, "connection to '$host'");
 
-my $q = Net::Z3950::ZOOM::query_create();
+$q = Net::Z3950::ZOOM::query_create();
 ok(defined $q, "create empty query");
 $res = Net::Z3950::ZOOM::query_prefix($q, '@attr 1=21 mineral');
 ok($res == 0, "set PQF into query");
