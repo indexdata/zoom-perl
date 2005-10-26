@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.16 2005-10-24 16:39:55 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.17 2005-10-26 16:27:25 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -215,11 +215,11 @@ int
 ZOOM_connection_last_event(cs)
 	ZOOM_connection	cs
 
-# UNTESTED
+# TESTED
 ZOOM_resultset
 ZOOM_connection_search(arg0, q)
 	ZOOM_connection	arg0
-	ZOOM_query	q
+	ZOOM_query q
 
 # TESTED
 ZOOM_resultset
@@ -298,28 +298,28 @@ ZOOM_record
 ZOOM_record_clone(srec)
 	ZOOM_record	srec
 
-# UNTESTED
+# TESTED
 ZOOM_query
 ZOOM_query_create()
 
-# UNTESTED
+# TESTED
 void
 ZOOM_query_destroy(s)
-	ZOOM_query	s
+	ZOOM_query s
 
-# UNTESTED
+# TESTED
 int
 ZOOM_query_cql(s, str)
-	ZOOM_query	s
-	const char *	str
+	ZOOM_query s
+	const char* str
 
-# UNTESTED
+# TESTED
 int
 ZOOM_query_prefix(s, str)
-	ZOOM_query	s
-	const char *	str
+	ZOOM_query s
+	const char* str
 
-# UNTESTED
+# TESTED
 int
 ZOOM_query_sortby(s, criteria)
 	ZOOM_query	s
