@@ -1,4 +1,4 @@
-# $Id: 2-ZOOM.t,v 1.7 2005-10-18 16:27:29 mike Exp $
+# $Id: 2-ZOOM.t,v 1.8 2005-10-31 15:02:41 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 2-ZOOM.t'
@@ -72,7 +72,7 @@ ok($n == 1, "found 1 record as expected");
 
 my $rec = $rs->record(0);
 my $data = $rec->render();
-ok($data =~ /245 +\$a ISOTOPIC DATES OF ROCKS AND MINERALS/,
+ok($data =~ /^245 +\$a ISOTOPIC DATES OF ROCKS AND MINERALS$/m,
    "rendered record has expected title");
 my $raw = $rec->raw();
 ok($raw =~ /^00981n/, "raw record contains expected header");

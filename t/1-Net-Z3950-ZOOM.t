@@ -1,4 +1,4 @@
-# $Id: 1-Net-Z3950-ZOOM.t,v 1.11 2005-10-18 16:27:58 mike Exp $
+# $Id: 1-Net-Z3950-ZOOM.t,v 1.12 2005-10-31 15:03:11 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 1-Net-Z3950-ZOOM.t'
@@ -80,7 +80,7 @@ ok($n == 1, "found 1 record as expected");
 my $rec = Net::Z3950::ZOOM::resultset_record($rs, 0);
 my $len = 0;
 my $data = Net::Z3950::ZOOM::record_get($rec, "render", $len);
-ok($data =~ /245 +\$a ISOTOPIC DATES OF ROCKS AND MINERALS/,
+ok($data =~ /^245 +\$a ISOTOPIC DATES OF ROCKS AND MINERALS$/m,
    "rendered record has expected title");
 my $raw = Net::Z3950::ZOOM::record_get($rec, "raw", $len);
 ok($raw =~ /^00981n/, "raw record contains expected header");
