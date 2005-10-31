@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.9 2005-10-24 16:42:16 mike Exp $
+# $Id: ZOOM.pm,v 1.10 2005-10-31 15:10:49 mike Exp $
 
 use strict;
 use warnings;
@@ -6,11 +6,6 @@ use Net::Z3950::ZOOM;
 
 
 package ZOOM;
-
-sub diag_str {
-    my($code) = @_;
-    return Net::Z3950::ZOOM::diag_str($code);
-}
 
 
 # Member naming convention: hash-element names which begin with an
@@ -45,6 +40,11 @@ sub TIMEOUT { Net::Z3950::ZOOM::ERROR_TIMEOUT }
 sub UNSUPPORTED_PROTOCOL { Net::Z3950::ZOOM::ERROR_UNSUPPORTED_PROTOCOL }
 sub UNSUPPORTED_QUERY { Net::Z3950::ZOOM::ERROR_UNSUPPORTED_QUERY }
 sub INVALID_QUERY { Net::Z3950::ZOOM::ERROR_INVALID_QUERY }
+# The following are added specifically for this OO interface
+sub CREATE_QUERY { 20001 }
+sub QUERY_CQL { 20002 }
+sub QUERY_PQF { 20003 }
+sub SORTBY { 20004 }
 
 # The "Event" package contains constants returned by last_event()
 package ZOOM::Event;
@@ -59,6 +59,33 @@ sub RECV_APDU { Net::Z3950::ZOOM::EVENT_RECV_APDU }
 sub RECV_RECORD { Net::Z3950::ZOOM::EVENT_RECV_RECORD }
 sub RECV_SEARCH { Net::Z3950::ZOOM::EVENT_RECV_SEARCH }
 
+# ----------------------------------------------------------------------------
+
+package ZOOM;
+
+sub diag_str {
+    my($code) = @_;
+
+    # Special cases for error specific to the OO layer
+    if ($code == ZOOM::Error::CREATE_QUERY) {
+	return "can't create query object";
+    } elsif ($code == ZOOM::Error::QUERY_CQL) {
+	return "can't set CQL query";
+    } elsif ($code == ZOOM::Error::QUERY_PQF) {
+	return "can't set prefix query";
+    } elsif ($code == ZOOM::Error::SORTBY) {
+	return "can't set sort-specification";
+    }
+
+    return Net::Z3950::ZOOM::diag_str($code);
+}
+
+### More of the ZOOM::Exception instantiations should use this
+sub _oops {
+    my($code, $addinfo) = @_;
+
+    die new ZOOM::Exception($code, diag_str($code), $addinfo);
+}
 
 # ----------------------------------------------------------------------------
 
@@ -248,7 +275,7 @@ sub _conn {
     my $this = shift();
 
     my $_conn = $this->{_conn};
-    die "{_conn} undefined: has this ResultSet been destroy()ed?"
+    die "{_conn} undefined: has this Connection been destroy()ed?"
 	if !defined $_conn;
 
     return $_conn;
@@ -315,18 +342,31 @@ sub option_binary {
     return $oldval;
 }
 
-
-sub search_pqf {
+sub search {
     my $this = shift();
     my($query) = @_;
 
-    my $_rs = Net::Z3950::ZOOM::connection_search_pqf($this->_conn(), $query);
+    my $_rs = Net::Z3950::ZOOM::connection_search($this->_conn(),
+						  $query->_query());
     my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
     $errcode = Net::Z3950::ZOOM::connection_error($this->_conn(),
 						  $errmsg, $addinfo);
     die new ZOOM::Exception($errcode, $errmsg, $addinfo) if $errcode;
 
     return _new ZOOM::ResultSet($this, $query, $_rs);
+}
+
+sub search_pqf {
+    my $this = shift();
+    my($pqf) = @_;
+
+    my $_rs = Net::Z3950::ZOOM::connection_search_pqf($this->_conn(), $pqf);
+    my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
+    $errcode = Net::Z3950::ZOOM::connection_error($this->_conn(),
+						  $errmsg, $addinfo);
+    die new ZOOM::Exception($errcode, $errmsg, $addinfo) if $errcode;
+
+    return _new ZOOM::ResultSet($this, $pqf, $_rs);
 }
 
 sub destroy {
@@ -344,16 +384,67 @@ package ZOOM::Query;
 sub new {
     my $class = shift();
     die "You can't create $class objects: it's a virtual base class";
+}
 
+sub _query {
+    my $this = shift();
+
+    my $_query = $this->{_query};
+    die "{_query} undefined: has this Query been destroy()ed?"
+	if !defined $_query;
+
+    return $_query;
+}
+
+sub sortby {
+    my $this = shift();
+    my($sortby) = @_;
+
+    Net::Z3950::ZOOM::query_sortby($this->_query(), $sortby) == 0
+	or ZOOM::_oops(ZOOM::Error::SORTBY, $sortby);
+}
+
+sub destroy {
+    my $this = shift();
+
+    Net::Z3950::ZOOM::query_destroy($this->_query());
+    $this->{_query} = undef;
 }
 
 
-package ZOOM::Query::RPN;
+package ZOOM::Query::CQL;
+our @ISA = qw(ZOOM::Query);
 
 sub new {
     my $class = shift();
+    my($string) = @_;
 
-    ### Er ...
+    my $q = Net::Z3950::ZOOM::query_create()
+	or ZOOM::_oops(ZOOM::Error::CREATE_QUERY);
+    Net::Z3950::ZOOM::query_cql($q, $string) == 0
+	or ZOOM::_oops(ZOOM::Error::QUERY_CQL, $string);
+
+    return bless {
+	_query => $q,
+    }, $class;
+}
+
+
+package ZOOM::Query::PQF;
+our @ISA = qw(ZOOM::Query);
+
+sub new {
+    my $class = shift();
+    my($string) = @_;
+
+    my $q = Net::Z3950::ZOOM::query_create()
+	or ZOOM::_oops(ZOOM::Error::CREATE_QUERY);
+    Net::Z3950::ZOOM::query_prefix($q, $string) == 0
+	or ZOOM::_oops(ZOOM::Error::QUERY_PQF, $string);
+
+    return bless {
+	_query => $q,
+    }, $class;
 }
 
 
@@ -373,7 +464,12 @@ sub _new {
 
     return bless {
 	conn => $conn,
-	query => $query,
+	query => $query,	# This is not currently used, which is
+				# just as well since it could be
+				# either a string (when the RS is
+				# created with search_pqf()) or a
+				# ZOOM::Query object (when it's
+				# created with search())
 	_rs => $_rs,
     }, $class;
 }
