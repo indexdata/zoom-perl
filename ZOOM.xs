@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.17 2005-10-26 16:27:25 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.18 2005-11-01 11:54:42 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -232,18 +232,18 @@ void
 ZOOM_resultset_destroy(r)
 	ZOOM_resultset r
 
-# UNTESTED
+# TESTED
 const char *
 ZOOM_resultset_option_get(r, key)
-	ZOOM_resultset	r
-	const char *	key
+	ZOOM_resultset r
+	const char* key
 
-# UNTESTED
+# TESTED
 void
 ZOOM_resultset_option_set(r, key, val)
-	ZOOM_resultset	r
-	const char *	key
-	const char *	val
+	ZOOM_resultset r
+	const char* key
+	const char* val
 
 # TESTED
 size_t
