@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.19 2005-11-02 17:23:50 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.20 2005-11-02 18:23:10 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -251,12 +251,43 @@ ZOOM_resultset_size(r)
 	ZOOM_resultset r
 
 # TESTING
-void
-ZOOM_resultset_records(r, recs, start, count)
+SV *
+ZOOM_resultset_records(r, start, count, return_values)
 	ZOOM_resultset r
-	ZOOM_record* recs
 	size_t start
 	size_t count
+	int return_values
+	INIT:
+		ZOOM_record *recs;
+	CODE:
+		/*printf("*** ZOOM_resultset_records(r=0x%lx, start=%lu, count=%lx, return_values=%d)\n", (unsigned long) r, (unsigned long) start, (unsigned long) count, return_values);*/
+		if (return_values) {
+			/*printf("*** generating space for %ld records\n", (unsigned long) count);*/
+			recs = (ZOOM_record*) xmalloc(count * sizeof *recs);
+		} else {
+			/*printf("*** using null pointer for records array\n");*/
+			recs = 0;
+		}
+		ZOOM_resultset_records(r, recs, start, count);
+		/*printf("*** returned from ZOOM_resultset_records()\n");*/
+		if (return_values) {
+			AV *av = newAV();
+			int i;
+			for (i = 0; i < count; i++) {
+				SV *tmp = sv_newmortal();
+				printf("*** recs[%d] = %lu\n", i, (unsigned long) recs[i]);
+				/* ### Next line fails.  Damn and blast Perl */
+				sv_setref_pv(tmp, "ZOOM_record", (void*) recs[i]);
+				av_push(av, tmp);
+			}
+			RETVAL = newRV((SV*) av);
+			printf("*** returning array %lu\n", (unsigned long) RETVAL);
+		} else {
+			/*printf("*** returning undef\n");*/
+			RETVAL = &PL_sv_undef;
+		}
+	OUTPUT:
+		RETVAL
 
 # TESTED
 ZOOM_record
