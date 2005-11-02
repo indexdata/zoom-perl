@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.18 2005-11-01 11:54:42 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.19 2005-11-02 17:23:50 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -250,13 +250,13 @@ size_t
 ZOOM_resultset_size(r)
 	ZOOM_resultset r
 
-# UNTESTED
+# TESTING
 void
 ZOOM_resultset_records(r, recs, start, count)
-	ZOOM_resultset	r
-	ZOOM_record *	recs
-	size_t	start
-	size_t	count
+	ZOOM_resultset r
+	ZOOM_record* recs
+	size_t start
+	size_t count
 
 # TESTED
 ZOOM_record
@@ -264,16 +264,16 @@ ZOOM_resultset_record(s, pos)
 	ZOOM_resultset s
 	size_t pos
 
-# UNTESTED
+# TESTED
 ZOOM_record
 ZOOM_resultset_record_immediate(s, pos)
-	ZOOM_resultset	s
-	size_t	pos
+	ZOOM_resultset s
+	size_t pos
 
-# UNTESTED
+# TESTED
 void
 ZOOM_resultset_cache_reset(r)
-	ZOOM_resultset	r
+	ZOOM_resultset r
 
 # See "typemap" for discussion of the "const char *" return-type.
 #
