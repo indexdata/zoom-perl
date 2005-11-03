@@ -1,4 +1,4 @@
-# $Id: MANIFEST,v 1.12 2005-11-02 18:24:57 mike Exp $
+# $Id: MANIFEST,v 1.13 2005-11-03 16:33:06 mike Exp $
 
 Changes
 Makefile.PL
@@ -15,6 +15,7 @@ t/2-ZOOM.t
 t/20-options.t
 t/21-option-callback.t
 t/22-query.t
+t/23-resultset.t
 lib/Net/Z3950/ZOOM.pm
 lib/ZOOM.pm
 lib/Net/Z3950.pm
