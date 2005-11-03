@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.10 2005-10-31 15:10:49 mike Exp $
+# $Id: ZOOM.pm,v 1.11 2005-11-03 16:32:10 mike Exp $
 
 use strict;
 use warnings;
@@ -485,6 +485,17 @@ sub _rs {
     return $_rs;
 }
 
+sub option {
+    my $this = shift();
+    my($key, $value) = @_;
+
+    my $oldval = Net::Z3950::ZOOM::resultset_option_get($this->_rs(), $key);
+    Net::Z3950::ZOOM::resultset_option_set($this->_rs(), $key, $value)
+	if defined $value;
+
+    return $oldval;
+}
+
 sub size {
     my $this = shift();
 
@@ -497,11 +508,52 @@ sub record {
 
     my $_rec = Net::Z3950::ZOOM::resultset_record($this->_rs(), $which);
     ### Check for error -- but how?
+    return undef if !defined $_rec;
 
     # For some reason, I have to use the explicit "->" syntax in order
     # to invoke the ZOOM::Record constructor here, even though I don't
     # have to do the same for _new ZOOM::ResultSet above.  Weird.
     return ZOOM::Record->_new($this, $which, $_rec);
+}
+
+sub record_immediate {
+    my $this = shift();
+    my($which) = @_;
+
+    my $_rec = Net::Z3950::ZOOM::resultset_record_immediate($this->_rs(),
+							    $which);
+    ### Check for error -- but how?
+    return undef if !defined $_rec;
+
+    return ZOOM::Record->_new($this, $which, $_rec);
+}
+
+sub cache_reset {
+    my $this = shift();
+
+    Net::Z3950::ZOOM::resultset_cache_reset($this->_rs());
+}
+
+sub records {
+    my $this = shift();
+    my($start, $count, $return_records) = @_;
+
+    my $raw = Net::Z3950::ZOOM::resultset_records($this->_rs(), $start, $count,
+						  $return_records);
+    return undef if !defined $raw;
+
+    # We need to package up the returned records in ZOOM::Record objects
+    my @res = ();
+    for my $i (0 .. @$raw-1) {
+	my $_rec = $raw->[$i];
+	if (!defined $_rec) {
+	    push @res, undef;
+	} else {
+	    push @res, ZOOM::Record->_new($this, $start+$i, $_rec);
+	}
+    }
+
+    return \@res;
 }
 
 sub destroy {
