@@ -1,4 +1,4 @@
-# $Id: 13-resultset.t,v 1.3 2005-11-02 18:24:32 mike Exp $
+# $Id: 13-resultset.t,v 1.4 2005-11-03 15:58:53 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 13-resultset.t'
@@ -63,11 +63,9 @@ $rec = Net::Z3950::ZOOM::resultset_record_immediate($rs, 0);
 ok(defined $rec, "*_immediate(0) ok after resultset_records()");
 # Fetch all records at once using records()
 $tmp = Net::Z3950::ZOOM::resultset_records($rs, 0, 2, 1);
-{ use Data::Dumper; print Dumper($tmp) }
 ok(@$tmp == 2, "resultset_records() returned two records");
-#These lines won't work yet, as the array elements are undefined
-#$data3 = Net::Z3950::ZOOM::record_get($tmp->[0], "render", $len);
-#ok($data3 eq $data2, "record returned from resultset_records() renders as expected");
+$data3 = Net::Z3950::ZOOM::record_get($tmp->[0], "render", $len);
+ok($data3 eq $data2, "record returned from resultset_records() renders as expected");
 
 Net::Z3950::ZOOM::resultset_destroy($rs);
 ok(1, "destroyed result-set");
