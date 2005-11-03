@@ -1,11 +1,11 @@
-# $Id: 13-resultset.t,v 1.4 2005-11-03 15:58:53 mike Exp $
+# $Id: 13-resultset.t,v 1.5 2005-11-03 16:04:04 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 13-resultset.t'
 
 use strict;
 use warnings;
-use Test::More tests => 17;
+use Test::More tests => 19;
 BEGIN { use_ok('Net::Z3950::ZOOM') };
 
 my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
@@ -48,24 +48,26 @@ ok($data2 =~ /<title>/i, "option for XML syntax is honoured");
 # ZOOM_resultset_cache_reset(), which presumably empties it.
 #
 $rec = Net::Z3950::ZOOM::resultset_record_immediate($rs, 0);
-ok(defined $rec, "prefetched record obtained with *_immediate()");
+ok(defined $rec, "prefetched record obtained with _immediate()");
 my $data3 = Net::Z3950::ZOOM::record_get($rec, "render", $len);
-ok($data3 eq $data2, "*_immediate record renders as expected");
+ok($data3 eq $data2, "_immediate record renders as expected");
 $rec = Net::Z3950::ZOOM::resultset_record_immediate($rs, 1);
-ok(!defined $rec, "non-prefetched record obtained with *_immediate()");
+ok(!defined $rec, "non-prefetched record obtained with _immediate()");
 Net::Z3950::ZOOM::resultset_cache_reset($rs);
 $rec = Net::Z3950::ZOOM::resultset_record_immediate($rs, 0);
-ok(!defined $rec, "*_immediate(0) fails after cache reset");
+ok(!defined $rec, "_immediate(0) fails after cache reset");
 # Fill both cache slots, but with no record array
 my $tmp = Net::Z3950::ZOOM::resultset_records($rs, 0, 2, 0);
 ok(!defined $tmp, "resultset_records() returns undef as expected");
 $rec = Net::Z3950::ZOOM::resultset_record_immediate($rs, 0);
-ok(defined $rec, "*_immediate(0) ok after resultset_records()");
+ok(defined $rec, "_immediate(0) ok after resultset_records()");
 # Fetch all records at once using records()
 $tmp = Net::Z3950::ZOOM::resultset_records($rs, 0, 2, 1);
 ok(@$tmp == 2, "resultset_records() returned two records");
 $data3 = Net::Z3950::ZOOM::record_get($tmp->[0], "render", $len);
 ok($data3 eq $data2, "record returned from resultset_records() renders as expected");
+$rec = Net::Z3950::ZOOM::resultset_record_immediate($rs, 1);
+ok(defined $rec, "_immediate(1) ok after resultset_records()");
 
 Net::Z3950::ZOOM::resultset_destroy($rs);
 ok(1, "destroyed result-set");
