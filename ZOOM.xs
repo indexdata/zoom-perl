@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.21 2005-11-03 15:58:09 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.22 2005-11-03 16:23:36 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -252,18 +252,18 @@ ZOOM_resultset_size(r)
 
 # TESTED
 SV *
-ZOOM_resultset_records(r, start, count, return_values)
+ZOOM_resultset_records(r, start, count, return_records)
 	ZOOM_resultset r
 	size_t start
 	size_t count
-	int return_values
+	int return_records
 	INIT:
 		ZOOM_record *recs = 0;
 	CODE:
-		if (return_values)
+		if (return_records)
 			recs = (ZOOM_record*) xmalloc(count * sizeof *recs);
 		ZOOM_resultset_records(r, recs, start, count);
-		if (return_values) {
+		if (return_records) {
 			AV *av = newAV();
 			int i;
 			for (i = 0; i < count; i++) {
