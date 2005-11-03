@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.22 2005-11-03 16:23:36 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.23 2005-11-03 16:42:22 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -210,11 +210,6 @@ const char *
 ZOOM_diag_str(error)
 	int error
 
-# UNTESTED
-int
-ZOOM_connection_last_event(cs)
-	ZOOM_connection	cs
-
 # TESTED
 ZOOM_resultset
 ZOOM_connection_search(arg0, q)
@@ -294,6 +289,13 @@ ZOOM_resultset_record_immediate(s, pos)
 void
 ZOOM_resultset_cache_reset(r)
 	ZOOM_resultset r
+
+# UNTESTED
+void
+ZOOM_resultset_sort(r, sort_type, sort_spec)
+	ZOOM_resultset	r
+	const char *	sort_type
+	const char *	sort_spec
 
 # See "typemap" for discussion of the "const char *" return-type.
 #
@@ -420,13 +422,6 @@ ZOOM_package_option_set(p, key, val)
 	const char *	key
 	const char *	val
 
-# UNTESTED
-void
-ZOOM_resultset_sort(r, sort_type, sort_spec)
-	ZOOM_resultset	r
-	const char *	sort_type
-	const char *	sort_spec
-
 # We ignore the return value of ZOOM_options_set_callback(), since it
 # is always just the address of the __ZOOM_option_callback() function.
 # The information that we actually want -- the address of the Perl
@@ -536,4 +531,9 @@ int
 ZOOM_event(no, cs)
 	int	no
 	ZOOM_connection *	cs
+
+# UNTESTED
+int
+ZOOM_connection_last_event(cs)
+	ZOOM_connection	cs
 
