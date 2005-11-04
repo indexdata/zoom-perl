@@ -1,4 +1,4 @@
-# $Id: 14-sorting.t,v 1.1 2005-11-04 16:13:42 mike Exp $
+# $Id: 14-sorting.t,v 1.2 2005-11-04 16:34:16 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 14-sorting.t'
@@ -37,7 +37,7 @@ my $rs = Net::Z3950::ZOOM::connection_search($conn, $query);
 $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
 ok($errcode == 0, "search for '$qstr'");
 my $n = Net::Z3950::ZOOM::resultset_size($rs);
-ok($n eq 5, "found $n records (expected 5)");
+ok($n == 5, "found $n records (expected 5)");
 
 Net::Z3950::ZOOM::resultset_option_set($rs, preferredRecordSyntax => "usmarc");
 my $previous = "";		# Sorts before all legitimate titles
