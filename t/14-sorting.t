@@ -1,4 +1,4 @@
-# $Id: 14-sorting.t,v 1.2 2005-11-04 16:34:16 mike Exp $
+# $Id: 14-sorting.t,v 1.3 2005-11-04 16:59:55 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 14-sorting.t'
@@ -17,7 +17,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 26;
+use Test::More tests => 27;
 use MARC::Record;
 
 BEGIN { use_ok('Net::Z3950::ZOOM') };
@@ -32,7 +32,8 @@ ok($errcode == 0, "connection to '$host'");
 my $qstr = '@attr 1=4 map';
 my $query = Net::Z3950::ZOOM::query_create();
 Net::Z3950::ZOOM::query_prefix($query, $qstr);
-Net::Z3950::ZOOM::query_sortby($query, "1=4<i");
+my $res = Net::Z3950::ZOOM::query_sortby($query, "1=4 <i");
+ok($res == 0, "sort specification accepted");
 my $rs = Net::Z3950::ZOOM::connection_search($conn, $query);
 $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
 ok($errcode == 0, "search for '$qstr'");
@@ -53,7 +54,7 @@ foreach my $i (1 .. $n) {
 }
 
 # Now reverse the order of sorting
-Net::Z3950::ZOOM::resultset_sort($rs, "dummy", "1=4>i");
+Net::Z3950::ZOOM::resultset_sort($rs, "dummy", "1=4 >i");
 ### There's no way to check for success, as this is a void function
 
 $previous = "z";		# Sorts after all legitimate titles
