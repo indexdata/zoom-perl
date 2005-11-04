@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.23 2005-11-03 16:42:22 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.24 2005-11-04 17:07:13 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -290,12 +290,12 @@ void
 ZOOM_resultset_cache_reset(r)
 	ZOOM_resultset r
 
-# UNTESTED
+# TESTED
 void
 ZOOM_resultset_sort(r, sort_type, sort_spec)
-	ZOOM_resultset	r
-	const char *	sort_type
-	const char *	sort_spec
+	ZOOM_resultset r
+	const char* sort_type
+	const char* sort_spec
 
 # See "typemap" for discussion of the "const char *" return-type.
 #
