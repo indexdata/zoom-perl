@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.11 2005-11-03 16:32:10 mike Exp $
+# $Id: ZOOM.pm,v 1.12 2005-11-04 17:08:00 mike Exp $
 
 use strict;
 use warnings;
@@ -554,6 +554,14 @@ sub records {
     }
 
     return \@res;
+}
+
+sub sort {
+    my $this = shift();
+    my($sort_type, $sort_spec) = @_;
+
+    Net::Z3950::ZOOM::resultset_sort($this->_rs(), $sort_type, $sort_spec);
+    ### There's no way to check for success, as this is a void function
 }
 
 sub destroy {
