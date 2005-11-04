@@ -1,4 +1,4 @@
-# $Id: 23-resultset.t,v 1.1 2005-11-03 16:32:41 mike Exp $
+# $Id: 23-resultset.t,v 1.2 2005-11-04 16:21:04 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 23-resultset.t'
@@ -7,14 +7,6 @@ use strict;
 use warnings;
 use Test::More tests => 19;
 BEGIN { use_ok('ZOOM') };
-
-
-
-
-my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
-
-
-
 
 my $host = "indexdata.com/gils";
 my $conn;
