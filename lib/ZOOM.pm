@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.12 2005-11-04 17:08:00 mike Exp $
+# $Id: ZOOM.pm,v 1.13 2005-11-07 15:48:08 mike Exp $
 
 use strict;
 use warnings;
@@ -45,6 +45,7 @@ sub CREATE_QUERY { 20001 }
 sub QUERY_CQL { 20002 }
 sub QUERY_PQF { 20003 }
 sub SORTBY { 20004 }
+sub CLONE { 20005 }
 
 # The "Event" package contains constants returned by last_event()
 package ZOOM::Event;
@@ -75,6 +76,8 @@ sub diag_str {
 	return "can't set prefix query";
     } elsif ($code == ZOOM::Error::SORTBY) {
 	return "can't set sort-specification";
+    } elsif ($code == ZOOM::Error::CLONE) {
+	return "can't clone record";
     }
 
     return Net::Z3950::ZOOM::diag_str($code);
@@ -270,7 +273,7 @@ sub create {
     };
 }
 
-# PRIVATE within this class
+# PRIVATE to this class
 sub _conn {
     my $this = shift();
 
@@ -386,6 +389,7 @@ sub new {
     die "You can't create $class objects: it's a virtual base class";
 }
 
+# PRIVATE to this class and ZOOM::Connection::search()
 sub _query {
     my $this = shift();
 
@@ -457,7 +461,7 @@ sub new {
     die "You can't create $class objects directly";
 }
 
-# PRIVATE to ZOOM::Connection::search()
+# PRIVATE to ZOOM::Connection::search() and ZOOM::Connection::search_pqf()
 sub _new {
     my $class = shift();
     my($conn, $query, $_rs) = @_;
@@ -474,7 +478,7 @@ sub _new {
     }, $class;
 }
 
-# PRIVATE within this class
+# PRIVATE to this class
 sub _rs {
     my $this = shift();
 
@@ -581,7 +585,10 @@ sub new {
     die "You can't create $class objects directly";
 }
 
-# PRIVATE to ZOOM::ResultSet::record()
+# PRIVATE to ZOOM::ResultSet::record(),
+# ZOOM::ResultSet::record_immediate(), ZOOM::ResultSet::records() and
+# ZOOM::Record::clone()
+#
 sub _new {
     my $class = shift();
     my($rs, $which, $_rec) = @_;
@@ -593,11 +600,15 @@ sub _new {
     }, $class;
 }
 
-# PRIVATE within this class
+# PRIVATE to this class
 sub _rec {
     my $this = shift();
 
-    return $this->{_rec};
+    my $_rec = $this->{_rec};
+    die "{_rec} undefined: has this Record been destroy()ed?"
+	if !defined $_rec;
+
+    return $_rec;
 }
 
 sub render {
@@ -620,6 +631,23 @@ sub raw {
     my $string = Net::Z3950::ZOOM::record_get($this->_rec(), "raw", $len);
     # See comment about $len in render()
     return $string;
+}
+
+sub clone {
+    my $this = shift();
+
+    my $raw = Net::Z3950::ZOOM::record_clone($this->_rec())
+	or ZOOM::_oops(ZOOM::Error::CLONE);
+
+    # Arg 1 (rs) is undefined as the new record doesn't belong to an RS
+    return _new ZOOM::Record(undef, undef, $raw);
+}
+
+sub destroy {
+    my $this = shift();
+
+    Net::Z3950::ZOOM::record_destroy($this->_rec());
+    $this->{_rec} = undef;
 }
 
 
