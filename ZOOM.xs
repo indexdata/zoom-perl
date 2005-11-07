@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.24 2005-11-04 17:07:13 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.25 2005-11-07 14:27:43 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -310,15 +310,15 @@ ZOOM_record_get(rec, type, len)
 		RETVAL
 		len
 
-# UNTESTED
+# TESTED
 void
 ZOOM_record_destroy(rec)
-	ZOOM_record	rec
+	ZOOM_record rec
 
-# UNTESTED
+# TESTED
 ZOOM_record
 ZOOM_record_clone(srec)
-	ZOOM_record	srec
+	ZOOM_record srec
 
 # TESTED
 ZOOM_query
