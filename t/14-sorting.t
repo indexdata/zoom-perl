@@ -1,19 +1,7 @@
-# $Id: 14-sorting.t,v 1.3 2005-11-04 16:59:55 mike Exp $
+# $Id: 14-sorting.t,v 1.4 2005-11-07 16:30:41 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 14-sorting.t'
-
-#   ###	At present, this test fails -- so far as I can see, because
-#	the underlying ZOOM-C sorting functionality is broken, as
-#	verified using "zoomsh" with the commands:
-#
-#		ZOOM>open indexdata.dk/gils
-#		ZOOM>find @attr 1=4 map
-#		ZOOM>sort 1=4
-#		ZOOM>show 0 5
-#
-#	Hopefully Adam will fix the underlying code, and then this
-#	will Just Work.
 
 use strict;
 use warnings;
