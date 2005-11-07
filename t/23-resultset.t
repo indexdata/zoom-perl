@@ -1,11 +1,11 @@
-# $Id: 23-resultset.t,v 1.2 2005-11-04 16:21:04 mike Exp $
+# $Id: 23-resultset.t,v 1.3 2005-11-07 15:48:25 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 23-resultset.t'
 
 use strict;
 use warnings;
-use Test::More tests => 19;
+use Test::More tests => 23;
 BEGIN { use_ok('ZOOM') };
 
 my $host = "indexdata.com/gils";
@@ -36,6 +36,8 @@ ok(length($data2) < length($data1), "re-fetched record is brief, old was full");
 
 $rs->option(preferredRecordSyntax => "xml");
 $rec = $rs->record(0);
+my $cloned = $rec->clone();
+ok(defined $cloned, "cloned record");
 $data2 = $rec->render();
 ok($data2 =~ /<title>/i, "option for XML syntax is honoured");
 
@@ -71,3 +73,9 @@ $rs->destroy();
 ok(1, "destroyed result-set");
 $conn->destroy();
 ok(1, "destroyed connection");
+
+$data3 = $cloned->render();
+ok(1, "rendered cloned record after its result-set was destroyed");
+ok($data3 eq $data2, "render of clone as expected");
+$cloned->destroy();
+ok(1, "destroyed cloned record");

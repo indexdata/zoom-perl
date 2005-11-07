@@ -1,11 +1,11 @@
-# $Id: 13-resultset.t,v 1.5 2005-11-03 16:04:04 mike Exp $
+# $Id: 13-resultset.t,v 1.6 2005-11-07 15:48:21 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 13-resultset.t'
 
 use strict;
 use warnings;
-use Test::More tests => 19;
+use Test::More tests => 23;
 BEGIN { use_ok('Net::Z3950::ZOOM') };
 
 my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
@@ -39,6 +39,8 @@ ok(length($data2) < length($data1), "re-fetched record is brief, old was full");
 
 Net::Z3950::ZOOM::resultset_option_set($rs, preferredRecordSyntax => "xml");
 $rec = Net::Z3950::ZOOM::resultset_record($rs, 0);
+my $cloned = Net::Z3950::ZOOM::record_clone($rec);
+ok(defined $cloned, "cloned record");
 $data2 = Net::Z3950::ZOOM::record_get($rec, "render", $len);
 ok($data2 =~ /<title>/i, "option for XML syntax is honoured");
 
@@ -73,3 +75,9 @@ Net::Z3950::ZOOM::resultset_destroy($rs);
 ok(1, "destroyed result-set");
 Net::Z3950::ZOOM::connection_destroy($conn);
 ok(1, "destroyed connection");
+
+$data3 = Net::Z3950::ZOOM::record_get($cloned, "render", $len);
+ok(1, "rendered cloned record after its result-set was destroyed");
+ok($data3 eq $data2, "render of clone as expected");
+Net::Z3950::ZOOM::record_destroy($cloned);
+ok(1, "destroyed cloned record");
