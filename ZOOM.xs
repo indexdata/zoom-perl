@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.25 2005-11-07 14:27:43 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.26 2005-11-08 10:23:02 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -347,37 +347,45 @@ ZOOM_query_sortby(s, criteria)
 	ZOOM_query	s
 	const char *	criteria
 
-# UNTESTED
+# TESTED
 ZOOM_scanset
 ZOOM_connection_scan(c, startterm)
-	ZOOM_connection	c
-	const char *	startterm
+	ZOOM_connection c
+	const char* startterm
 
-# UNTESTED
+# TESTED
 const char *
 ZOOM_scanset_term(scan, pos, occ, len)
-	ZOOM_scanset	scan
-	size_t	pos
-	int *	occ
-	int *	len
+	ZOOM_scanset scan
+	size_t pos
+	int& occ
+	int& len
+	OUTPUT:
+		RETVAL
+		occ
+		len
 
-# UNTESTED
+# TESTED
 const char *
 ZOOM_scanset_display_term(scan, pos, occ, len)
-	ZOOM_scanset	scan
-	size_t	pos
-	int *	occ
-	int *	len
+	ZOOM_scanset scan
+	size_t pos
+	int& occ
+	int& len
+	OUTPUT:
+		RETVAL
+		occ
+		len
 
-# UNTESTED
+# TESTED
 size_t
 ZOOM_scanset_size(scan)
-	ZOOM_scanset	scan
+	ZOOM_scanset scan
 
-# UNTESTED
+# TESTED
 void
 ZOOM_scanset_destroy(scan)
-	ZOOM_scanset	scan
+	ZOOM_scanset scan
 
 # UNTESTED
 const char *
