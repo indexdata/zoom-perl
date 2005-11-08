@@ -1,4 +1,4 @@
-# $Id: 16-packages.t,v 1.1 2005-11-08 13:47:11 mike Exp $
+# $Id: 16-packages.t,v 1.2 2005-11-08 14:46:31 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 16-packages.t'
@@ -22,7 +22,7 @@ my $p = Net::Z3950::ZOOM::connection_package($conn, $o);
 ok(defined $p, "created package");
 
 # There may be useful options to set, but this is not one of them!
-Net::Z3950::ZOOM::package_option_set($p, "foo", "bar");
+Net::Z3950::ZOOM::package_option_set($p, foo => "bar");
 my $val = Net::Z3950::ZOOM::package_option_get($p, "foo");
 ok($val eq "bar", "package option retrieved as expected");
 
