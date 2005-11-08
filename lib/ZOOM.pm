@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.14 2005-11-08 11:46:59 mike Exp $
+# $Id: ZOOM.pm,v 1.15 2005-11-08 15:55:45 mike Exp $
 
 use strict;
 use warnings;
@@ -46,6 +46,7 @@ sub QUERY_CQL { 20002 }
 sub QUERY_PQF { 20003 }
 sub SORTBY { 20004 }
 sub CLONE { 20005 }
+sub PACKAGE { 20006 }
 
 # The "Event" package contains constants returned by last_event()
 package ZOOM::Event;
@@ -78,6 +79,8 @@ sub diag_str {
 	return "can't set sort-specification";
     } elsif ($code == ZOOM::Error::CLONE) {
 	return "can't clone record";
+    } elsif ($code == ZOOM::Error::PACKAGE) {
+	return "can't create package";
     }
 
     return Net::Z3950::ZOOM::diag_str($code);
@@ -147,6 +150,9 @@ sub new {
     }, $class;
 }
 
+# PRIVATE to this class and ZOOM::Connection::create() and
+# ZOOM::Connection::package()
+#
 sub _opts {
     my $this = shift();
 
@@ -383,6 +389,18 @@ sub scan {
     die new ZOOM::Exception($errcode, $errmsg, $addinfo) if $errcode;
 
     return _new ZOOM::ScanSet($this, $startterm, $_ss);
+}
+
+sub package {
+    my $this = shift();
+    my($options) = @_;
+
+    my $_o = defined $options ? $options->_opts() :
+	Net::Z3950::ZOOM::options_create();
+    my $_p = Net::Z3950::ZOOM::connection_package($this->_conn(), $_o)
+	or ZOOM::_oops(ZOOM::Error::PACKAGE);
+
+    return _new ZOOM::Package($this, $options, $_p);
 }
 
 sub destroy {
@@ -735,6 +753,68 @@ sub destroy {
 
     Net::Z3950::ZOOM::scanset_destroy($this->_ss());
     $this->{_ss} = undef;
+}
+
+
+# ----------------------------------------------------------------------------
+
+package ZOOM::Package;
+
+sub new {
+    my $class = shift();
+    die "You can't create $class objects directly";
+}
+
+# PRIVATE to ZOOM::Connection::package(),
+sub _new {
+    my $class = shift();
+    my($conn, $options, $_p) = @_;
+
+    return bless {
+	conn => $conn,
+	options => $options,
+	_p => $_p,
+    }, $class;
+}
+
+# PRIVATE to this class
+sub _p {
+    my $this = shift();
+
+    my $_p = $this->{_p};
+    die "{_p} undefined: has this Package been destroy()ed?"
+	if !defined $_p;
+
+    return $_p;
+}
+
+sub option {
+    my $this = shift();
+    my($key, $value) = @_;
+
+    my $oldval = Net::Z3950::ZOOM::package_option_get($this->_p(), $key);
+    Net::Z3950::ZOOM::package_option_set($this->_p(), $key, $value)
+	if defined $value;
+
+    return $oldval;
+}
+
+sub send {
+    my $this = shift();
+    my($type) = @_;
+
+    Net::Z3950::ZOOM::package_send($this->_p(), $type);
+    my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
+    $errcode = Net::Z3950::ZOOM::connection_error($this->{conn}->_conn(),
+						  $errmsg, $addinfo);
+    die new ZOOM::Exception($errcode, $errmsg, $addinfo) if $errcode;
+}
+
+sub destroy {
+    my $this = shift();
+
+    Net::Z3950::ZOOM::package_destroy($this->_p());
+    $this->{_p} = undef;
 }
 
 
