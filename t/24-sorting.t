@@ -1,11 +1,11 @@
-# $Id: 24-sorting.t,v 1.3 2005-11-08 16:41:25 mike Exp $
+# $Id: 24-sorting.t,v 1.4 2005-11-08 16:49:06 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 24-sorting.t'
 
 use strict;
 use warnings;
-use Test::More tests => 27;
+use Test::More tests => 29;
 use MARC::Record;
 
 BEGIN { use_ok('ZOOM') };
