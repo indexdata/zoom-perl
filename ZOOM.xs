@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.27 2005-11-08 11:51:57 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.28 2005-11-08 15:56:44 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -504,30 +504,30 @@ ZOOM_options_set_int(opt, name, value)
 	const char* name
 	int value
 
-# UNTESTED
+# TESTED
 ZOOM_package
 ZOOM_connection_package(c, options)
 	ZOOM_connection	c
 	ZOOM_options	options
 
-# UNTESTED
+# TESTED
 void
 ZOOM_package_destroy(p)
 	ZOOM_package	p
 
-# UNTESTED
+# TESTED
 void
 ZOOM_package_send(p, type)
 	ZOOM_package	p
 	const char *	type
 
-# UNTESTED
+# TESTED
 const char *
 ZOOM_package_option_get(p, key)
 	ZOOM_package	p
 	const char *	key
 
-# UNTESTED
+# TESTED
 void
 ZOOM_package_option_set(p, key, val)
 	ZOOM_package	p
