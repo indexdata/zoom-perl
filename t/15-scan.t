@@ -1,11 +1,11 @@
-# $Id: 15-scan.t,v 1.2 2005-11-08 10:37:31 mike Exp $
+# $Id: 15-scan.t,v 1.3 2005-11-08 11:45:29 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 15-scan.t'
 
 use strict;
 use warnings;
-use Test::More tests => 46;
+use Test::More tests => 47;
 
 BEGIN { use_ok('Net::Z3950::ZOOM') };
 
@@ -41,6 +41,7 @@ foreach my $i (1 .. $n) {
 
 Net::Z3950::ZOOM::scanset_destroy($ss);
 ok(1, "destroyed scanset");
+ok(1, "(can't re-destroy scanset)"); # Only meaningful in OO API.
 
 #   ###	There remains much testing still to do with scan, but I can't
 #	do it until Adam better explains ZOOM-C's scan functionality.
