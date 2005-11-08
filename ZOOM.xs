@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.28 2005-11-08 15:56:44 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.29 2005-11-08 16:39:23 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -290,9 +290,16 @@ void
 ZOOM_resultset_cache_reset(r)
 	ZOOM_resultset r
 
-# TESTED
+# TESTED (but deprecated)
 void
 ZOOM_resultset_sort(r, sort_type, sort_spec)
+	ZOOM_resultset r
+	const char* sort_type
+	const char* sort_spec
+
+# TESTED
+int
+ZOOM_resultset_sort1(r, sort_type, sort_spec)
 	ZOOM_resultset r
 	const char* sort_type
 	const char* sort_spec
