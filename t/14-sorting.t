@@ -1,11 +1,11 @@
-# $Id: 14-sorting.t,v 1.4 2005-11-07 16:30:41 mike Exp $
+# $Id: 14-sorting.t,v 1.5 2005-11-08 16:40:06 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 14-sorting.t'
 
 use strict;
 use warnings;
-use Test::More tests => 27;
+use Test::More tests => 29;
 use MARC::Record;
 
 BEGIN { use_ok('Net::Z3950::ZOOM') };
@@ -41,9 +41,12 @@ foreach my $i (1 .. $n) {
     $previous = $title;
 }
 
-# Now reverse the order of sorting
-Net::Z3950::ZOOM::resultset_sort($rs, "dummy", "1=4 >i");
-### There's no way to check for success, as this is a void function
+# Now reverse the order of sorting.  We never use resultset_sort(),
+# which is identical to sort1() except that it returns nothing.
+my $status = Net::Z3950::ZOOM::resultset_sort1($rs, "dummy", "1=4>i");
+ok($status < 0, "malformed sort criterion rejected");
+$status = Net::Z3950::ZOOM::resultset_sort1($rs, "dummy", "1=4 >i");
+ok($status == 0, "sort criterion accepted");
 
 $previous = "z";		# Sorts after all legitimate titles
 foreach my $i (1 .. $n) {
