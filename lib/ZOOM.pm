@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.15 2005-11-08 15:55:45 mike Exp $
+# $Id: ZOOM.pm,v 1.16 2005-11-08 16:42:08 mike Exp $
 
 use strict;
 use warnings;
@@ -595,8 +595,8 @@ sub sort {
     my $this = shift();
     my($sort_type, $sort_spec) = @_;
 
-    Net::Z3950::ZOOM::resultset_sort($this->_rs(), $sort_type, $sort_spec);
-    ### There's no way to check for success, as this is a void function
+    return Net::Z3950::ZOOM::resultset_sort1($this->_rs(),
+					     $sort_type, $sort_spec);
 }
 
 sub destroy {
