@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.26 2005-11-08 10:23:02 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.27 2005-11-08 11:51:57 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -400,36 +400,6 @@ ZOOM_scanset_option_set(scan, key, val)
 	const char *	key
 	const char *	val
 
-# UNTESTED
-ZOOM_package
-ZOOM_connection_package(c, options)
-	ZOOM_connection	c
-	ZOOM_options	options
-
-# UNTESTED
-void
-ZOOM_package_destroy(p)
-	ZOOM_package	p
-
-# UNTESTED
-void
-ZOOM_package_send(p, type)
-	ZOOM_package	p
-	const char *	type
-
-# UNTESTED
-const char *
-ZOOM_package_option_get(p, key)
-	ZOOM_package	p
-	const char *	key
-
-# UNTESTED
-void
-ZOOM_package_option_set(p, key, val)
-	ZOOM_package	p
-	const char *	key
-	const char *	val
-
 # We ignore the return value of ZOOM_options_set_callback(), since it
 # is always just the address of the __ZOOM_option_callback() function.
 # The information that we actually want -- the address of the Perl
@@ -533,6 +503,36 @@ ZOOM_options_set_int(opt, name, value)
 	ZOOM_options opt
 	const char* name
 	int value
+
+# UNTESTED
+ZOOM_package
+ZOOM_connection_package(c, options)
+	ZOOM_connection	c
+	ZOOM_options	options
+
+# UNTESTED
+void
+ZOOM_package_destroy(p)
+	ZOOM_package	p
+
+# UNTESTED
+void
+ZOOM_package_send(p, type)
+	ZOOM_package	p
+	const char *	type
+
+# UNTESTED
+const char *
+ZOOM_package_option_get(p, key)
+	ZOOM_package	p
+	const char *	key
+
+# UNTESTED
+void
+ZOOM_package_option_set(p, key, val)
+	ZOOM_package	p
+	const char *	key
+	const char *	val
 
 # UNTESTED
 int
