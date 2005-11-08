@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.13 2005-11-07 15:48:08 mike Exp $
+# $Id: ZOOM.pm,v 1.14 2005-11-08 11:46:59 mike Exp $
 
 use strict;
 use warnings;
@@ -372,6 +372,19 @@ sub search_pqf {
     return _new ZOOM::ResultSet($this, $pqf, $_rs);
 }
 
+sub scan {
+    my $this = shift();
+    my($startterm) = @_;
+
+    my $_ss = Net::Z3950::ZOOM::connection_scan($this->_conn(), $startterm);
+    my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
+    $errcode = Net::Z3950::ZOOM::connection_error($this->_conn(),
+						  $errmsg, $addinfo);
+    die new ZOOM::Exception($errcode, $errmsg, $addinfo) if $errcode;
+
+    return _new ZOOM::ScanSet($this, $startterm, $_ss);
+}
+
 sub destroy {
     my $this = shift();
 
@@ -648,6 +661,80 @@ sub destroy {
 
     Net::Z3950::ZOOM::record_destroy($this->_rec());
     $this->{_rec} = undef;
+}
+
+
+# ----------------------------------------------------------------------------
+
+package ZOOM::ScanSet;
+
+sub new {
+    my $class = shift();
+    die "You can't create $class objects directly";
+}
+
+# PRIVATE to ZOOM::Connection::scan(),
+sub _new {
+    my $class = shift();
+    my($conn, $startterm, $_ss) = @_;
+
+    return bless {
+	conn => $conn,
+	startterm => $startterm,
+	_ss => $_ss,
+    }, $class;
+}
+
+# PRIVATE to this class
+sub _ss {
+    my $this = shift();
+
+    my $_ss = $this->{_ss};
+    die "{_ss} undefined: has this ScanSet been destroy()ed?"
+	if !defined $_ss;
+
+    return $_ss;
+}
+
+sub size {
+    my $this = shift();
+
+    return Net::Z3950::ZOOM::scanset_size($this->_ss());
+}
+
+sub term {
+    my $this = shift();
+    my($which) = @_;
+
+    my($occ, $len) = (0, 0);
+    my $term = Net::Z3950::ZOOM::scanset_term($this->_ss(), $which,
+					      $occ, $len);
+    return undef if !defined $term;
+    die "length of term '$term' differs from returned len=$len"
+	if length($term) != $len;
+
+    return ($term, $occ);
+}
+
+sub display_term {
+    my $this = shift();
+    my($which) = @_;
+
+    my($occ, $len) = (0, 0);
+    my $term = Net::Z3950::ZOOM::scanset_display_term($this->_ss(), $which,
+						      $occ, $len);
+    return undef if !defined $term;
+    die "length of display term '$term' differs from returned len=$len"
+	if length($term) != $len;
+
+    return ($term, $occ);
+}
+
+sub destroy {
+    my $this = shift();
+
+    Net::Z3950::ZOOM::scanset_destroy($this->_ss());
+    $this->{_ss} = undef;
 }
 
 
