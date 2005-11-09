@@ -1,4 +1,4 @@
-# $Id: 15-scan.t,v 1.5 2005-11-09 17:00:43 mike Exp $
+# $Id: 15-scan.t,v 1.6 2005-11-09 17:03:15 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 15-scan.t'
@@ -96,6 +96,6 @@ sub scan {
     ok($errcode == 0, "scan for '$startterm'");
     $n = Net::Z3950::ZOOM::scanset_size($ss);
     ok(defined $n, "got size");
-    ok($n == $nexpected, "got $n terms (expected $n)");
+    ok($n == $nexpected, "got $n terms (expected $nexpected)");
     return ($ss, $n);
 }
