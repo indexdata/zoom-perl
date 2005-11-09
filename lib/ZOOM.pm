@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.16 2005-11-08 16:42:08 mike Exp $
+# $Id: ZOOM.pm,v 1.17 2005-11-09 17:08:03 mike Exp $
 
 use strict;
 use warnings;
@@ -712,6 +712,17 @@ sub _ss {
 	if !defined $_ss;
 
     return $_ss;
+}
+
+sub option {
+    my $this = shift();
+    my($key, $value) = @_;
+
+    my $oldval = Net::Z3950::ZOOM::scanset_option_get($this->_ss(), $key);
+    Net::Z3950::ZOOM::scanset_option_set($this->_ss(), $key, $value)
+	if defined $value;
+
+    return $oldval;
 }
 
 sub size {
