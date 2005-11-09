@@ -1,4 +1,4 @@
-# $Id: 15-scan.t,v 1.4 2005-11-09 16:47:42 mike Exp $
+# $Id: 15-scan.t,v 1.5 2005-11-09 17:00:43 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 15-scan.t'
@@ -76,7 +76,7 @@ ok(Net::Z3950::ZOOM::scanset_option_get($ss, "position") == 0,
    "seed-term before start of returned list");
 
 # Silly test of option setting and getting
-Net::Z3950::ZOOM::scanset_option_set($ss, "position", "fruit");
+Net::Z3950::ZOOM::scanset_option_set($ss, position => "fruit");
 ok(Net::Z3950::ZOOM::scanset_option_get($ss, "position") eq "fruit",
    "option setting/getting works");
 
