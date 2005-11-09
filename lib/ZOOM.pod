@@ -1,0 +1,61 @@
+# $Id: ZOOM.pod,v 1.1 2005-11-09 11:32:12 mike Exp $
+
+use strict;
+use warnings;
+
+=head1 NAME
+
+ZOOM - Perl extension implementing the ZOOM API for Information Retrieval
+
+=head1 SYNOPSIS
+
+ use ZOOM;
+ eval {
+     $conn = new ZOOM::Connection($host, $port)
+     $conn->option(preferredRecordSyntax => "usmarc");
+     $rs = $conn->search_pqf($query);
+     $n = $rs->size();
+     print $rs->record(0)->render();
+ };
+ if ($@) {
+     print "Error ", $@->code(), ": ", $@->message(), "\n";
+ }
+
+=head1 DESCRIPTION
+
+This module provides a nice, Perlish implementation of the ZOOM
+Abstract API described at http://zoom.z3950.org/api/
+
+the ZOOM module is implemented as a set of thin classes on top of the
+non-OO functions provided by the Net::Z3950::ZOOM module, which in
+turn is a thin layer on top of the ZOOM-C code supplied as part of
+Index Data's YAZ Toolkit.  Because ZOOM-C is also the underlying code
+that implements ZOOM bindings in C++, Visual Basic, Scheme, Ruby, .NET
+(including C#) and other languages, this Perl module works compatibly
+with those other implementations.  (Of course, the point of a public
+API such as ZOOM is that all implementations should be compatible
+anyway; but knowing that the same code is running is reassuring.)
+
+I<###> There is rather more to say here :-)
+
+=head1 SEE ALSO
+
+The C<Net::Z3950::ZOOM> module, included in the same distribution as this one.
+
+The C<Net::Z3950> module, which this one supersedes.
+
+=head1 AUTHOR
+
+Mike Taylor, E<lt>mike@indexdata.comE<gt>
+
+=head1 COPYRIGHT AND LICENCE
+
+Copyright (C) 2005 by Index Data.
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.4 or,
+at your option, any later version of Perl 5 you may have available.
+
+=cut
+
+1;
