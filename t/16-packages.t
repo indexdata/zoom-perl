@@ -1,4 +1,4 @@
-# $Id: 16-packages.t,v 1.3 2005-11-15 17:24:42 mike Exp $
+# $Id: 16-packages.t,v 1.4 2005-11-15 17:26:24 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 16-packages.t'
@@ -37,7 +37,7 @@ ok($errcode == 223, "permission denined for database create");
 
 # Now we inspect the package options to see what the result was
 $val = Net::Z3950::ZOOM::package_option_get($p, "targetReference");
-print "targetReference for create($dbname) is '$val'\n";
+#print "targetReference for create($dbname) is '$val'\n";
 
 Net::Z3950::ZOOM::package_destroy($p);
 ok(1, "destroyed package");
