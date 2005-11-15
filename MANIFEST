@@ -1,4 +1,4 @@
-# $Id: MANIFEST,v 1.17 2005-11-08 15:57:20 mike Exp $
+# $Id: MANIFEST,v 1.18 2005-11-15 17:25:20 mike Exp $
 
 Changes
 Makefile.PL
@@ -24,6 +24,7 @@ t/25-scan.t
 t/26-packages.t
 lib/Net/Z3950/ZOOM.pm
 lib/ZOOM.pm
+lib/ZOOM.pod
 lib/Net/Z3950.pm
 MANIFEST.SKIP
 META.yml                                 Module meta-data (added by MakeMaker)
