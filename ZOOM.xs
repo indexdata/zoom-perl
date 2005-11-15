@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.29 2005-11-08 16:39:23 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.30 2005-11-15 11:31:52 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -394,13 +394,13 @@ void
 ZOOM_scanset_destroy(scan)
 	ZOOM_scanset scan
 
-# UNTESTED
+# TESTED
 const char *
 ZOOM_scanset_option_get(scan, key)
 	ZOOM_scanset	scan
 	const char *	key
 
-# UNTESTED
+# TESTED
 void
 ZOOM_scanset_option_set(scan, key, val)
 	ZOOM_scanset	scan
