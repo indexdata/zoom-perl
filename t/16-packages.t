@@ -1,4 +1,4 @@
-# $Id: 16-packages.t,v 1.2 2005-11-08 14:46:31 mike Exp $
+# $Id: 16-packages.t,v 1.3 2005-11-15 17:24:42 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 16-packages.t'
@@ -12,6 +12,7 @@ BEGIN { use_ok('Net::Z3950::ZOOM') };
 my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
 
 my $host = "indexdata.com/gils";
+#my $host = "localhost:9999/default";
 my $conn = Net::Z3950::ZOOM::connection_new($host, 0);
 $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
 ok($errcode == 0, "connection to '$host'");
@@ -21,16 +22,22 @@ my $p = Net::Z3950::ZOOM::connection_package($conn, $o);
 # Inspection of the ZOOM-C code shows that this can never fail, in fact.
 ok(defined $p, "created package");
 
-# There may be useful options to set, but this is not one of them!
-Net::Z3950::ZOOM::package_option_set($p, foo => "bar");
-my $val = Net::Z3950::ZOOM::package_option_get($p, "foo");
-ok($val eq "bar", "package option retrieved as expected");
+# We will create a new database with a random name
+my $dbname = "";
+for (1..10) {
+    $dbname .= substr("abcdefghijklmnopqrstuvwxyz", int(rand(26)), 1);
+}
+Net::Z3950::ZOOM::package_option_set($p, databaseName => $dbname);
+my $val = Net::Z3950::ZOOM::package_option_get($p, "databaseName");
+ok($val eq $dbname, "package option retrieved as expected");
 
-Net::Z3950::ZOOM::package_send($p, "foo");
+Net::Z3950::ZOOM::package_send($p, "create");
 $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
-ok($errcode == 0, "sent 'foo' package");
+ok($errcode == 223, "permission denined for database create");
 
-### Now what?
+# Now we inspect the package options to see what the result was
+$val = Net::Z3950::ZOOM::package_option_get($p, "targetReference");
+print "targetReference for create($dbname) is '$val'\n";
 
 Net::Z3950::ZOOM::package_destroy($p);
 ok(1, "destroyed package");
