@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.17 2005-11-09 17:08:03 mike Exp $
+# $Id: ZOOM.pm,v 1.18 2005-11-16 14:49:30 mike Exp $
 
 use strict;
 use warnings;
@@ -124,6 +124,15 @@ sub addinfo {
     return $this->{addinfo};
 }
 
+sub render {
+    my $this = shift();
+    my $res = "ZOOM error " . $this->code() . ' "' . $this->message() . '"';
+    $res .= ' (addinfo: "' . $this->addinfo() . '")' if $this->addinfo();
+    return $res;
+}
+
+# This means that untrapped exceptions render nicely.
+use overload '""' => \&render;
 
 # ----------------------------------------------------------------------------
 
@@ -255,7 +264,7 @@ sub new {
     my $class = shift();
     my($host, $port) = @_;
 
-    my $_conn = Net::Z3950::ZOOM::connection_new($host, $port);
+    my $_conn = Net::Z3950::ZOOM::connection_new($host, $port || 0);
     my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
     $errcode = Net::Z3950::ZOOM::connection_error($_conn, $errmsg, $addinfo);
     die new ZOOM::Exception($errcode, $errmsg, $addinfo) if $errcode;
@@ -575,6 +584,7 @@ sub records {
 
     my $raw = Net::Z3950::ZOOM::resultset_records($this->_rs(), $start, $count,
 						  $return_records);
+    ### Why don't we throw an exception if $raw is undefined?
     return undef if !defined $raw;
 
     # We need to package up the returned records in ZOOM::Record objects
@@ -738,6 +748,7 @@ sub term {
     my($occ, $len) = (0, 0);
     my $term = Net::Z3950::ZOOM::scanset_term($this->_ss(), $which,
 					      $occ, $len);
+    ### Throw exception?
     return undef if !defined $term;
     die "length of term '$term' differs from returned len=$len"
 	if length($term) != $len;
@@ -752,6 +763,7 @@ sub display_term {
     my($occ, $len) = (0, 0);
     my $term = Net::Z3950::ZOOM::scanset_display_term($this->_ss(), $which,
 						      $occ, $len);
+    ### Throw exception?
     return undef if !defined $term;
     die "length of display term '$term' differs from returned len=$len"
 	if length($term) != $len;
