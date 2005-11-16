@@ -1,11 +1,11 @@
-# $Id: 1-Net-Z3950-ZOOM.t,v 1.12 2005-10-31 15:03:11 mike Exp $
+# $Id: 1-Net-Z3950-ZOOM.t,v 1.13 2005-11-16 16:24:42 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 1-Net-Z3950-ZOOM.t'
 
 use strict;
 use warnings;
-use Test::More tests => 21;
+use Test::More tests => 22;
 BEGIN { use_ok('Net::Z3950::ZOOM') };
 
 my $msg = Net::Z3950::ZOOM::diag_str(Net::Z3950::ZOOM::ERROR_INVALID_QUERY);
@@ -67,7 +67,8 @@ ok(Net::Z3950::ZOOM::connection_errmsg($conn) eq $errmsg,
    "errmsg() consistent with error()");
 ok(Net::Z3950::ZOOM::connection_addinfo($conn) eq $addinfo,
    "addinfo() consistent with error()");
-### These is no ZOOM_connection_diagset() -- surely that's a mistake?
+ok(Net::Z3950::ZOOM::connection_diagset($conn) eq $xset,
+   "diagset() consistent with error()");
 
 $query = '@attr 1=4 minerals';
 $rs = Net::Z3950::ZOOM::connection_search_pqf($conn, $query);
