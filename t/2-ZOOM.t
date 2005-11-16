@@ -1,11 +1,11 @@
-# $Id: 2-ZOOM.t,v 1.8 2005-10-31 15:02:41 mike Exp $
+# $Id: 2-ZOOM.t,v 1.9 2005-11-16 16:25:02 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 2-ZOOM.t'
 
 use strict;
 use warnings;
-use Test::More tests => 21;
+use Test::More tests => 22;
 BEGIN { use_ok('ZOOM') };
 
 my $msg = ZOOM::diag_str(ZOOM::Error::INVALID_QUERY);
@@ -54,14 +54,15 @@ ok($@ && $@->isa("ZOOM::Exception") &&
 
 my($xcode, $xmsg, $xinfo, $xset) = $conn->error_x();
 ok($xcode == $@->code() && $xmsg eq $@->message() && $xinfo eq $@->addinfo() &&
-   $xset eq "ZOOM", "error_x() consistent with exception");
+   $xset eq $@->diagset(), "error_x() consistent with exception");
 ok($conn->errcode() == $@->code(),
    "errcode() consistent with exception");
 ok($conn->errmsg() eq $@->message(),
    "errmsg() consistent with exception");
 ok($conn->addinfo() eq $@->addinfo(),
    "addinfo() consistent with exception");
-### No $conn->diagset() yet, due to lack of underlying support
+ok($conn->diagset() eq $@->diagset(),
+   "diagset() consistent with exception");
 
 $query = '@attr 1=4 minerals';
 eval { $rs = $conn->search_pqf($query) };
