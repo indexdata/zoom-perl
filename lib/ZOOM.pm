@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.19 2005-11-16 16:48:11 mike Exp $
+# $Id: ZOOM.pm,v 1.20 2005-11-16 17:26:23 mike Exp $
 
 use strict;
 use warnings;
@@ -47,6 +47,7 @@ sub QUERY_PQF { 20003 }
 sub SORTBY { 20004 }
 sub CLONE { 20005 }
 sub PACKAGE { 20006 }
+sub SCANTERM { 20007 }
 
 # The "Event" package contains constants returned by last_event()
 package ZOOM::Event;
@@ -81,6 +82,8 @@ sub diag_str {
 	return "can't clone record";
     } elsif ($code == ZOOM::Error::PACKAGE) {
 	return "can't create package";
+    } elsif ($code == ZOOM::Error::SCANTERM) {
+	return "can't retrieve term from scan-set";
     }
 
     return Net::Z3950::ZOOM::diag_str($code);
@@ -553,7 +556,12 @@ sub record {
     my($which) = @_;
 
     my $_rec = Net::Z3950::ZOOM::resultset_record($this->_rs(), $which);
-    ### Check for error -- but how?
+    $this->{conn}->_check();
+
+    # Even if no error has occurred, I think record() might
+    # legitimately return undef if we're running in asynchronous mode
+    # and the record just hasn't been retrieved yet.  This goes double
+    # for record_immediate().
     return undef if !defined $_rec;
 
     # For some reason, I have to use the explicit "->" syntax in order
@@ -568,7 +576,7 @@ sub record_immediate {
 
     my $_rec = Net::Z3950::ZOOM::resultset_record_immediate($this->_rs(),
 							    $which);
-    ### Check for error -- but how?
+    $this->{conn}->_check();
     return undef if !defined $_rec;
 
     return ZOOM::Record->_new($this, $which, $_rec);
@@ -586,7 +594,7 @@ sub records {
 
     my $raw = Net::Z3950::ZOOM::resultset_records($this->_rs(), $start, $count,
 						  $return_records);
-    ### Why don't we throw an exception if $raw is undefined?
+    # By design, $raw may be undefined (if $return_records is true)
     return undef if !defined $raw;
 
     # We need to package up the returned records in ZOOM::Record objects
@@ -749,9 +757,9 @@ sub term {
 
     my($occ, $len) = (0, 0);
     my $term = Net::Z3950::ZOOM::scanset_term($this->_ss(), $which,
-					      $occ, $len);
-    ### Throw exception?
-    return undef if !defined $term;
+					      $occ, $len)
+	or ZOOM::_oops(ZOOM::Error::SCANTERM);
+
     die "length of term '$term' differs from returned len=$len"
 	if length($term) != $len;
 
@@ -764,9 +772,9 @@ sub display_term {
 
     my($occ, $len) = (0, 0);
     my $term = Net::Z3950::ZOOM::scanset_display_term($this->_ss(), $which,
-						      $occ, $len);
-    ### Throw exception?
-    return undef if !defined $term;
+						      $occ, $len)
+	or ZOOM::_oops(ZOOM::Error::SCANTERM);
+
     die "length of display term '$term' differs from returned len=$len"
 	if length($term) != $len;
 
