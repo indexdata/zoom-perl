@@ -1,4 +1,4 @@
-# $Id: ZOOM.pod,v 1.5 2005-11-16 15:36:16 mike Exp $
+# $Id: ZOOM.pod,v 1.6 2005-11-16 16:39:25 mike Exp $
 
 use strict;
 use warnings;
@@ -193,7 +193,7 @@ Support for SRU will follow in the fullness of time.
 
 =head4 connect()
 
-=head4 error_x() / errcode() / errmsg() / addinfo()
+=head4 error_x() / errcode() / errmsg() / addinfo() / diagset()
 
 =head4 option() / option_binary()
 
