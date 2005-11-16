@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.30 2005-11-15 11:31:52 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.31 2005-11-16 16:10:13 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -203,6 +203,11 @@ ZOOM_connection_errmsg(c)
 # TESTED
 const char *
 ZOOM_connection_addinfo(c)
+	ZOOM_connection	c
+
+# TESTED
+const char *
+ZOOM_connection_diagset(c)
 	ZOOM_connection	c
 
 # TESTED
