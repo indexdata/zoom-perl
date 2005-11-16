@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.18 2005-11-16 14:49:30 mike Exp $
+# $Id: ZOOM.pm,v 1.19 2005-11-16 16:48:11 mike Exp $
 
 use strict;
 use warnings;
@@ -86,11 +86,10 @@ sub diag_str {
     return Net::Z3950::ZOOM::diag_str($code);
 }
 
-### More of the ZOOM::Exception instantiations should use this
 sub _oops {
-    my($code, $addinfo) = @_;
+    my($code, $addinfo, $diagset) = @_;
 
-    die new ZOOM::Exception($code, diag_str($code), $addinfo);
+    die new ZOOM::Exception($code, diag_str($code), $addinfo, $diagset);
 }
 
 # ----------------------------------------------------------------------------
@@ -99,13 +98,13 @@ package ZOOM::Exception;
 
 sub new {
     my $class = shift();
-    my($code, $message, $addinfo) = @_;
-    ### support diag-set, too
+    my($code, $message, $addinfo, $diagset) = @_;
 
     return bless {
 	code => $code,
 	message => $message,
 	addinfo => $addinfo,
+	diagset => $diagset || "ZOOM",
     }, $class;
 }
 
@@ -122,6 +121,11 @@ sub message {
 sub addinfo {
     my $this = shift();
     return $this->{addinfo};
+}
+
+sub diagset {
+    my $this = shift();
+    return $this->{diagset};
 }
 
 sub render {
@@ -265,15 +269,34 @@ sub new {
     my($host, $port) = @_;
 
     my $_conn = Net::Z3950::ZOOM::connection_new($host, $port || 0);
-    my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
-    $errcode = Net::Z3950::ZOOM::connection_error($_conn, $errmsg, $addinfo);
-    die new ZOOM::Exception($errcode, $errmsg, $addinfo) if $errcode;
-
-    return bless {
+    my $conn = bless {
 	host => $host,
 	port => $port,
 	_conn => $_conn,
     };
+    $conn->_check();
+    return $conn;
+}
+
+# PRIVATE to this class
+sub _conn {
+    my $this = shift();
+
+    my $_conn = $this->{_conn};
+    die "{_conn} undefined: has this Connection been destroy()ed?"
+	if !defined $_conn;
+
+    return $_conn;
+}
+
+sub _check {
+    my $this = shift();
+
+    my($errcode, $errmsg, $addinfo, $diagset) = (undef, "x", "x", "x");
+    $errcode = Net::Z3950::ZOOM::connection_error_x($this->_conn(), $errmsg,
+						    $addinfo, $diagset);
+    die new ZOOM::Exception($errcode, $errmsg, $addinfo, $diagset)
+	if $errcode;
 }
 
 sub create {
@@ -286,17 +309,6 @@ sub create {
 	port => undef,
 	_conn => $_conn,
     };
-}
-
-# PRIVATE to this class
-sub _conn {
-    my $this = shift();
-
-    my $_conn = $this->{_conn};
-    die "{_conn} undefined: has this Connection been destroy()ed?"
-	if !defined $_conn;
-
-    return $_conn;
 }
 
 sub error_x {
@@ -323,15 +335,17 @@ sub addinfo {
     return Net::Z3950::ZOOM::connection_addinfo($this->_conn());
 }
 
+sub diagset {
+    my $this = shift();
+    return Net::Z3950::ZOOM::connection_diagset($this->_conn());
+}
+
 sub connect {
     my $this = shift();
     my($host, $port) = @_;
 
     Net::Z3950::ZOOM::connection_connect($this->_conn(), $host, $port);
-    my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
-    $errcode = Net::Z3950::ZOOM::connection_error($this->_conn(),
-						  $errmsg, $addinfo);
-    die new ZOOM::Exception($errcode, $errmsg, $addinfo) if $errcode;
+    $this->_check();
     # No return value
 }
 
@@ -366,11 +380,7 @@ sub search {
 
     my $_rs = Net::Z3950::ZOOM::connection_search($this->_conn(),
 						  $query->_query());
-    my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
-    $errcode = Net::Z3950::ZOOM::connection_error($this->_conn(),
-						  $errmsg, $addinfo);
-    die new ZOOM::Exception($errcode, $errmsg, $addinfo) if $errcode;
-
+    $this->_check();
     return _new ZOOM::ResultSet($this, $query, $_rs);
 }
 
@@ -379,11 +389,7 @@ sub search_pqf {
     my($pqf) = @_;
 
     my $_rs = Net::Z3950::ZOOM::connection_search_pqf($this->_conn(), $pqf);
-    my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
-    $errcode = Net::Z3950::ZOOM::connection_error($this->_conn(),
-						  $errmsg, $addinfo);
-    die new ZOOM::Exception($errcode, $errmsg, $addinfo) if $errcode;
-
+    $this->_check();
     return _new ZOOM::ResultSet($this, $pqf, $_rs);
 }
 
@@ -392,11 +398,7 @@ sub scan {
     my($startterm) = @_;
 
     my $_ss = Net::Z3950::ZOOM::connection_scan($this->_conn(), $startterm);
-    my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
-    $errcode = Net::Z3950::ZOOM::connection_error($this->_conn(),
-						  $errmsg, $addinfo);
-    die new ZOOM::Exception($errcode, $errmsg, $addinfo) if $errcode;
-
+    $this->_check();
     return _new ZOOM::ScanSet($this, $startterm, $_ss);
 }
 
@@ -827,10 +829,7 @@ sub send {
     my($type) = @_;
 
     Net::Z3950::ZOOM::package_send($this->_p(), $type);
-    my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
-    $errcode = Net::Z3950::ZOOM::connection_error($this->{conn}->_conn(),
-						  $errmsg, $addinfo);
-    die new ZOOM::Exception($errcode, $errmsg, $addinfo) if $errcode;
+    $this->{conn}->_check();
 }
 
 sub destroy {
