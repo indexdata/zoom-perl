@@ -1,4 +1,4 @@
-# $Id: ZOOM.pod,v 1.8 2005-11-17 13:32:30 mike Exp $
+# $Id: ZOOM.pod,v 1.9 2005-11-17 15:31:06 mike Exp $
 
 use strict;
 use warnings;
@@ -109,8 +109,7 @@ relevant section of the ZOOM Abstract API.
  $conn = new ZOOM::Connection("indexdata.dk:210/gils");
  print("server is '", $conn->option("serverImplementationName"), "'\n");
  $conn->option(preferredRecordSyntax => "usmarc");
- $conn->option_binary(iconBlob => "foo\0bar");
- $rs = $conn->search_pqf('@attr 1=4 mineral');/usr/local/src/mike/records/acc-ounts/cheques-
+ $rs = $conn->search_pqf('@attr 1=4 mineral');
  $ss = $conn->scan('@attr 1=1003 a');
  if ($conn->errcode() != 0) {
     die("somthing went wrong: " . $conn->errmsg())
@@ -239,6 +238,11 @@ See the C<ZOOM::Exception> for the interpretation of these elements.
 
 =head4 option() / option_binary()
 
+ print("server is '", $conn->option("serverImplementationName"), "'\n");
+ $conn->option(preferredRecordSyntax => "usmarc");
+ $conn->option_binary(iconBlob => "foo\0bar");
+ die if length($conn->option_binary("iconBlob") != 7);
+
 Objects of the Connection, ResultSet, ScanSet and Package classes
 carry with them a set of named options which affect their behaviour in
 certain ways.  See the ZOOM-C options documentation for details:
@@ -254,19 +258,19 @@ http://indexdata.com/yaz/doc/zoom.tkl#zoom.connections
 
 ResultSet options are listed at
 http://indexdata.com/yaz/doc/zoom.resultsets.tkl
-I<### move this obvservation down the appropriate place>
+I<### move this obvservation down to the appropriate place>
 
 =item *
 
 ScanSet options are listed at
 http://indexdata.com/yaz/doc/zoom.scan.tkl
-I<### move this obvservation down the appropriate place>
+I<### move this obvservation down to the appropriate place>
 
 =item *
 
 Package options are listed at
 http://indexdata.com/yaz/doc/zoom.ext.html
-I<### move this obvservation down the appropriate place>
+I<### move this obvservation down to the appropriate place>
 
 =back
 
@@ -284,15 +288,83 @@ and returned correctly.
 
 =head4 search() / search_pqf()
 
-I<###>
+ $rs = $conn->search(new ZOOM::Query::CQL('title=dinosaur'));
+ # The next two lines are equivalent
+ $rs = $conn->search(new ZOOM::Query::PQF('@attr 1=4 dinosaur'));
+ $rs = $conn->search_pqf('@attr 1=4 dinosaur');
+
+The principal purpose of a search-and-retrieve protocol is searching
+(and, er, retrieval), so the principal method used on a Connection
+object is C<search()>.  It accepts a single argument, a C<ZOOM::Query>
+object (or, more precisely, an object of a subclass of this class);
+and it creates and returns a new ResultSet object representing the set
+of records resulting from the search.
+
+Since queries using PQF (Prefix Query Format) are so common, we make
+them a special case by providing a C<search_prefix()> method.  This is
+identical to C<search()> except that it accepts a string containing
+the query rather than an object, thereby obviating the need to create
+a C<ZOOM::Query::PQF> object.  See the documentation of that class for
+information about PQF.
 
 =head4 scan()
 
-I<###>
+Many Z39.50 servers allow you to browse their indexes to find terms to
+search for.  This is done using the C<scan> method, which creates and
+returns a new ScanSet object representing the set of terms resulting
+from the scan.
+
+C<scan()> takes a single argument, but it has to work hard: it
+specifies both what index to scan for terms, and where in the index to
+start scanning.  What's more, the specification of what index to scan
+includes multiple facets, such as what database fields it's an index
+of (author, subject, title, etc.) and whether to scan for whole fields
+or single words (e.g. the title ``I<The Empire Strikes Back>'', or the
+four words ``Back'', ``Empire'', ``Strikes'' and ``The'', interleaved
+with words from other titles in the same index.
+
+All of this is done by using a single term from the PQF query as the
+C<scan()> argument.  (At present, only PQF is supported, although
+there is no reason in principle why CQL and other query syntaxes
+should not be supported in future).  The attributes associated with
+the term indicate which index is to be used, and the term itself
+indicates the point in the index at which to start the scan.  For
+example, if the argument is C<@attr 1=4 fish>, then
+
+=over 4
+
+=item @attr 1=4
+
+This is the BIB-1 attribute with type 1 (meaning access-point, which
+specifies an index), and type 4 (which means ``title'').  So the scan
+is in the title index.
+
+=item fish
+
+Start the scan from the lexicographically earliest term that is equal
+to or falls after ``fish''.
+
+=back
+
+The argument C<@attr 1=4 @attr 6=3 fish> would behave similarly; but
+the BIB-1 attribute 6=3 mean completeness=``complete field'', so the
+scan would be for complete titles rather than for words occurring in
+titles.
+
+This takes a bit of getting used to.
+
+I<###> discuss how the values of options affect scanning.
 
 =head4 package()
 
-I<###>
+ $p = $conn->package();
+ $o = new ZOOM::Options();
+ $o->option(databaseName => "newdb");
+ $p = $conn->package($o);
+
+Creates and returns a new C<ZOOM::Package>, to be used in invoking an
+Extended Service.  An options block may optionally be passed in.  See
+the C<ZOOM::Package> documentation.
 
 =head4 destroy()
 
@@ -426,6 +498,7 @@ http://zoom.z3950.org/api/zoom-current.html
 The C<Net::Z3950::ZOOM> module, included in the same distribution as this one.
 
 The C<Net::Z3950> module, which this one supersedes.
+http://perl.z3950.org/
 
 The documentation for the ZOOM-C module of the YAZ Toolkit, which this
 module is built on.  Specifically, its lists of options are useful.
