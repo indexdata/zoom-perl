@@ -1,4 +1,4 @@
-# $Id: ZOOM.pod,v 1.7 2005-11-16 17:27:07 mike Exp $
+# $Id: ZOOM.pod,v 1.8 2005-11-17 13:32:30 mike Exp $
 
 use strict;
 use warnings;
@@ -189,21 +189,118 @@ SRW connection using SOAP over HTTP.
 
 Support for SRU will follow in the fullness of time.
 
-=head4 create()
+If an error occurs, an exception is thrown.  This may indicate a
+networking problem (e.g. the host is not found or unreachable), or a
+protocol-level problem (e.g. a Z39.50 server rejected the Init
+request).
 
-=head4 connect()
+=head4 create() / connect()
+
+ $options = new ZOOM::Options();
+ $options->option(implementationName => "my client");
+ $conn = create ZOOM::Connection($options)
+ $conn->connect($host, 0);
+
+The usual Connection constructor, C<new()> brings a new object into
+existence and forges the connection to the server all in one
+operation, which is often what you want.  For applications that need
+more control, however, these two method separate the two steps,
+allowing additional steps in between such as the setting of options.
+
+C<create()> creates and returns a new Connection object, which is
+I<not> connected to any server.  It may be passed an options block, of
+type C<ZOOM::Options> (see below), into which options may be set
+before or after the creation of the Connection.  The connection to the
+server may then be forged by the C<connect()> method, the arguments of
+which are the same as those of the C<new()> constructor.
 
 =head4 error_x() / errcode() / errmsg() / addinfo() / diagset()
 
+ ($errcode, $errmsg, $addinfo, $diagset) = $conn->error_x();
+ $errcode = $conn->errcode();
+ $errmsg = $conn->errmsg();
+ $addinfo = $conn->addinfo();
+ $diagset = $conn->diagset();
+
+These methods may be used to obtain information about the last error
+to have occurred on a connection - although typically they will not
+been used, as the same information is available through the
+C<ZOOM::Exception> that is thrown when the error occurs.  The
+C<errcode()>,
+C<errmsg()>,
+C<addinfo()>
+and
+C<diagset()>
+methods each return one element of the diagnostic, and
+C<error_x()>
+returns all four at once.
+
+See the C<ZOOM::Exception> for the interpretation of these elements.
+
 =head4 option() / option_binary()
+
+Objects of the Connection, ResultSet, ScanSet and Package classes
+carry with them a set of named options which affect their behaviour in
+certain ways.  See the ZOOM-C options documentation for details:
+
+=over 4
+
+=item *
+
+Connection options are listed at
+http://indexdata.com/yaz/doc/zoom.tkl#zoom.connections
+
+=item *
+
+ResultSet options are listed at
+http://indexdata.com/yaz/doc/zoom.resultsets.tkl
+I<### move this obvservation down the appropriate place>
+
+=item *
+
+ScanSet options are listed at
+http://indexdata.com/yaz/doc/zoom.scan.tkl
+I<### move this obvservation down the appropriate place>
+
+=item *
+
+Package options are listed at
+http://indexdata.com/yaz/doc/zoom.ext.html
+I<### move this obvservation down the appropriate place>
+
+=back
+
+These options are set and fetched using the C<option()> method, which
+may be called with either one or two arguments.  In the two-argument
+form, the option named by the first argument is set to the value of
+the second argument, and its old value is returned.  In the
+one-argument form, the value of the specified option is returned.
+
+For historical reasons, option values are not binary-clean, so that a
+value containing a NUL byte will be returned in truncated form.  The
+C<option_binary()> method behaves identically to C<option()> except
+that it is binary-clean, so that values containing NUL bytes are set
+and returned correctly.
 
 =head4 search() / search_pqf()
 
+I<###>
+
 =head4 scan()
+
+I<###>
 
 =head4 package()
 
+I<###>
+
 =head4 destroy()
+
+ $conn->destroy()
+
+Destroys a Connection object, tearing down any low-level connection
+associated with it and freeing its resources.  It is an error to reuse
+a Connection that has been C<destroy()>ed.
 
 =head2 ZOOM::ResultSet
 
@@ -221,7 +318,19 @@ for success after each call.  Exceptions are caught by enclosing the
 main code in an C<eval{}> block and checking C<$@> on exit from that
 block, as in the code-sample above.
 
-There are a small number of exceptions to this rule.
+There are a small number of exceptions to this rule: the three
+record-fetching methods in the C<ZOOM::ResultSet> class,
+C<record()>,
+C<record_immediate()>,
+and
+C<records()>
+can all return undefined values for legitimate reasons, under
+circumstances that do not merit throwing an exception.  For this
+reason, the return values of these methods should be checked.  See the
+individual methods' documentation for details.
+
+=head3 Methods
+
 I<###>
 
 =head2 ZOOM::ScanSet
