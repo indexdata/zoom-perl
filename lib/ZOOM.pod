@@ -1,4 +1,4 @@
-# $Id: ZOOM.pod,v 1.9 2005-11-17 15:31:06 mike Exp $
+# $Id: ZOOM.pod,v 1.10 2005-11-18 17:55:08 mike Exp $
 
 use strict;
 use warnings;
@@ -256,12 +256,6 @@ http://indexdata.com/yaz/doc/zoom.tkl#zoom.connections
 
 =item *
 
-ResultSet options are listed at
-http://indexdata.com/yaz/doc/zoom.resultsets.tkl
-I<### move this obvservation down to the appropriate place>
-
-=item *
-
 ScanSet options are listed at
 http://indexdata.com/yaz/doc/zoom.scan.tkl
 I<### move this obvservation down to the appropriate place>
@@ -353,7 +347,33 @@ titles.
 
 This takes a bit of getting used to.
 
-I<###> discuss how the values of options affect scanning.
+The behaviour is C<scan()> is affected by the following options, which
+may be set on the Connection through which the scan is done:
+
+=over 4
+
+=item number [default: 10]
+
+Indicates how many terms should be returned in the ScanSet.  The
+number actually returned may be less, if the start-point is near the
+end of the index, but will not be greater.
+
+=item position [default: 1]
+
+A 1-based index specifying where in the returned list of terms the
+seed-term should appear.  By default it should be the first term
+returned, but C<position> may be set, for example, to zero (requesting
+the next terms I<after> the seed-term), or to the same value as
+C<number> (requesting the index terms I<before> the seed term).
+
+=item stepSize [default: 0]
+
+An integer indicating how many indexed terms are to be skipped between
+each one returned in the ScanSet.  By default, no terms are skipped,
+but overriding this can be useful to get a high-level overview of the
+index.
+
+=back
 
 =head4 package()
 
@@ -376,7 +396,123 @@ a Connection that has been C<destroy()>ed.
 
 =head2 ZOOM::ResultSet
 
-I<###>
+ $rs = $conn->search_pqf('@attr 1=4 mineral');
+ $n = $rs->size();
+ for $i (1 .. $n) {
+     $rec = $rs->record($i-1);
+     print $rec->render();
+ }
+
+A ResultSet object represents the set of zero or more records
+resulting from a search, and is the means whereby these records can be
+retrieved.  A ResultSet object may maintain client side cache or some,
+less, none, all or more of the server's records: in general, this is
+supposed to an implementaton detail of no interest to a typical
+application, although more sophisticated applications do have
+facilities for messing with the cache.  Most applications will only
+need the C<size()>, C<record()> and C<sort()> methods.
+
+There is no C<new()> method nor any other explicit constructor.  The
+only way to create a new ResultSet is by using C<search()> (or
+C<search_prefix()>) on a Connection.
+
+See the description of the C<Result Set> class in the ZOOM Abstract
+API at
+http://zoom.z3950.org/api/zoom-current.html#3.4
+
+=head3 Methods
+
+=head4 option()
+
+ $conn->option(elementSetName => "f");
+
+Allows options to be set into, and read from a ResultSet, just like
+the Connection class's C<option()> method.  There is no
+C<option_binary()> method for ResultSet objects.
+
+ResultSet options are listed at
+http://indexdata.com/yaz/doc/zoom.resultsets.tkl
+
+=head4 size()
+
+ print "Found ", $rs->size(), " records\n";
+
+Returns the number of records in the result set.
+
+=head4 record(), record_immediate()
+
+ $rec = $rs->record(0);
+ $rec2 = $rs->record_immediate(0);
+ $rec3 = $rs->record_immediate(1)
+     or print "second record wasn't in cache\n";
+
+The C<record()> method returns a C<ZOOM::Record> object representing
+a record from result-set, whose position is indicated by the argument
+passed in.  This is a zero-based index, so that legitimate values
+range from zero to C<$rs->size()-1>.
+
+The C<record_immediate()> API is identical, but it never invokes a
+network operation, merely returning the record from the ResultSet's
+cache if it's already there, or an undefined value otherwise.  So if
+you use this method, B<you must always check the return value>.
+
+=head4 records()
+
+ $rs->records(0, 10, 0);
+ for $i (0..10) {
+     print $rs->record_immediate($i)->render();
+ }
+
+ @nextseven = $rs->records(10, 7, 1);
+
+The C<record_immediate()> method only fetches records from the cache,
+whereas C<record()> fetches them from the server if they have not
+already been cached; but the ZOOM module has to guess what the most
+efficient strategy for this is.  It might fetch each record, alone
+when asked for: that's optimal in an application that's only
+interested in the top hit from each search, but pessimal for one that
+wants to display a whole list of results.  Conversely, the software's
+strategy might be always to ask for blocks of a twenty records:
+that's great for assembling long lists of things, but wasteful when
+only one record is wanted.  The problem is that the ZOOM module can't
+tell, when you call C<$rs->record()>, what your intention is.
+
+But you can tell it.  The C<records()> method fetches a sequence of
+records, all in one go.  It takes three arguments: the first is the
+zero-based index of the first record in the sequence, the second is
+the number of records to fetch, and the third is a boolean indication
+of whether or not to return the retrieved records as well as adding
+them to the cache.  (You can always pass 1 for this if you like, and
+Perl will discard the unused return value, but there is a small
+efficiency gain to be had by passing 0.)
+
+Once the records have been retrieved from the server
+(i.e. C<records()> has completed without throwing an exception), they
+can be fetched much more efficiently using C<record()> - or
+C<record_immediate(), which is then guaranteed to succeed.
+
+=head4 cache_reset()
+
+ $rs->cache_reset()
+
+Resets the ResultSet's record cache, so that subsequent invocations of
+C<record_immediate()> will fail.  I struggle to imagine a real
+scenario where you'd want to do this.
+
+=head4 sort()
+
+ if ($rs->sort("yaz", "1=4 >i") < 0) {
+     die "sort failed";
+ }
+
+Sorts the ResultSet in place ###
+
+=head4 destroy()
+
+ $rs->destroy()
+
+Destroys a ResultSet object, freeing its resources.  It is an error to
+reuse a ResultSet that has been C<destroy()>ed.
 
 =head2 ZOOM::Record
 
