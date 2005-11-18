@@ -1,4 +1,4 @@
-# $Id: 24-sorting.t,v 1.4 2005-11-08 16:49:06 mike Exp $
+# $Id: 24-sorting.t,v 1.5 2005-11-18 17:53:16 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 24-sorting.t'
@@ -38,9 +38,9 @@ foreach my $i (1 .. $n) {
 }
 
 # Now reverse the order of sorting
-my $status = $rs->sort("dummy", "1=4>i");
+my $status = $rs->sort("yaz", "1=4>i");
 ok($status < 0, "malformed sort criterion rejected");
-$status = $rs->sort("dummy", "1=4 >i");
+$status = $rs->sort("yaz", "1=4 >i");
 ok($status == 0, "sort criterion accepted");
 
 $previous = "z";		# Sorts after all legitimate titles
