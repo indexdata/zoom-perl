@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.20 2005-11-16 17:26:23 mike Exp $
+# $Id: ZOOM.pm,v 1.21 2005-11-24 15:39:20 mike Exp $
 
 use strict;
 use warnings;
@@ -577,6 +577,7 @@ sub record_immediate {
     my $_rec = Net::Z3950::ZOOM::resultset_record_immediate($this->_rs(),
 							    $which);
     $this->{conn}->_check();
+    # The record might legitimately not be there yet
     return undef if !defined $_rec;
 
     return ZOOM::Record->_new($this, $which, $_rec);
