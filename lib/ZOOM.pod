@@ -1,4 +1,4 @@
-# $Id: ZOOM.pod,v 1.10 2005-11-18 17:55:08 mike Exp $
+# $Id: ZOOM.pod,v 1.11 2005-11-24 17:35:29 mike Exp $
 
 use strict;
 use warnings;
@@ -501,12 +501,37 @@ scenario where you'd want to do this.
 
 =head4 sort()
 
- if ($rs->sort("yaz", "1=4 >i") < 0) {
+ if ($rs->sort("yaz", "1=4 >i 1=21 >s") < 0) {
      die "sort failed";
  }
 
-Sorts the ResultSet in place ###
+Sorts the ResultSet in place (discarding any cached records, as they
+will in general be sorted into a different position).  There are two
+arguments: the first is a string indicating the type of the
+sort-specification, and the second is the specification itself.
 
+The C<sort()> method returns 0 on success, or -1 if the
+sort-specification is invalid.
+
+At present, the only supported sort-specification type is C<yaz>.
+Such a specification consists of a space-separated sequence of keys,
+each of which itself consists of two space-separated words (so that
+the total number of words in the sort-specification is even).  The two
+words making up each key are a field and a set of flags.  The field
+can take one of two forms: if it contains an C<=> sign, then it is a
+BIB-1 I<type>=I<value> pair specifying which field to sort
+(e.g. C<1=4> for a title sort); otherwise it is sent for the server to
+interpret as best it can.  The word of flags is made up from one or
+more of the following: C<s> for case sensitive, C<i> for case
+insensitive; C<<> for ascending order and C<E<gt>> for descending
+order.
+
+For example, the sort-specification in the code-fragment above will
+sort the records in C<$rs> case-insensitively in descending order of
+title, with records having equivalent titles sorted case-sensitively
+in ascending order of subject.  (The BIB-1 access points 4 and 21
+represent title and subject respectively.)
+ 
 =head4 destroy()
 
  $rs->destroy()
@@ -516,7 +541,69 @@ reuse a ResultSet that has been C<destroy()>ed.
 
 =head2 ZOOM::Record
 
-I<###>
+ $rec = $rs->record($i);
+ print $rec->render();
+ $raw = $rec->raw();
+ $marc = new_from_usmarc MARC::Record($raw);
+ print "Record title is: ", $marc->title(), "\n";
+
+A Record object represents a record that has been retrived from the
+server.
+
+There is no C<new()> method nor any other explicit constructor.  The
+only way to create a new Record is by using C<record()> (or
+C<record_immediate()>, or C<records()>) on a ResultSet.
+
+In general, records are ``owned'' by their result-sets that they were
+retrieved from, so they do not have to be explicitly memory-managed:
+they are deallocated (and therefore can no longer be used) when the
+result-set is destroyed.
+
+See the description of the C<Record> class in the ZOOM Abstract
+API at
+http://zoom.z3950.org/api/zoom-current.html#3.4
+
+=head3 Methods
+
+=head4 render()
+
+ print $rec->render()
+
+Returns a human-readable representation of the record.  Beyond that,
+no promises are made: careful programs should not make assumptions
+about the format of the returned string.
+
+This method is useful mostly for debugging.
+
+=head4 raw()
+
+ use MARC::Record
+ $raw = $rec->raw();
+ $marc = new_from_usmarc MARC::Record($raw);
+
+Returns an opaque blob of data that is the raw form of the record.
+Exactly what this is, and what you can do with it, varies depending on
+the record-syntax.  For example, XML records will be returned as,
+well, XML; MARC records will be returned as ISO 2709-encoded blocks
+that can be decoded by software such as the fine C<Marc::Record>
+module; GRS-1 record will be ... gosh, what an interesting question.
+But no-one uses GRS-1 any more, do they?
+
+=head4 clone(), destroy()
+
+ $rec = $rs->record($i);
+ $newrec = $rec->clone();
+ $rs->destroy();
+ print $newrec->render();
+ $newrec->destroy();
+
+Usually, it's convenient that Record objects are owned by their
+ResultSets and go away when the ResultSet is destroyed; but
+occasionally you need a Record to outlive its parent and destroy it
+later, explicitly.  To do this, C<clone()> the record, keep the new
+Record object that is returned, and C<destroy()> it when it's no
+longer needed.  This is B<only> situation in which a Record needs to
+be destroyed.
 
 =head2 ZOOM::Exception
 
