@@ -1,4 +1,4 @@
-# $Id: 22-query.t,v 1.1 2005-10-31 15:11:08 mike Exp $
+# $Id: 22-query.t,v 1.2 2005-11-26 16:58:03 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 22-query.t'
@@ -16,20 +16,6 @@ ok(defined $@ && $@ =~ /can.t create ZOOM::Query/,
 ok(1, "[no query to destroy]");
 
 ok(1, "[no need to recreate empty query]");
-
-
-
-
-
-
-
-
-my $res;			### not needed in OO interface
-
-
-
-
-
 
 # Invalid CQL is not recognised as such, because ZOOM-C does not
 # attempt to parse it: it just gets passed to the server when the
