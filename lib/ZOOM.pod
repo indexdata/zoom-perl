@@ -1,4 +1,4 @@
-# $Id: ZOOM.pod,v 1.11 2005-11-24 17:35:29 mike Exp $
+# $Id: ZOOM.pod,v 1.12 2005-11-26 16:59:53 mike Exp $
 
 use strict;
 use warnings;
@@ -561,7 +561,7 @@ result-set is destroyed.
 
 See the description of the C<Record> class in the ZOOM Abstract
 API at
-http://zoom.z3950.org/api/zoom-current.html#3.4
+http://zoom.z3950.org/api/zoom-current.html#3.5
 
 =head3 Methods
 
@@ -589,7 +589,7 @@ that can be decoded by software such as the fine C<Marc::Record>
 module; GRS-1 record will be ... gosh, what an interesting question.
 But no-one uses GRS-1 any more, do they?
 
-=head4 clone(), destroy()
+=head4 clone() / destroy()
 
  $rec = $rs->record($i);
  $newrec = $rec->clone();
@@ -624,11 +624,120 @@ circumstances that do not merit throwing an exception.  For this
 reason, the return values of these methods should be checked.  See the
 individual methods' documentation for details.
 
+An exception carries the following pieces of information:
+
+=over 4
+
+=item error-code
+
+A numeric code that specifies the type of error.  This can be checked
+for equality with known values, so that intelligent applications can
+take appropriate action.
+
+=item error-message
+
+A human-readable message corresponding with the code.  This can be
+shown to users, but its value should not be tested, as it could vary
+in different versions or under different locales.
+
+=item additional information [optional]
+
+A string containing information specific to the error-code.  For
+example, when the error-code is the BIB-1 diagnostic 109 ("Database
+unavailable"), the additional information is the name of the database
+that the application tried to use.  For some error-codes, there is no
+additional information at all; for some others, the additional
+information is undefined and may just be an human-readable string.
+
+=item diagnostic set [optional]
+
+A short string specifying the diagnostic set from which the error-code
+was drawn: for example, C<ZOOM> for a ZOOM-specific error such as
+C<ZOOM::Error::MEMORY> ("out of memory"), and C<BIB-1> for a Z39.50
+error-code drawn from the BIB-1 diagnostic set.
+
+=back
+
+In theory, the error-code should be interpreted in the context of the
+diagnostic set from which it is drawn; in practice, nearly all errors
+are from either the ZOOM or BIB-1 diagnostic sets, and the codes in
+those sets have been chosen so as not to overlap, so the diagnostic
+set can usually be ignored.
+
+See the description of the C<Exception> class in the ZOOM Abstract
+API at
+http://zoom.z3950.org/api/zoom-current.html#3.7
+
 =head3 Methods
+
+=head4 new()
+
+ die new ZOOM::Exception($errcode, $errmsg, $addinfo, $diagset);
+
+Creates and returns a new Exception object with the specified
+error-code, error-message, additional information and diagnostic set.
+Applications will not in general need to use this, but may find it
+useful to simulate ZOOM exceptions.  As is usual with Perl, exceptions
+are thrown using C<die()>.
+
+=head4 code() / message() / addinfo() / diagset()
+
+ print "Error ", $@->code(), ": ", $@->message(), "\n";
+ print "(addinfo '", $@->addinfo(), "', set '", $@->diagset(), "')\n";
+
+These methods, of no arguments, return the exception's error-code,
+error-message, additional information and diagnostic set respectively.
+
+=head4 render()
+
+ print $@->render();
+
+Returns a human-readable rendition of an exception.  The C<"">
+operator is overloaded on the Exception class, so that an Exception
+used in a string context is automatically rendered.  Among other
+consequences, this has the useful result that a ZOOM application that
+died due to an uncaught exception will emit an informative message
+before exiting.
+
+=head2 ZOOM::ScanSet
+
+ $ss = $conn->scan('@attr 1=1003 a');
+ $n = $ss->size();
+ ($term, $occ) = $ss->term($n-1);
+ $rs = $conn->search_pqf('@attr 1=1003 "' . $term . "'");
+ assert($rs->size() == $occ);
+
+A ScanSet represents a set of candidate search-terms returned from an
+index scan.  Its sole purpose is to provide access to those term, to
+the corresponding display terms, and to the occurrence-counts of the
+terms.
+
+There is no C<new()> method nor any other explicit constructor.  The
+only way to create a new ScanSet is by using C<scan()> on a
+Connection.
+
+See the description of the C<Scan Set> class in the ZOOM Abstract
+API at
+http://zoom.z3950.org/api/zoom-current.html#3.6
+
+=head3 Methods
+
+=head4 size()
+
+ print "Found ", $ss->size(), " terms\n";
+
+Returns the number of terms in the scan set.
+### describe option that affects this.
+
+=head4 term() / display_term()
 
 I<###>
 
-=head2 ZOOM::ScanSet
+=head4 option()
+
+I<###>
+
+=head4 destroy()
 
 I<###>
 
@@ -685,10 +794,12 @@ C<CLONE>,
 C<PACKAGE>
 and
 C<SCANTERM>,
-each of which specifies a client-side error.  Since errors may also be
-diagnosed by the server, and returned to the client, error codes may
-also take values from the BIB-1 diagnostic set of Z39.50, listed at
-the Z39.50 Maintenance Agency's web-site at
+each of which specifies a client-side error.  These codes constitute
+the C<ZOOM> diagnostic set.
+
+Since errors may also be diagnosed by the server, and returned to the
+client, error codes may also take values from the BIB-1 diagnostic set
+of Z39.50, listed at the Z39.50 Maintenance Agency's web-site at
 http://www.loc.gov/z3950/agency/defns/bib1diag.html
 
 All error-codes, whether client-side from the C<ZOOM::Error>
