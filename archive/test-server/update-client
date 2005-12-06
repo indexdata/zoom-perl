@@ -1,0 +1,190 @@
+From mike  Wed Nov 30 17:50:48 2005
+MIME-Version: 1.0
+Envelope-to: mike@indexdata.com
+Delivery-date: Wed, 30 Nov 2005 17:49:30 +0100
+Date: Wed, 30 Nov 2005 17:49:11 +0100
+From: Adam Dickmeiss <adam@indexdata.dk>
+X-Accept-Language: en-us, da, en
+To: Zebra Information Server <zebralist@indexdata.dk>
+Subject: Re: [Zebralist] indexing data from yaz client
+In-Reply-To: <20051117161003.M83503@reverseorder.net>
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Reply-To: Zebra Information Server <zebralist@indexdata.dk>
+Sender: zebralist-bounces@indexdata.dk
+X-Spam-Checker-Version: SpamAssassin 3.0.4 (2005-06-05) on bagel.indexdata.dk
+X-Spam-Status: No, score=-2.6 required=5.0 tests=AWL,BAYES_00 
+	autolearn=unavailable version=3.0.4
+X-Spam-Level: 
+
+scuzzy wrote:
+> Is there a way to initiate a re-index of the database through the yaz link? 
+> furthermore, is there a way to index content that is not a physical file, but
+> rather something sent to zebra via the yaz client/link.
+> 
+> I've tried a few things, but I'm not sure how to do this.
+
+The extended services are not enabled by default in zebra - due to the 
+fact that they modify the system.
+
+In order to allow anybody to update, use
+perm.anonymous: rw
+in zebra.cfg.
+
+Or, even better, allow only updates for a particular admin user. For 
+user 'admin', you could use:
+perm.admin: rw
+passwd: passwordfile
+
+And in passwordfile, specify users and passwords ..
+admin:secret
+
+We can now start a yaz-client admin session and create a database:
+
+$ yaz-client localhost:9999 -u admin/secret
+Authentication set to Open (admin/secret)
+Connecting...OK.
+Sent initrequest.
+Connection accepted by v3 target.
+ID     : 81
+Name   : Zebra Information Server/GFS/YAZ
+Version: Zebra 1.4.0/1.63/2.1.9
+Options: search present delSet triggerResourceCtrl scan sort 
+extendedServices namedResultSets
+Elapsed: 0.007046
+Z> adm-create
+Admin request
+Got extended services response
+Status: done
+Elapsed: 0.045009
+
+Now Default was created..  We can now insert an XML file (esdd0006.grs 
+from example/gils/records) and index it:
+
+Z> update insert 1 esdd0006.grs
+Got extended services response
+Status: done
+Elapsed: 0.438016
+
+The 3rd parameter.. 1 here .. is the opaque record id from Ext update. 
+It a record ID that _we_ assign to the record in question. If we do not 
+assign one the usual rules for match apply (recordId: from zebra.cfg).
+
+Actually, we should have a way to specify "no opaque record id" for 
+yaz-client's update command.. We'll fix that.
+
+Elapsed: 0.438016
+Z> f utah
+Sent searchRequest.
+Received SearchResponse.
+Search was a success.
+Number of hits: 1, setno 1
+SearchResult-1: term=utah cnt=1
+records returned: 0
+Elapsed: 0.014179
+
+Let's delete the beast:
+
+Z> update delete 1
+No last record (update ignored)
+Z> update delete 1 esdd0006.grs
+Got extended services response
+Status: done
+Elapsed: 0.072441
+Z> f utah
+Sent searchRequest.
+Received SearchResponse.
+Search was a success.
+Number of hits: 0, setno 2
+SearchResult-1: term=utah cnt=0
+records returned: 0
+Elapsed: 0.013610
+
+If shadow register is enabled you must run the adm-commit command in 
+order write your changes..
+
+/ Adam
+
+> 
+> Any help would be appreciated.
+> 
+> Daine Mamacos
+> --
+> random signature
+> 
+> 
+> 
+> _______________________________________________
+> Zebralist mailing list
+> Zebralist@indexdata.dk
+> http://www.indexdata.dk/mailman/listinfo/zebralist
+> 
+
+
+
+_______________________________________________
+Zebralist mailing list
+Zebralist@indexdata.dk
+http://www.indexdata.dk/mailman/listinfo/zebralist
+
+From mike  Tue Nov 29 11:38:15 2005
+MIME-Version: 1.0
+Envelope-to: mike@miketaylor.org.uk
+Delivery-date: Tue, 29 Nov 2005 11:36:14 +0100
+Date: Tue, 29 Nov 2005 11:36:14 +0100
+From: Adam Dickmeiss <adam@indexdata.dk>
+X-Accept-Language: en-us, da, en
+To: Mike Taylor <mike@miketaylor.org.uk>
+Subject: Re: zoomtest9.c
+In-Reply-To: <200511241610.jAOGAuSh015366@localhost.localnet>
+Content-Type: text/plain; charset=us-ascii; format=flowed
+X-Spam-Checker-Version: SpamAssassin 3.0.4 (2005-06-05) on bagel.indexdata.dk
+X-Spam-Status: No, score=-2.9 required=5.0 tests=AWL,BAYES_00 autolearn=ham 
+	version=3.0.4
+X-Spam-Level: 
+
+Mike Taylor wrote:
+> Hi, Adam, thanks for making this very helpful example code.  A few
+> followup quesations.
+> 
+> 1. What's the difference between "replace" and "update"?
+
+For replace, and error is returned if the record does not already exist. 
+For (special)update it will be inserted or updated/replaced..
+
+> 2. What format should the records be in?  If I have a choice (e.g. XML
+>    or MARC) how do I specify which I am using?
+
+Currently it's XML only. We could have a way to inject other formats.. 
+Ideally what Zebra would like is a filter name reather than a record 
+syntax.. In actual fact updating _is_ a weird thing.. if you inject a 
+record that's already being mangled by presentation... For example, 
+consider a case where a ISO2709/MARC is inserted by zebraidx update... 
+Later a client retireves the same record but now it's in DublinCore.. 
+What happens if it gets updated? I guess it's just a DDTH.
+
+> 3. Are there options that should be checked after calling send()
+Don't think so.
+> 4. Do we have a running server that I can test this against?  Or does
+>    any Zebra installation support it, so I can run my own?
+You should be able to run it against any Zebra server but you need to 
+allow-updated in the config. (It would be too much of a security risk if 
+anybody could update). Add something like this:
+
+# Flags for the non-authenticated user. w=write (allows ES Updates)
+perm.anonymous: rw
+
+> 5. What steps are taken to authenticate the request?
+> 
+> ... this is complicated stuff, isn't it?  :-)
+And undocumented stuff.
+
+/ Adam
+
+>  _/|_	 ___________________________________________________________________
+> /o ) \/  Mike Taylor  <mike@miketaylor.org.uk>  http://www.miketaylor.org.uk
+> )_v__/\  "I have no idea what a `strong' or a `weak' verb is, and I truly
+> 	 hope I never find out what a `turbo verb' is, but I usually have
+> 	 a pretty good idea what the *right* verb is" -- Jane MacDonald.
+> 
+> 
+
