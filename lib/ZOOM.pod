@@ -1,4 +1,4 @@
-# $Id: ZOOM.pod,v 1.12 2005-11-26 16:59:53 mike Exp $
+# $Id: ZOOM.pod,v 1.13 2005-12-07 18:04:47 mike Exp $
 
 use strict;
 use warnings;
@@ -489,7 +489,7 @@ efficiency gain to be had by passing 0.)
 Once the records have been retrieved from the server
 (i.e. C<records()> has completed without throwing an exception), they
 can be fetched much more efficiently using C<record()> - or
-C<record_immediate(), which is then guaranteed to succeed.
+C<record_immediate()>, which is then guaranteed to succeed.
 
 =head4 cache_reset()
 
