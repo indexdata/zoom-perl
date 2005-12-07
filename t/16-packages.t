@@ -1,4 +1,4 @@
-# $Id: 16-packages.t,v 1.5 2005-12-07 15:28:07 mike Exp $
+# $Id: 16-packages.t,v 1.6 2005-12-07 17:46:00 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 16-packages.t'
@@ -14,7 +14,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 32;
+use Test::More tests => 40;
 
 BEGIN { use_ok('Net::Z3950::ZOOM') };
 
@@ -43,27 +43,27 @@ makedb($conn, $dbname, 223);
 Net::Z3950::ZOOM::connection_destroy($conn);
 $conn = makeconn($host, "admin", "fish", 0);
 Net::Z3950::ZOOM::connection_option_set($conn, databaseName => $dbname);
-my $rs = Net::Z3950::ZOOM::connection_search_pqf($conn, "the");
-my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
-$errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
-ok($errcode == 109, "database '$dbname' does not yet exist");
+count_hits($conn, "the", 109);
 
 # Now create the database and check that it is present but empty
 makedb($conn, $dbname, 0);
-$rs = Net::Z3950::ZOOM::connection_search_pqf($conn, "the");
-$errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
-ok($errcode == 0, "database '$dbname' does now exists");
-my $n = Net::Z3950::ZOOM::resultset_size($rs);
-ok($n == 0, "database '$dbname' is empty");
+count_hits($conn, "the", 0, 0);
 
 # Trying to create the same database again will fail EEXIST
 makedb($conn, $dbname, 224);
 
-# Try to add a non-existent record
-updaterec($conn, 465, "samples/records/notthere.grs", 224);
-
 # Add a single record, and check that it can be found
-updaterec($conn, 465, "samples/records/esdd0006.grs", 0);
+updaterec($conn, 1, content_of("samples/records/esdd0006.grs"), 0);
+count_hits($conn, "the", 0, 1);
+
+# Add the same record with the same ID: overwrite => no change
+updaterec($conn, 1, content_of("samples/records/esdd0006.grs"), 0);
+count_hits($conn, "the", 0, 1);
+
+# Add it again record with different ID => new copy added
+### For some reason, this does not work
+updaterec($conn, 2, content_of("samples/records/esdd0006.grs"), 0);
+count_hits($conn, "the", 0, 2);
 
 # Now drop the newly-created database
 dropdb($conn, $dbname, 0);
@@ -90,7 +90,7 @@ sub makeconn {
     Net::Z3950::ZOOM::connection_connect($conn, $host, 0);
     $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
     ok($errcode == $expected_error,
-       "connection to '$host'" . ($errcode ? " refused $errcode" : ""));
+       "connection to '$host'" . ($errcode ? " refused ($errcode)" : ""));
 
     return $conn;
 }
@@ -111,8 +111,8 @@ sub makedb {
     Net::Z3950::ZOOM::package_send($p, "create");
     my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
     $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
-    ok($errcode == $expected_error,
-       "database creation '$dbname'"  . ($errcode ? " refused $errcode" : ""));
+    ok($errcode == $expected_error, "database creation '$dbname'" .
+       ($errcode ? " refused ($errcode)" : ""));
 
     # Now we can inspect the package options to find out more about
     # how the server dealt with the request.  However, it seems that
@@ -162,9 +162,37 @@ sub updaterec {
     Net::Z3950::ZOOM::package_send($p, "update");
     my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
     $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
-    ok($errcode == $expected_error,
-       "record update $id '$file'"  . ($errcode ? " failed $errcode $errmsg $addinfo" : ""));
+    ok($errcode == $expected_error, "record update $id" .
+       ($errcode ? " failed $errcode '$errmsg' ($addinfo)" : ""));
 
     Net::Z3950::ZOOM::package_destroy($p);
     ok(1, "destroyed update package");
+}
+
+
+sub count_hits {
+    my($conn, $query, $expected_error, $expected_count) = @_;
+
+    my $rs = Net::Z3950::ZOOM::connection_search_pqf($conn, $query);
+    my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
+    $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
+    ok($errcode == $expected_error, "database '$dbname' " .
+       ($errcode == 0 ? "can be searched" : "not searchable ($errcode)"));
+    return if $errcode != 0;
+    my $n = Net::Z3950::ZOOM::resultset_size($rs);
+    ok($n == $expected_count,
+       "database '$dbname' has $n records (expected $expected_count)");
+}
+
+
+sub content_of {
+    my($filename) = @_;
+
+    use IO::File;
+    my $f = new IO::File("<$filename")
+	or die "can't open file '$filename': $!";
+    my $text = join("", <$f>);
+    $f->close();
+
+    return $text;
 }
