@@ -1,4 +1,4 @@
-# $Id: MANIFEST,v 1.18 2005-11-15 17:25:20 mike Exp $
+# $Id: MANIFEST,v 1.19 2005-12-09 10:34:31 mike Exp $
 
 Changes
 Makefile.PL
@@ -29,6 +29,7 @@ lib/Net/Z3950.pm
 MANIFEST.SKIP
 META.yml                                 Module meta-data (added by MakeMaker)
 samples/README
+samples/records/esdd0006.grs
 samples/net-z3950-zoom/zoomtst1.pl
 samples/net-z3950/zoomtst1.pl
 samples/zoom/zoomtst1.pl
