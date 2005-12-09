@@ -1,4 +1,4 @@
-# $Id: Makefile.PL,v 1.4 2005-10-11 11:35:47 mike Exp $
+# $Id: Makefile.PL,v 1.5 2005-12-09 10:55:15 mike Exp $
 
 use 5.008;
 use ExtUtils::MakeMaker;
@@ -7,7 +7,7 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
     NAME              => 'Net::Z3950::ZOOM',
     VERSION_FROM      => 'lib/Net/Z3950/ZOOM.pm', # finds $VERSION
-    PREREQ_PM         => {}, # e.g., Module::Name => 1.1
+    PREREQ_PM         => { MARC::Record => 1.38 }, # e.g., Module::Name => 1.1
     ($] >= 5.005 ?     ## Add these new keywords supported since 5.005
       (ABSTRACT_FROM  => 'lib/Net/Z3950/ZOOM.pm', # retrieve abstract from module
        AUTHOR         => 'Mike Taylor <mike@>') : ()),
