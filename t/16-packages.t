@@ -1,4 +1,4 @@
-# $Id: 16-packages.t,v 1.6 2005-12-07 17:46:00 mike Exp $
+# $Id: 16-packages.t,v 1.7 2005-12-09 10:17:35 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 16-packages.t'
@@ -61,7 +61,6 @@ updaterec($conn, 1, content_of("samples/records/esdd0006.grs"), 0);
 count_hits($conn, "the", 0, 1);
 
 # Add it again record with different ID => new copy added
-### For some reason, this does not work
 updaterec($conn, 2, content_of("samples/records/esdd0006.grs"), 0);
 count_hits($conn, "the", 0, 2);
 
