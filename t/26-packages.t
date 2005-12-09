@@ -1,32 +1,196 @@
-# $Id: 26-packages.t,v 1.1 2005-11-08 15:56:05 mike Exp $
+# $Id: 26-packages.t,v 1.2 2005-12-09 10:33:48 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 26-packages.t'
 
 use strict;
 use warnings;
-use Test::More tests => 6;
+use Test::More tests => 40;
 
 BEGIN { use_ok('ZOOM') };
 
-my $host = "indexdata.com/gils";
-my $conn;
-eval { $conn = new ZOOM::Connection($host, 0) };
-ok(!$@, "connection to '$host'");
 
-my $p = $conn->package();
-# Inspection of the ZOOM-C code shows that this can never fail, in fact.
-ok(defined $p, "created package");
+# For now, use a local database: later establish a public one for this.
+# We will create, and destroy, a new database with a random name
+my $host = "localhost:9999";
+#my $host = "indexdata.com/gils";
+my $dbname = join("", map { chr(ord("a") + int(rand(26))) } 1..10);
 
-# There may be useful options to set, but this is not one of them!
-$p->option(foo => "bar");
-my $val = $p->option("foo");
-ok($val eq "bar", "package option retrieved as expected");
+# Connect anonymously, and expect this to fail
+my $conn = makeconn($host, undef, undef, 1011);
 
-eval { $p->send("foo") };
-ok(!$@, "sent 'foo' package");
+# Connect as a user, but with incorrect password -- expect failure
+$conn->destroy();
+$conn = makeconn($host, "user", "badpw", 1011);
 
-### Now what?
+# Connect as a non-privileged user with correct password
+$conn->destroy();
+$conn = makeconn($host, "user", "frog", 0);
 
-$p->destroy();
-ok(1, "destroyed package");
+# Non-privileged user can't create database
+makedb($conn, $dbname, 223);
+
+# Connect as a privileged user with correct password, check DB is absent
+$conn->destroy();
+$conn = makeconn($host, "admin", "fish", 0);
+$conn->option(databaseName => $dbname);
+count_hits($conn, "the", 109);
+
+# Now create the database and check that it is present but empty
+makedb($conn, $dbname, 0);
+count_hits($conn, "the", 0, 0);
+
+# Trying to create the same database again will fail EEXIST
+makedb($conn, $dbname, 224);
+
+# Add a single record, and check that it can be found
+updaterec($conn, 1, content_of("samples/records/esdd0006.grs"), 0);
+count_hits($conn, "the", 0, 1);
+
+# Add the same record with the same ID: overwrite => no change
+updaterec($conn, 1, content_of("samples/records/esdd0006.grs"), 0);
+count_hits($conn, "the", 0, 1);
+
+# Add it again record with different ID => new copy added
+updaterec($conn, 2, content_of("samples/records/esdd0006.grs"), 0);
+count_hits($conn, "the", 0, 2);
+
+# Now drop the newly-created database
+dropdb($conn, $dbname, 0);
+
+# A second dropping should fail, but does not do so -- I think that
+# "drop" is an always-"successful" no-op.  Yuck.
+dropdb($conn, $dbname, 0);
+
+
+sub makeconn {
+    my($host, $user, $password, $expected_error) = @_;
+
+    my $options = new ZOOM::Options();
+    $options->option(user => $user)
+	if defined $user;
+    $options->option(password => $password)
+	if defined $password;
+
+    my $conn;
+    eval { $conn = create ZOOM::Connection($options) };
+    ok(!$@, "unconnected connection object created");
+
+    eval { $conn->connect($host, 0) };
+    my($errcode, $errmsg, $addinfo) = maybe_error($@);
+
+    ok($errcode == $expected_error,
+       "connection to '$host'" . ($errcode ? " refused ($errcode)" : ""));
+
+    return $conn;
+}
+
+
+sub makedb {
+    my($conn, $dbname, $expected_error) = @_;
+
+    my $p = $conn->package();
+    # Inspection of the ZOOM-C code shows that this can never fail, in fact.
+    ok(defined $p, "created package");
+
+    $p->option(databaseName => $dbname);
+    my $val = $p->option("databaseName");
+    ok($val eq $dbname, "package option retrieved as expected");
+
+    eval { $p->send("create") };
+    my($errcode, $errmsg, $addinfo) = maybe_error($@);
+    ok($errcode == $expected_error, "database creation '$dbname'" .
+       ($errcode ? " refused ($errcode)" : ""));
+
+    # Now we can inspect the package options to find out more about
+    # how the server dealt with the request.  However, it seems that
+    # the "package database" described in the standard is not used,
+    # and that the only options we can inspect are the following:
+    $val = $p->option("targetReference");
+    $val = $p->option("xmlUpdateDoc");
+    # ... and we know nothing about expected or actual values.
+
+    $p->destroy();
+    ok(1, "destroyed createdb package");
+}
+
+
+sub dropdb {
+    my($conn, $dbname, $expected_error) = @_;
+
+    my $p = $conn->package();
+    # No need to keep ok()ing this, or checking the option-setting
+    $p->option(databaseName => $dbname);
+    $p->send("drop");
+    my($errcode, $errmsg, $addinfo) = maybe_error($@);
+    ok($errcode == $expected_error,
+       "database drop '$dbname'"  . ($errcode ? " refused $errcode" : ""));
+
+    $p->destroy();
+    ok(1, "destroyed dropdb package");
+}
+
+
+# We always use "specialUpdate", which adds a record or replaces it if
+# it's already there.  By contrast, "insert" fails if the record
+# already exists, and "replace" fails if it does not.
+#
+sub updaterec {
+    my($conn, $id, $file, $expected_error) = @_;
+
+    my $p = $conn->package();
+    $p->option(action => "specialUpdate");
+    $p->option(recordIdOpaque => $id);
+    $p->option(record => $file);
+
+    eval { $p->send("update") };
+    my($errcode, $errmsg, $addinfo) = maybe_error($@);
+    ok($errcode == $expected_error, "record update $id" .
+       ($errcode ? " failed $errcode '$errmsg' ($addinfo)" : ""));
+
+    $p->destroy();
+    ok(1, "destroyed update package");
+}
+
+
+sub count_hits {
+    my($conn, $query, $expected_error, $expected_count) = @_;
+
+    my $rs;
+    eval { $rs = $conn->search_pqf($query) };
+    my($errcode, $errmsg, $addinfo) = maybe_error($@);
+    ok($errcode == $expected_error, "database '$dbname' " .
+       ($errcode == 0 ? "can be searched" : "not searchable ($errcode)"));
+
+    return if $errcode != 0;
+    my $n = $rs->size($rs);
+    ok($n == $expected_count,
+       "database '$dbname' has $n records (expected $expected_count)");
+}
+
+
+sub content_of {
+    my($filename) = @_;
+
+    use IO::File;
+    my $f = new IO::File("<$filename")
+	or die "can't open file '$filename': $!";
+    my $text = join("", <$f>);
+    $f->close();
+
+    return $text;
+}
+
+
+# Return the elements of an exception as separate scalars
+sub maybe_error {
+    my ($x) = @_;
+
+    if ($x && $x->isa("ZOOM::Exception")) {
+	return ($x->code(),
+		$x->message(),
+		$x->addinfo());
+    } else {
+	return (0, undef, undef);
+    }
+}
