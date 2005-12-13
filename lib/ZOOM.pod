@@ -1,4 +1,4 @@
-# $Id: ZOOM.pod,v 1.16 2005-12-13 14:01:59 mike Exp $
+# $Id: ZOOM.pod,v 1.17 2005-12-13 14:40:47 mike Exp $
 
 use strict;
 use warnings;
@@ -883,7 +883,57 @@ reuse a Package that has been C<destroy()>ed.
 
 =head2 ZOOM::Query
 
+ $q = new ZOOM::Query::CQL("creator=pike and subject=unix");
+ $rs = $conn->search($q);
+ $q->destroy();
+
+C<ZOOM::Query> is a virtual base class from which various concrete
+subclasses can be derived.  Different subclasses implement different
+types of query.  The sole purpose of a Query object is to be used in a
+C<search()> on a Connection; because PQF is such a common special
+case, the shortcut Connection method C<search_pqf()> is provided.
+
+The following Query subclasses are provided, both of the providing the
+same set of methods described below:
+
+=over 4
+
+=item ZOOM::Query::PQF
+
+Implements Prefix Query Format (PQF), also sometimes known as Prefix
+Query Notation (PQN).  This esoteric but rigorous and expressive
+format is described in the YAZ Manual at
+http://indexdata.com/yaz/doc/tools.tkl#PQF
+
+=item ZOOM::Query::CQL
+
+Implements the Common Query Language (CQL) of SRU, the Search/Retrieve
+URL.  CQL is a much friendlier notation than PQF, using a simple infix
+notation.  The queries are passed ``as is'' to the server rather than
+being compiled into a Z39.50 Type-1 query, so only CQL-compliant
+servers can support such querier.  CQL is described at
+http://www.loc.gov/standards/sru/cql/
+and in a slight out-of-date but nevertheless useful tutorial at
+http://zing.z3950.org/cql/intro.html
+
+=back
+
+=head3 Methods
+
+=head4 new()
+
+Creates a new query object, 
+
+=head4 sortby()
+
 I<###>
+
+=head4 destroy()
+
+ $p->destroy()
+
+Destroys a Query object, freeing its resources.  It is an error to
+reuse a Query that has been C<destroy()>ed.
 
 =head2 ZOOM::Options
 
