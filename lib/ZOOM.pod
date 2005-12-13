@@ -1,4 +1,4 @@
-# $Id: ZOOM.pod,v 1.21 2005-12-13 16:22:41 mike Exp $
+# $Id: ZOOM.pod,v 1.22 2005-12-13 16:46:59 mike Exp $
 
 use strict;
 use warnings;
@@ -94,7 +94,8 @@ enumeration or drawn from the BIB-1 diagnostic set.
 
 =head2 ZOOM::event()
 
-B<Warning: lark's vomit.  Do not read this.>
+B<Warning.>
+Lark's vomit.  Do not read this section.
 
  $which = ZOOM::event([ $conn1, $conn2, $conn3 ]);
 
@@ -105,7 +106,8 @@ the connections it occurred on.  The return value is a 1-based index
 into the list; 0 is returned if no event occurs within the longest
 timeout specified by the C<timeout> options of all the connections.
 
-B<This function is not yet implemented.>
+B<Warning.>
+This function is not yet implemented.
 
 =head1 CLASSES
 
@@ -392,9 +394,10 @@ the C<ZOOM::Package> documentation.
 Returns a C<ZOOM::Event> enumerated value indicating the type of the
 last event that occurred on the connection.  This is used only in
 complex asynchronous applications - see the section below on
-<ZOOM::Event> for more information.
+C<ZOOM::Event> for more information.
 
-B<Beware - this method has not been tested>
+B<Warning.>
+This method has not been tested.
 
 =head4 destroy()
 
@@ -1076,7 +1079,32 @@ be useful.  Though I can't imagine how.
 
 =head4 set_callback()
 
-I<###>
+ sub cb {
+     ($udata, $key) = @;
+     return "$udata-$key-$udata";
+ }
+ $o->set_callback(\&cb, "xyz");
+ assert($o->option("foo") eq "xyz-foo-xyz");
+
+This method allows a callback function to be installed in an option
+set, so that the values of options can be calculated algorithmically
+rather than, as usual, looked up in a table.  Along with the callback
+function itself, an additional datum is provided: when an option is
+subsequently looked up, this datum is passed to the callback function
+along with the key; and its return value is returned to the caller as
+the value of the option.
+
+B<Warning.>
+Although it ought to be possible to specify callback function using
+the C<\&name> syntax above, or a literal C<sub { code }> code
+reference, the complexities of the Perl-internal memory management
+system mean that the function must currently be specified as a string
+containing the fully-qualified name, e.g. C<"main::cb">.>
+
+B<Warning.>
+The current implementation of the this method leaks memory, not only
+when the callback is installed, but on every occasion that it is
+consulted to look up an option value.
 
 =head4 destroy()
 
