@@ -1,4 +1,4 @@
-# $Id: ZOOM.pod,v 1.19 2005-12-13 15:30:26 mike Exp $
+# $Id: ZOOM.pod,v 1.20 2005-12-13 16:03:14 mike Exp $
 
 use strict;
 use warnings;
@@ -979,23 +979,72 @@ They are an extension to that specification.
 
 =head4 new()
 
-I<###>
+ $o1 = new ZOOM::Options();
+ $o1and2 = new ZOOM::Options($o1);
+ $o3 = new ZOOM::Options();
+ $o1and3and4 = new ZOOM::Options($o1, $o3);
 
-=head4 option()
+Creates and returns a new option set.  One or two (but no more)
+existing option sets may be passed as arguments, in which case they
+become ``parents'' of the new set, which thereby ``inherits'' their
+options, the values of the first parent overriding those of the second
+when both have a value for the same key.  An option set that inherits
+from a parent that has its own parents also inherits the grandparent's
+options, and so on.
 
-I<###>
+=head4 option() / option_binary()
 
-=head4 option_binary()
+ $o->option(preferredRecordSyntax => "usmarc");
+ $o->option_binary(iconBlob => "foo\0bar");
+ die if length($o->option_binary("iconBlob") != 7);
 
-I<###>
+These methods are used to get and set options within a set, and behave
+the same way as the same-named C<Connection> methods - see above.  As
+with the C<Connection> methods, values passed to and retrieved using
+C<option()> are interpreted as NUL-terminated, while those passed to
+and retrieved from C<option_binary()> are binary-clean.
 
-=head4 bool() / int()
+=head4 bool()
 
-I<###>
+ $o->option(x => "T");
+ $o->option(y => "F");
+ assert($o->bool("x", 1));
+ assert(!$o->bool("y", 1));
+ assert($o->bool("z", 1));
+
+The first argument is a key, and the second is a default value.
+Returns the value associated with the specified key as a boolean, or
+the default value if the key has not been set.  The values C<T> (upper
+case) and C<1> are considered true; all other values (including C<t>
+(lower case) and non-zero integers other than one) are considered
+false.
+
+This method is provided in ZOOM-C because in a statically typed
+language it's convenient to have the result returned as an
+easy-to-test type.  In a dynamically typed language such as Perl, this
+problem doesn't arise, so C<bool()> is nearly useless; but it is made
+available in case applications need to duplicate the idiosyncratic
+interpretation of truth and falsehood and ZOOM-C uses.
+
+=head4 int()
+
+ $o->option(x => "012");
+ assert($o->int("x", 20) == 12);
+ assert($o->int("y", 20) == 20);
+
+Returns the value associated with the specified key as an integer, or
+the default value if the key has not been set.  See the description of
+C<bool()> for why you almost certainly don't want to use this.
 
 =head4 set_int()
 
-I<###>
+ $o->set_int(x => "29");
+
+Sets the value of the specified option as an integer.  Of course, Perl
+happily converts strings to integers on its own, so you can just use
+C<option()> for this, but C<set_int()> is guaranteed to use the same
+string-to-integer conversion as ZOOM-C does, which might occasionally
+be useful.  Though I can't imagine how.
 
 =head4 set_callback()
 
@@ -1003,7 +1052,10 @@ I<###>
 
 =head4 destroy()
 
-I<###>
+ $o->destroy()
+
+Destroys an Options object, freeing its resources.  It is an error to
+reuse an Options object that has been C<destroy()>ed.
 
 =head1 ENUMERATIONS
 
