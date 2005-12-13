@@ -1,4 +1,4 @@
-# $Id: ZOOM.pod,v 1.20 2005-12-13 16:03:14 mike Exp $
+# $Id: ZOOM.pod,v 1.21 2005-12-13 16:22:41 mike Exp $
 
 use strict;
 use warnings;
@@ -38,8 +38,8 @@ API such as ZOOM is that all implementations should be compatible
 anyway; but knowing that the same code is running is reassuring.)
 
 The ZOOM module provides two enumerations (C<ZOOM::Error> and
-C<ZOOM::Event>), a single utility function C<diag_str()> in the C<ZOOM>
-package itself, and eight classes:
+C<ZOOM::Event>), two utility functions C<diag_str()> and C<event()> in
+the C<ZOOM> package itself, and eight classes:
 C<ZOOM::Exception>,
 C<ZOOM::Options>,
 C<ZOOM::Connection>,
@@ -76,7 +76,7 @@ In general, method calls throw an exception if anything goes wrong, so
 you don't need to test for success after each call.  See the section
 below on the Exception class for details.
 
-=head1 UTILITY FUNCTION
+=head1 UTILITY FUNCTIONS
 
 =head2 ZOOM::diag_str()
 
@@ -91,6 +91,21 @@ or
 C<ZOOM::Connection::errcode()>,
 irrespective of whether it is a member of the C<ZOOM::Error>
 enumeration or drawn from the BIB-1 diagnostic set.
+
+=head2 ZOOM::event()
+
+B<Warning: lark's vomit.  Do not read this.>
+
+ $which = ZOOM::event([ $conn1, $conn2, $conn3 ]);
+
+Used only in complex asynchronous applications, this function takes a
+reference to a list of Connection objects, waits until an event
+occurs on any one of them, and returns an integer indicating which of
+the connections it occurred on.  The return value is a 1-based index
+into the list; 0 is returned if no event occurs within the longest
+timeout specified by the C<timeout> options of all the connections.
+
+B<This function is not yet implemented.>
 
 =head1 CLASSES
 
@@ -367,6 +382,19 @@ index.
 Creates and returns a new C<ZOOM::Package>, to be used in invoking an
 Extended Service.  An options block may optionally be passed in.  See
 the C<ZOOM::Package> documentation.
+
+=head4 last_event()
+
+ if ($conn->last_event() == ZOOM::Event::CONNECT) {
+     print "Connected!\n";
+ }
+
+Returns a C<ZOOM::Event> enumerated value indicating the type of the
+last event that occurred on the connection.  This is used only in
+complex asynchronous applications - see the section below on
+<ZOOM::Event> for more information.
+
+B<Beware - this method has not been tested>
 
 =head4 destroy()
 
