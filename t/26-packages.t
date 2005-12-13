@@ -1,4 +1,4 @@
-# $Id: 26-packages.t,v 1.4 2005-12-13 17:35:20 mike Exp $
+# $Id: 26-packages.t,v 1.5 2005-12-13 17:36:11 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 26-packages.t'
@@ -10,7 +10,6 @@ use Test::More tests => 40;
 BEGIN { use_ok('ZOOM') };
 
 
-# For now, use a local database: later establish a public one for this.
 # We will create, and destroy, a new database with a random name
 my $host = "test.indexdata.com:8017";
 my $dbname = join("", map { chr(ord("a") + int(rand(26))) } 1..10);
