@@ -1,4 +1,4 @@
-# $Id: ZOOM.pod,v 1.13 2005-12-07 18:04:47 mike Exp $
+# $Id: ZOOM.pod,v 1.14 2005-12-13 11:26:19 mike Exp $
 
 use strict;
 use warnings;
@@ -258,13 +258,13 @@ http://indexdata.com/yaz/doc/zoom.tkl#zoom.connections
 
 ScanSet options are listed at
 http://indexdata.com/yaz/doc/zoom.scan.tkl
-I<### move this obvservation down to the appropriate place>
+I<### move this observation down to the appropriate place>
 
 =item *
 
 Package options are listed at
 http://indexdata.com/yaz/doc/zoom.ext.html
-I<### move this obvservation down to the appropriate place>
+I<### move this observation down to the appropriate place>
 
 =back
 
