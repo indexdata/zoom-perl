@@ -1,4 +1,4 @@
-# $Id: ZOOM.pod,v 1.15 2005-12-13 12:32:15 mike Exp $
+# $Id: ZOOM.pod,v 1.16 2005-12-13 14:01:59 mike Exp $
 
 use strict;
 use warnings;
@@ -408,7 +408,7 @@ http://zoom.z3950.org/api/zoom-current.html#3.4
 
  $rs->option(elementSetName => "f");
 
-Allows options to be set into, and read from a ResultSet, just like
+Allows options to be set into, and read from, a ResultSet, just like
 the Connection class's C<option()> method.  There is no
 C<option_binary()> method for ResultSet objects.
 
@@ -740,7 +740,7 @@ terms are indexed.
 
  print "scan status is ", $ss->option("scanStatus");
 
-Allows options to be set into, and read from a ScanSet, just like
+Allows options to be set into, and read from, a ScanSet, just like
 the Connection class's C<option()> method.  There is no
 C<option_binary()> method for ScanSet objects.
 
@@ -757,10 +757,129 @@ reuse a ScanSet that has been C<destroy()>ed.
 
 =head2 ZOOM::Package
 
-I<###>
+ $p = $conn->package();
+ $p->option(action => "specialUpdate");
+ $p->option(recordIdOpaque => 145);
+ $p->option(record => content_of("/tmp/record.xml"));
+ $p->send("update");
+ $p->destroy();
+
+This class represents an Extended Services Package: an instruction to
+the server to do something not covered by the core parts of the Z39.50
+standard (or the equivalent in SRW or SRU).  Since the core protocols
+are read-only, such requests are often used to make changes to the
+database, such as in the record update example above.
+
+Requesting an extended service is a four-step process: first, create a
+package associated with the connection to the relevant database;
+second, set options on the package to instruct the server on what to
+do; third, send the package (which may result in an exception being
+thrown if the server cannot execute the requested operations; and
+finally, destroy the package.
 
 Package options are listed at
 http://indexdata.com/yaz/doc/zoom.ext.html
+
+The particular options that have meaning are determined by the
+top-level operation string specified as the argument to C<send()>.
+For example, when the operation is C<update> (the most commonly used
+extended service), the C<action> option may be set to any of
+C<recordInsert>
+(add a new record, failing if that record already exists),
+C<recordDelete>
+(delete a record, failing if it is not in the database).
+C<recordReplace>
+(replace a record, failing if an old version is not already present)
+or
+C<specialUpdate>
+(add a record, replacing any existing version that may be present).
+
+For update, the C<record> option should be set to the full text of the
+XML record to added, deleted or replaced.  Depending on how the server
+is configured, it may extract the record's unique ID from the text
+(i.e. from a known element such as the C<001> field of a MARCXML
+record), or it may require the unique ID to passed in explicitly using
+the C<recordIdOpaque> option.
+
+Extended services packages are B<not currently described> in the ZOOM
+Abstract API at
+http://zoom.z3950.org/api/zoom-current.html
+They will be added in a forthcoming version, and will function much
+as those implemented in this module.
+
+=head3 Methods
+
+=head4 option()
+
+ $p->option(recordIdOpaque => "46696f6e61");
+
+Allows options to be set into, and read from, a Package, just like
+the Connection class's C<option()> method.  There is no
+C<option_binary()> method for Package objects.
+
+Package options are listed at
+http://indexdata.com/yaz/doc/zoom.ext.tkl
+
+=head4 send()
+
+ $p->send("createdb");
+
+Sends a package to the server associated with the Connection that
+created it.  Problems are reported by throwing an exception.  The
+single parameter indicates the operation that the server is being
+requested to perform, and controls the interpretation of the package's
+options.  Valid operations include:
+
+=over 4
+
+=item itemorder
+
+Request a copy of a nominated object, e.g. place an ILL request.
+
+=item create
+
+Create a new database, the name of which is specified by the
+C<databaseName> option.
+
+=item drop
+
+Drop an existing database, the name of which is specified by the
+C<databaseName> option.
+
+=item commit
+
+Commit changes made to the database within a transaction.
+
+=item update
+
+Modify the contents of the database by adding, deleting or replacing
+records (as described above in the overview of the C<ZOOM::Package>
+class).
+
+=item xmlupdate
+
+I have no idea what this does.
+
+=back
+
+Although the module is capable of I<making> all these requests, not
+all servers are capable of I<executing> them.  Refusal is indicated by
+throwing an exception.  Problems may also be caused by lack of
+privileges; so C<send()> must be used with caution, and is perhaps
+best wrapped in a clause that checks for execptions, like so:
+
+ eval { $p->send("create") };
+ if ($@ && $@->isa("ZOOM::Exception")) {
+     print "Oops!  ", $@->message(), "\n";
+     return $@->code();
+ }
+
+=head4 destroy()
+
+ $p->destroy()
+
+Destroys a Package object, freeing its resources.  It is an error to
+reuse a Package that has been C<destroy()>ed.
 
 =head2 ZOOM::Query
 
