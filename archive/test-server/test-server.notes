@@ -1,4 +1,4 @@
-$Id: test-server.notes,v 1.3 2005-12-14 10:00:54 mike Exp $
+$Id: test-server.notes,v 1.4 2005-12-14 10:27:47 mike Exp $
 
 To run the test-suite, this module needs an up-to-date Zebra server
 (as of Tue Dec 13 17:41:05 GMT 2005) running on test.indexdata.com
@@ -20,14 +20,17 @@ configuration.  Here's how I did it:
 	./buildconf.sh
 	LDFLAGS=-L/home/mike/universe/lib CPPFLAGS=-I/home/mike/universe/include ./configure --prefix=/home/mike/universe
 	make
+	make check
 	make install
 	cd ../zebra
 	./buildconf.sh
 	LDFLAGS=-L/home/mike/universe/lib CPPFLAGS=-I/home/mike/universe/include ./configure --prefix=/home/mike/universe
 	make
+	make check
 	make install
 	cd ../ZOOM-Perl/archive
-	sudo cp test-server.init /etc/init.d/zoom-perl-server
+	sudo cp -p test-server.init /etc/init.d/zoom-perl-server
+	sudo chmod +x /etc/init.d/zoom-perl-server
 	cd /etc/rc2.d
 	sudo ln -s ../init.d/zoom-perl-server S99zoom-perl-server
 	sudo /etc/init.d/zoom-perl-server start
