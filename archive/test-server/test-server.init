@@ -1,6 +1,6 @@
 #! /bin/sh
 
-# $Id: test-server.init,v 1.2 2005-12-14 10:21:17 mike Exp $
+# $Id: test-server.init,v 1.3 2005-12-14 10:22:08 mike Exp $
 #
 # This is a startup/shutdown script for the ZOOM-Perl test-server,
 # suitable for use in a SysV-style init directory such as /etc/init.d
@@ -41,6 +41,5 @@ case "$1" in
 	;;
   *)
 	echo "Usage: $0 start|stop|restart" >&2
-	exit 1
         ;;
 esac
