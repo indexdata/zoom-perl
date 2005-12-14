@@ -1,0 +1,39 @@
+$Id: test-server.notes,v 1.2 2005-12-14 09:30:26 mike Exp $
+
+To run the test-suite, this module needs an up-to-date Zebra server
+(as of Tue Dec 13 17:41:05 GMT 2005) running on test.indexdata.com
+port 2118, using isam:b and recognising a normal user "user" with
+password "frog" and an administrator "admin" with password "fish".
+
+To provide this, I needed to build an up-to-date Zebra in a custom
+universe, so as not to interfere with the Debian packages used
+elsewhere on test, and to start the server with appropriate
+configuration.  Here's how I did it:
+
+	ssh test
+	mkdir -p universe/usr/src
+	cd universe/usr/src
+	cvs -q -d ":pserver:mike@bagel.indexdata.dk:/home/cvsroot" co yaz
+	cvs -q -d ":pserver:mike@bagel.indexdata.dk:/home/cvsroot" co zebra
+	cvs -q -d ":pserver:mike@bagel.indexdata.dk:/home/cvsroot" co ZOOM-Perl
+	cd yaz
+	./buildconf.sh
+	LDFLAGS=-L/home/mike/universe/usr/lib CPPFLAGS=-I/home/mike/universe/usr/include ./configure --prefix=/home/mike/universe
+	make
+	make install
+	cd ../zebra
+	./buildconf.sh
+	LDFLAGS=-L/home/mike/universe/usr/lib CPPFLAGS=-I/home/mike/universe/usr/include ./configure --prefix=/home/mike/universe
+	make
+	make install
+	cd ../ZOOM-Perl/archive
+	sudo cp test-server.init /etc/init.d/zoom-perl-server
+	cd /etc/rc2.d
+	sudo ln -s ../init.d/zoom-perl-server S99zoom-perl-server
+	sudo /etc/init.d/zoom-perl-server start
+
+On test, two ranges of ports are left open through the firewall:
+	2100-2120 are open, meant for Z servers
+	8001-8020 are open, meant for web services
+We arbitrarily choose port 2118 for this service.
+
