@@ -1,4 +1,4 @@
-$Id: test-server.notes,v 1.2 2005-12-14 09:30:26 mike Exp $
+$Id: test-server.notes,v 1.3 2005-12-14 10:00:54 mike Exp $
 
 To run the test-suite, this module needs an up-to-date Zebra server
 (as of Tue Dec 13 17:41:05 GMT 2005) running on test.indexdata.com
@@ -11,19 +11,19 @@ elsewhere on test, and to start the server with appropriate
 configuration.  Here's how I did it:
 
 	ssh test
-	mkdir -p universe/usr/src
-	cd universe/usr/src
+	mkdir -p universe/src
+	cd universe/src
 	cvs -q -d ":pserver:mike@bagel.indexdata.dk:/home/cvsroot" co yaz
 	cvs -q -d ":pserver:mike@bagel.indexdata.dk:/home/cvsroot" co zebra
 	cvs -q -d ":pserver:mike@bagel.indexdata.dk:/home/cvsroot" co ZOOM-Perl
 	cd yaz
 	./buildconf.sh
-	LDFLAGS=-L/home/mike/universe/usr/lib CPPFLAGS=-I/home/mike/universe/usr/include ./configure --prefix=/home/mike/universe
+	LDFLAGS=-L/home/mike/universe/lib CPPFLAGS=-I/home/mike/universe/include ./configure --prefix=/home/mike/universe
 	make
 	make install
 	cd ../zebra
 	./buildconf.sh
-	LDFLAGS=-L/home/mike/universe/usr/lib CPPFLAGS=-I/home/mike/universe/usr/include ./configure --prefix=/home/mike/universe
+	LDFLAGS=-L/home/mike/universe/lib CPPFLAGS=-I/home/mike/universe/include ./configure --prefix=/home/mike/universe
 	make
 	make install
 	cd ../ZOOM-Perl/archive
