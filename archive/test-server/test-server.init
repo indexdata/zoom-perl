@@ -1,0 +1,46 @@
+#! /bin/sh
+
+# $Id: test-server.init,v 1.2 2005-12-14 10:21:17 mike Exp $
+#
+# This is a startup/shutdown script for the ZOOM-Perl test-server,
+# suitable for use in a SysV-style init directory such as /etc/init.d
+# (on Debian systems) and /etc/rc.d/init.d (on Red Hat systems).  This
+# is configured to run on test.indexdata.com -- if you want to run it
+# somewhere else, you'll probably need to tweak it to suit your
+# system's paths.
+
+PATH=/bin:/usr/bin
+logfile=/var/log/zoom-perl-test-server
+pidfile=/var/run/zoom-perl-test-server.pid
+
+case "$1" in
+  start)
+	if [ -f $pidfile ]; then
+		echo "ZOOM-Perl test server seems to be already running"
+		exit 1
+	fi
+	echo "Starting ZOOM-Perl test server"
+	test -f $logfile && mv $logfile $logfile.old
+	( cd /home/mike/universe/src/ZOOM-Perl/archive
+	  ../../../bin/zebrasrv -c test-server.cfg @:2118 \
+		> $logfile 2>&1 < /dev/null &
+	  echo $! > $pidfile
+	)
+	;;
+  stop)
+	if [ ! -f $pidfile ]; then
+		echo "ZOOM-Perl test server does not seem to be running"
+		exit 1
+	fi
+	echo "Stopping ZOOM-Perl test server"
+	kill `cat $pidfile`
+	rm $pidfile
+	;;
+  restart)
+	$0 stop && $0 start
+	;;
+  *)
+	echo "Usage: $0 start|stop|restart" >&2
+	exit 1
+        ;;
+esac
