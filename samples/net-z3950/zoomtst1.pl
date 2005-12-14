@@ -1,4 +1,4 @@
-# $Id: zoomtst1.pl,v 1.2 2005-10-12 14:35:46 mike Exp $
+# $Id: zoomtst1.pl,v 1.3 2005-12-14 11:17:30 mike Exp $
 #
 # See ../README for a description of this program.
 # perl -I../../blib/lib -I../../blib/arch zoomtst1.pl <target> <query>
@@ -15,16 +15,16 @@ if (@ARGV != 2) {
 
 my($host, $query) = @ARGV;
 
-### Database name defaults to "Default" in Net::Z3950 and must be overridden
+# Database name defaults to "Default" in Net::Z3950 and must be overridden
 $host =~ s/\/(.*)//;
 my $db = $1;
 my $conn = new Net::Z3950::Connection($host, 0, databaseName => $db)
     or die "can't connect to '$host': $!";
 
-### Default format is GRS-1 in Net::Z3950
+# Default format is GRS-1 in Net::Z3950
 $conn->option(preferredRecordSyntax => "usmarc");
 
-### Default format is "B" in Net::Z3950
+# Default format is "B" in Net::Z3950
 $conn->option(elementSetName => "F");
 
 my $rs = $conn->search(-prefix => $query)
@@ -32,13 +32,13 @@ my $rs = $conn->search(-prefix => $query)
 my $n = $rs->size();
 print "Query '$query' found $n records\n";
 
-### Note that the record-index is 1-based here, 0-based in ZOOM-C
+# Note that the record-index is 1-based here, 0-based in ZOOM-C
 for my $i (1..$n) {
     my $rec = $rs->record($i)
 	or die "can't fetch record $i: ", $rs->errmsg();
     print "=== Record $i of $n ===\n";
 
-    ### Rendering format for MARC records is different
+    # Rendering format for MARC records is different
     print $rec->render(), "\n";
 }
 
