@@ -1,4 +1,4 @@
-$Id: Changes,v 1.7 2005-12-19 17:39:19 mike Exp $
+$Id: Changes,v 1.8 2005-12-19 17:48:21 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
@@ -14,6 +14,11 @@ Revision history for Perl extension Net::Z3950::ZOOM.
 	  uses a query object to indicate the start-term.  This opens
 	  the way for using CQL queries for scanning once the
 	  underlying ZOOM-C code supports this.
+	- NOTE BACKWARDS-INCOMPATIBLE CHANGE: The ZOOM::Connection
+	  method scan() is renamed scan_pqf(), and a new scan() method
+	  is introduced which calls the underlying scan1() function.
+	  Thus the scan()/scan_pqf() dichotomy is consistent with that
+	  between search()/search_pqf().
 
 1.00  Wed Dec 14 11:18:33 GMT 2005
 	- First distributed version.
