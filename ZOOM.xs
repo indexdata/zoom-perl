@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.31 2005-11-16 16:10:13 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.32 2005-12-19 13:46:11 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -161,10 +161,12 @@ ZOOM_connection_error(c, cp, addinfo)
 	char* &cp
 	char* &addinfo
 	CODE:
+		{
 		const char *ccp, *caddinfo;
 		RETVAL = ZOOM_connection_error(c, &ccp, &caddinfo);
 		cp = (char*) ccp;
 		addinfo = (char*) caddinfo;
+		}
 	OUTPUT:
 		RETVAL
 		cp
@@ -179,11 +181,13 @@ ZOOM_connection_error_x(c, cp, addinfo, diagset)
 	const char * &addinfo
 	const char * &diagset
 	CODE:
+		{
 		const char *ccp, *caddinfo, *cdset;
 		RETVAL = ZOOM_connection_error_x(c, &ccp, &caddinfo, &cdset);
 		cp = (char*) ccp;
 		addinfo = (char*) caddinfo;
 		diagset = (char*) cdset;
+		}
 	OUTPUT:
 		RETVAL
 		cp
@@ -257,9 +261,9 @@ ZOOM_resultset_records(r, start, count, return_records)
 	size_t start
 	size_t count
 	int return_records
-	INIT:
-		ZOOM_record *recs = 0;
 	CODE:
+		{
+		ZOOM_record *recs = 0;
 		if (return_records)
 			recs = (ZOOM_record*) xmalloc(count * sizeof *recs);
 		ZOOM_resultset_records(r, recs, start, count);
@@ -274,6 +278,7 @@ ZOOM_resultset_records(r, start, count, return_records)
 			RETVAL = newRV((SV*) av);
 		} else {
 			RETVAL = &PL_sv_undef;
+		}
 		}
 	OUTPUT:
 		RETVAL
@@ -425,6 +430,7 @@ ZOOM_options_set_callback(opt, function, handle)
 	SV* function;
 	SV* handle;
 	CODE:
+		{
 		/* The tiny amount of memory allocated here is never
 	         * released, as options_destroy() doesn't do anything
 	         * to the callback information.  Not a big deal.
@@ -440,6 +446,7 @@ ZOOM_options_set_callback(opt, function, handle)
 		SvREFCNT(block->handle);
 		ZOOM_options_set_callback(opt, __ZOOM_option_callback,
 					  (void*) block);
+		}
 
 # TESTED
 ZOOM_options
