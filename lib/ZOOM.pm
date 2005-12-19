@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.21 2005-11-24 15:39:20 mike Exp $
+# $Id: ZOOM.pm,v 1.22 2005-12-19 17:39:47 mike Exp $
 
 use strict;
 use warnings;
@@ -405,6 +405,16 @@ sub scan {
     return _new ZOOM::ScanSet($this, $startterm, $_ss);
 }
 
+sub scan1 {
+    my $this = shift();
+    my($query) = @_;
+
+    my $_ss = Net::Z3950::ZOOM::connection_scan1($this->_conn(),
+						 $query->_query());
+    $this->_check();
+    return _new ZOOM::ScanSet($this, $query, $_ss);
+}
+
 sub package {
     my $this = shift();
     my($options) = @_;
@@ -719,7 +729,12 @@ sub _new {
 
     return bless {
 	conn => $conn,
-	startterm => $startterm,
+	startterm => $startterm,# This is not currently used, which is
+				# just as well since it could be
+				# either a string (when the SS is
+				# created with scan()) or a
+				# ZOOM::Query object (when it's
+				# created with scan1())
 	_ss => $_ss,
     }, $class;
 }
