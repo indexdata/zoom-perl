@@ -1,15 +1,24 @@
-$Id: Changes,v 1.5 2005-12-14 11:19:04 mike Exp $
+$Id: Changes,v 1.6 2005-12-19 13:47:11 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
+
+1.01  (IN PROGRESS)
+	- Place some CODE: chunks in "ZOOM.xs" inside curly brackets
+	  so that the declarations they begin with are at the start of
+	  the block.  This avoid mixed code/declarations.  (The
+	  "correct" solution is to use INIT: clauses in the XS file,
+	  but they don't seem to work: the code in them is slapped
+	  down right next to the CODE:, so declarations are not
+	  acceptable there either.)
+
+1.00  Wed Dec 14 11:18:33 GMT 2005
+	- First distributed version.
 
 0.01  Fri Oct  7 16:14:20 2005
 	- original version; created by h2xs 1.23 with options
 		--name=Net::Z3950::ZOOM --compat-version=5.8.0 \
 		--omit-constant --skip-exporter --skip-ppport \
 		--autogen-xsubs yaz/zoom.h -lyaz -lxml2
-
-1.00  Wed Dec 14 11:18:33 GMT 2005
-	- First distributed version.
 
 --
 
