@@ -1,4 +1,4 @@
-# $Id: 25-scan.t,v 1.3 2005-12-19 17:40:04 mike Exp $
+# $Id: 25-scan.t,v 1.4 2005-12-19 17:48:47 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 25-scan.t'
@@ -93,12 +93,13 @@ sub scan {
     eval {
 	if ($use_query_for_scan) {
 	    my $q = new ZOOM::Query::PQF($startterm);
-	    $ss = $conn->scan1($q);
+	    $ss = $conn->scan($q);
 	} else {
-	    $ss = $conn->scan($startterm);
+	    $ss = $conn->scan_pqf($startterm);
 	}
     };
     ok(!$@, "scan for '$startterm'");
+    die $@ if $@;
     $use_query_for_scan = !$use_query_for_scan;
 
     my $n = $ss->size();

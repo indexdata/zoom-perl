@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.22 2005-12-19 17:39:47 mike Exp $
+# $Id: ZOOM.pm,v 1.23 2005-12-19 17:46:09 mike Exp $
 
 use strict;
 use warnings;
@@ -396,7 +396,7 @@ sub search_pqf {
     return _new ZOOM::ResultSet($this, $pqf, $_rs);
 }
 
-sub scan {
+sub scan_pqf {
     my $this = shift();
     my($startterm) = @_;
 
@@ -405,7 +405,7 @@ sub scan {
     return _new ZOOM::ScanSet($this, $startterm, $_ss);
 }
 
-sub scan1 {
+sub scan {
     my $this = shift();
     my($query) = @_;
 
