@@ -1,4 +1,4 @@
-# $Id: 25-scan.t,v 1.2 2005-11-09 17:08:31 mike Exp $
+# $Id: 25-scan.t,v 1.3 2005-12-19 17:40:04 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 25-scan.t'
@@ -84,12 +84,22 @@ ok(1, "destroyed fourth scanset");
 
 # Some more testing still to do: see comment in "15-scan.t"
 
+
+my $use_query_for_scan = 0;
 sub scan {
     my($conn, $startterm, $nexpected) = @_;
 
     my $ss;
-    eval { $ss = $conn->scan($startterm) };
+    eval {
+	if ($use_query_for_scan) {
+	    my $q = new ZOOM::Query::PQF($startterm);
+	    $ss = $conn->scan1($q);
+	} else {
+	    $ss = $conn->scan($startterm);
+	}
+    };
     ok(!$@, "scan for '$startterm'");
+    $use_query_for_scan = !$use_query_for_scan;
 
     my $n = $ss->size();
     ok(defined $n, "got size");

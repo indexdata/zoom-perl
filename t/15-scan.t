@@ -1,4 +1,4 @@
-# $Id: 15-scan.t,v 1.6 2005-11-09 17:03:15 mike Exp $
+# $Id: 15-scan.t,v 1.7 2005-12-19 17:39:58 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 15-scan.t'
@@ -88,10 +88,21 @@ ok(1, "destroyed fourth scanset");
 # returns display terms different from its terms.
 
 
+my $use_query_for_scan = 0;
 sub scan {
     my($conn, $startterm, $nexpected) = @_;
 
-    $ss = Net::Z3950::ZOOM::connection_scan($conn, $startterm);
+    # Alternately use the original scan() interface and new scan1()
+    my $ss;
+    if ($use_query_for_scan) {
+	my $q = Net::Z3950::ZOOM::query_create();
+	Net::Z3950::ZOOM::query_prefix($q, $startterm);
+	$ss = Net::Z3950::ZOOM::connection_scan1($conn, $q);
+    } else {
+	$ss = Net::Z3950::ZOOM::connection_scan($conn, $startterm);
+    }
+    $use_query_for_scan = !$use_query_for_scan;
+
     $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
     ok($errcode == 0, "scan for '$startterm'");
     $n = Net::Z3950::ZOOM::scanset_size($ss);
