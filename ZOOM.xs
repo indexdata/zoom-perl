@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.32 2005-12-19 13:46:11 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.33 2005-12-19 17:05:05 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -369,6 +369,12 @@ ZOOM_scanset
 ZOOM_connection_scan(c, startterm)
 	ZOOM_connection c
 	const char* startterm
+
+# TESTED
+ZOOM_scanset
+ZOOM_connection_scan1(c, startterm)
+	ZOOM_connection c
+	ZOOM_query startterm
 
 # TESTED
 const char *
