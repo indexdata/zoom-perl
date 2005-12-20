@@ -1,4 +1,4 @@
-$Id: Changes,v 1.8 2005-12-19 17:48:21 mike Exp $
+$Id: Changes,v 1.9 2005-12-20 22:21:26 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
@@ -19,6 +19,8 @@ Revision history for Perl extension Net::Z3950::ZOOM.
 	  is introduced which calls the underlying scan1() function.
 	  Thus the scan()/scan_pqf() dichotomy is consistent with that
 	  between search()/search_pqf().
+	- The tests t/15-scan.t and t/25-scan.t now also test for
+	  scanning by CQL query.
 
 1.00  Wed Dec 14 11:18:33 GMT 2005
 	- First distributed version.
