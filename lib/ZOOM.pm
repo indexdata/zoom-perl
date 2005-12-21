@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.23 2005-12-19 17:46:09 mike Exp $
+# $Id: ZOOM.pm,v 1.24 2005-12-21 17:01:41 mike Exp $
 
 use strict;
 use warnings;
@@ -40,6 +40,8 @@ sub TIMEOUT { Net::Z3950::ZOOM::ERROR_TIMEOUT }
 sub UNSUPPORTED_PROTOCOL { Net::Z3950::ZOOM::ERROR_UNSUPPORTED_PROTOCOL }
 sub UNSUPPORTED_QUERY { Net::Z3950::ZOOM::ERROR_UNSUPPORTED_QUERY }
 sub INVALID_QUERY { Net::Z3950::ZOOM::ERROR_INVALID_QUERY }
+sub CQL_PARSE { Net::Z3950::ZOOM::ERROR_CQL_PARSE }
+sub CQL_TRANSFORM { Net::Z3950::ZOOM::ERROR_CQL_TRANSFORM }
 # The following are added specifically for this OO interface
 sub CREATE_QUERY { 20001 }
 sub QUERY_CQL { 20002 }
@@ -135,6 +137,7 @@ sub render {
     my $this = shift();
     my $res = "ZOOM error " . $this->code() . ' "' . $this->message() . '"';
     $res .= ' (addinfo: "' . $this->addinfo() . '")' if $this->addinfo();
+    $res .= " from diag-set '" . $this->diagset() . "'" if $this->diagset();
     return $res;
 }
 
@@ -281,7 +284,7 @@ sub new {
     return $conn;
 }
 
-# PRIVATE to this class
+# PRIVATE to this class and to ZOOM::Query::CQL2RPN::new()
 sub _conn {
     my $this = shift();
 
@@ -482,6 +485,25 @@ sub new {
 	or ZOOM::_oops(ZOOM::Error::CREATE_QUERY);
     Net::Z3950::ZOOM::query_cql($q, $string) == 0
 	or ZOOM::_oops(ZOOM::Error::QUERY_CQL, $string);
+
+    return bless {
+	_query => $q,
+    }, $class;
+}
+
+
+package ZOOM::Query::CQL2RPN;
+our @ISA = qw(ZOOM::Query);
+
+sub new {
+    my $class = shift();
+    my($string, $conn) = @_;
+
+    my $q = Net::Z3950::ZOOM::query_create()
+	or ZOOM::_oops(ZOOM::Error::CREATE_QUERY);
+    # check() throws the exception we want; but we only want it on failure!
+    Net::Z3950::ZOOM::query_cql2rpn($q, $string, $conn->_conn()) == 0
+	or $conn->_check();
 
     return bless {
 	_query => $q,
@@ -862,6 +884,29 @@ sub destroy {
     Net::Z3950::ZOOM::package_destroy($this->_p());
     $this->{_p} = undef;
 }
+
+
+# There follows trivial support for YAZ logging.  This is wired out
+# into the Net::Z3950::ZOOM package, and we here provide wrapper
+# functions -- nothing more than aliases, really -- in the ZOOM::Log
+# package.  There really is no point in inventing an OO interface.
+#
+# Passing @_ directly to the underlying Net::Z3950::ZOOM::* functions
+# doesn't work, for reasons that I can't begin to fathom, and that
+# don't particularly interest me.  Unpacking into scalars and passing
+# those _does_ work, so that's what we do.
+
+package ZOOM::Log;
+
+sub mask_str      { my($a) = @_; Net::Z3950::ZOOM::yaz_log_mask_str($a); }
+sub init          { my($a, $b, $c) = @_;
+		    Net::Z3950::ZOOM::yaz_log_init($a, $b, $c) }
+sub init_file     { my($a) = @_; Net::Z3950::ZOOM::yaz_log_init_file($a) }
+sub init_level    { my($a) = @_; Net::Z3950::ZOOM::yaz_log_init_level($a) }
+sub init_prefix   { my($a) = @_; Net::Z3950::ZOOM::yaz_log_init_prefix($a) }
+sub time_format   { my($a) = @_; Net::Z3950::ZOOM::yaz_log_time_format($a) }
+sub init_max_size { my($a) = @_; Net::Z3950::ZOOM::yaz_log_init_max_size($a) }
+sub log           { my($a,$b) = @_; Net::Z3950::ZOOM::yaz_log($a, $b) }
 
 
 1;
