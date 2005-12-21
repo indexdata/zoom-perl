@@ -1,4 +1,4 @@
-# $Id: ZOOM.pod,v 1.24 2005-12-19 17:53:00 mike Exp $
+# $Id: ZOOM.pod,v 1.25 2005-12-21 00:25:51 mike Exp $
 
 use strict;
 use warnings;
@@ -984,9 +984,6 @@ Sets a sort specification into the query, so that when a C<search()>
 is run on the query, the result is automatically sorted.  The sort
 specification language is the same as the C<yaz> sort-specification
 type of the C<ResultSet> method C<sort()>, described above.
-
-B<It ought to be possible to sort by CQL query, too, but at present
-limitations in the underlying ZOOM-C library make this impossible.>
 
 =head4 destroy()
 
