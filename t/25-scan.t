@@ -1,4 +1,4 @@
-# $Id: 25-scan.t,v 1.6 2005-12-21 00:16:50 mike Exp $
+# $Id: 25-scan.t,v 1.7 2005-12-21 00:43:54 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 25-scan.t'
@@ -9,8 +9,7 @@ use Test::More tests => 81;
 
 BEGIN { use_ok('ZOOM') };
 
-#my $host = "indexdata.com/gils";
-my $host = "localhost:9999/default";
+my $host = "indexdata.com/gils";
 my $conn;
 eval { $conn = new ZOOM::Connection($host, 0) };
 ok(!$@, "connection to '$host'");

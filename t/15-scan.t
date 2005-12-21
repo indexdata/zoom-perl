@@ -1,4 +1,4 @@
-# $Id: 15-scan.t,v 1.8 2005-12-21 00:16:50 mike Exp $
+# $Id: 15-scan.t,v 1.9 2005-12-21 00:43:54 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 15-scan.t'
@@ -11,8 +11,7 @@ BEGIN { use_ok('Net::Z3950::ZOOM') };
 
 my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
 
-#my $host = "indexdata.com/gils";
-my $host = "localhost:9999/default";
+my $host = "indexdata.com/gils";
 my $conn = Net::Z3950::ZOOM::connection_new($host, 0);
 $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
 ok($errcode == 0, "connection to '$host'");
