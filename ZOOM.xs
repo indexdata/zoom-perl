@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.34 2005-12-19 17:46:52 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.35 2005-12-21 16:54:45 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -321,6 +321,12 @@ ZOOM_query_cql(s, str)
 	const char* str
 
 int
+ZOOM_query_cql2rpn(s, str, conn)
+	ZOOM_query s
+	const char* str
+	ZOOM_connection conn
+
+int
 ZOOM_query_prefix(s, str)
 	ZOOM_query s
 	const char* str
@@ -510,4 +516,48 @@ ZOOM_event(no, cs)
 int
 ZOOM_connection_last_event(cs)
 	ZOOM_connection	cs
+
+# ----------------------------------------------------------------------------
+# What follows is the YAZ logging API.  This is not strictly part of
+# ZOOM, but it's so useful that it would be silly to omit.
+
+int
+yaz_log_mask_str(str)
+	const char *str
+
+void
+yaz_log_init(level, prefix, name)
+	int level
+	const char *prefix
+	const char *name
+
+void
+yaz_log_init_file(fname)
+	const char *fname
+
+void
+yaz_log_init_level(level)
+	int level
+
+void
+yaz_log_init_prefix(prefix)
+	const char *prefix
+
+void
+yaz_log_time_format(fmt)
+	const char *fmt
+
+void
+yaz_log_init_max_size(mx)
+	int mx
+
+# <stdarg.h> interfaces are horrible to code for a Perl-C interface
+# layer.  Instead, we expect Perl applications to construct the
+# message themselves, and pass it in as an opaque lump.
+void
+yaz_log(level, str)
+	int level
+	const char *str
+	CODE:
+		yaz_log(level, "%s", str);
 
