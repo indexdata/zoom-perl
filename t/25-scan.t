@@ -1,4 +1,4 @@
-# $Id: 25-scan.t,v 1.5 2005-12-20 22:21:58 mike Exp $
+# $Id: 25-scan.t,v 1.6 2005-12-21 00:16:50 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 25-scan.t'
@@ -9,7 +9,8 @@ use Test::More tests => 81;
 
 BEGIN { use_ok('ZOOM') };
 
-my $host = "indexdata.com/gils";
+#my $host = "indexdata.com/gils";
+my $host = "localhost:9999/default";
 my $conn;
 eval { $conn = new ZOOM::Connection($host, 0) };
 ok(!$@, "connection to '$host'");
@@ -58,7 +59,8 @@ ok(1, "destroyed second scanset");
 # Now re-do the same scan, but limiting the results to four terms at a
 # time.  This time, use a CQL query
 $conn->option(number => 4);
-$conn->option(cqlfile => "/etc/passwd");
+$conn->option(cqlfile => "samples/cql/pqf.properties");
+
 ($ss, $n) = scan($conn, 1, new ZOOM::Query::CQL('title=w'), 4);
 # Get last term and use it as seed for next scan
 my($term, $occ) = $ss->term($n-1);
@@ -91,7 +93,6 @@ sub scan {
     my($conn, $startterm_is_query, $startterm, $nexpected) = @_;
 
     my $ss;
-    ok(1, "about to scan for '$startterm'");
     eval {
 	if ($startterm_is_query) {
 	    $ss = $conn->scan($startterm);
@@ -100,7 +101,6 @@ sub scan {
 	}
     };
     ok(!$@, "scan for '$startterm'");
-    die $@ if $@;
 
     my $n = $ss->size();
     ok(defined $n, "got size");

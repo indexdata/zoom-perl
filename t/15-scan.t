@@ -1,4 +1,4 @@
-# $Id: 15-scan.t,v 1.7 2005-12-19 17:39:58 mike Exp $
+# $Id: 15-scan.t,v 1.8 2005-12-21 00:16:50 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 15-scan.t'
@@ -11,12 +11,13 @@ BEGIN { use_ok('Net::Z3950::ZOOM') };
 
 my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
 
-my $host = "indexdata.com/gils";
+#my $host = "indexdata.com/gils";
+my $host = "localhost:9999/default";
 my $conn = Net::Z3950::ZOOM::connection_new($host, 0);
 $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
 ok($errcode == 0, "connection to '$host'");
 
-my($ss, $n) = scan($conn, "w", 10);
+my($ss, $n) = scan($conn, 0, "w", 10);
 
 my @terms = ();
 my($occ, $len) = (0, 0);
@@ -40,7 +41,10 @@ ok(1, "destroyed scanset");
 ok(1, "(can't re-destroy scanset)"); # Only meaningful in OO API.
 
 # Now re-scan, but only for words that occur in the title
-($ss, $n) = scan($conn, '@attr 1=4 w', 6);
+# This time, use a Query object for the start-term
+my $q = Net::Z3950::ZOOM::query_create();
+Net::Z3950::ZOOM::query_prefix($q, '@attr 1=4 w');
+($ss, $n) = scan($conn, 1, $q, 6);
 
 $previous = "";		# Sorts before all legitimate terms
 foreach my $i (1 .. $n) {
@@ -56,9 +60,14 @@ Net::Z3950::ZOOM::scanset_destroy($ss);
 ok(1, "destroyed second scanset");
 
 # Now re-do the same scan, but limiting the results to four terms at a
-# time.
+# time.  This time, use a CQL query
 Net::Z3950::ZOOM::connection_option_set($conn, number => 4);
-($ss, $n) = scan($conn, '@attr 1=4 w', 4);
+Net::Z3950::ZOOM::connection_option_set($conn, cqlfile =>
+					"samples/cql/pqf.properties");
+
+$q = Net::Z3950::ZOOM::query_create();
+Net::Z3950::ZOOM::query_cql($q, 'title=w');
+($ss, $n) = scan($conn, 1, $q, 4);
 # Get last term and use it as seed for next scan
 my $term = Net::Z3950::ZOOM::scanset_term($ss, $n-1, $occ, $len);
 ok(Net::Z3950::ZOOM::scanset_option_get($ss, "position") == 1,
@@ -71,7 +80,7 @@ ok(1, "destroyed third scanset");
 
 # We want the seed-term to be in "position zero", i.e. just before the start
 Net::Z3950::ZOOM::connection_option_set($conn, position => 0);
-($ss, $n) = scan($conn, "\@attr 1=4 $term", 2);
+($ss, $n) = scan($conn, 0, "\@attr 1=4 $term", 2);
 ok(Net::Z3950::ZOOM::scanset_option_get($ss, "position") == 0,
    "seed-term before start of returned list");
 
@@ -88,24 +97,20 @@ ok(1, "destroyed fourth scanset");
 # returns display terms different from its terms.
 
 
-my $use_query_for_scan = 0;
 sub scan {
-    my($conn, $startterm, $nexpected) = @_;
+    my($conn, $startterm_is_query, $startterm, $nexpected) = @_;
 
-    # Alternately use the original scan() interface and new scan1()
     my $ss;
-    if ($use_query_for_scan) {
-	my $q = Net::Z3950::ZOOM::query_create();
-	Net::Z3950::ZOOM::query_prefix($q, $startterm);
-	$ss = Net::Z3950::ZOOM::connection_scan1($conn, $q);
+    if ($startterm_is_query) {
+	$ss = Net::Z3950::ZOOM::connection_scan1($conn, $startterm);
     } else {
 	$ss = Net::Z3950::ZOOM::connection_scan($conn, $startterm);
     }
-    $use_query_for_scan = !$use_query_for_scan;
 
     $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
     ok($errcode == 0, "scan for '$startterm'");
-    $n = Net::Z3950::ZOOM::scanset_size($ss);
+
+    my $n = Net::Z3950::ZOOM::scanset_size($ss);
     ok(defined $n, "got size");
     ok($n == $nexpected, "got $n terms (expected $nexpected)");
     return ($ss, $n);
