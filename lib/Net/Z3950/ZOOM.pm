@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.5 2005-12-19 13:43:38 mike Exp $
+# $Id: ZOOM.pm,v 1.6 2005-12-21 16:56:59 mike Exp $
 
 package Net::Z3950::ZOOM; 
 
@@ -28,6 +28,8 @@ sub ERROR_TIMEOUT { 10007 }
 sub ERROR_UNSUPPORTED_PROTOCOL { 10008 }
 sub ERROR_UNSUPPORTED_QUERY { 10009 }
 sub ERROR_INVALID_QUERY { 10010 }
+sub ERROR_CQL_PARSE { 10011 }
+sub ERROR_CQL_TRANSFORM { 10012 }
 
 # Event types, as returned from connection_last_event()
 sub EVENT_NONE { 0 }
