@@ -1,8 +1,8 @@
-$Id: Changes,v 1.13 2005-12-22 09:26:04 mike Exp $
+$Id: Changes,v 1.14 2005-12-22 14:13:47 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
-1.01  (IN PROGRESS)
+1.01  Thu Dec 22 14:13:34 GMT 2005
 	- Place some CODE: chunks in "ZOOM.xs" inside curly brackets
 	  so that the declarations they begin with are at the start of
 	  the block.  This avoid mixed code/declarations.  (The
@@ -37,8 +37,7 @@ Revision history for Perl extension Net::Z3950::ZOOM.
 	- Add new ZOOM::Log class for logging, providing aliases for
 	  the functions in the Net::Z3950::ZOOM layer.
 	- Add diagnostic set to rendering of Exception objects.
-	- ### Documentation updates required for CQL compilation,
-	  logging and exception rendering.
+	- Documentation added for CQL compilation and logging.
 
 1.00  Wed Dec 14 11:18:33 GMT 2005
 	- First distributed version.
