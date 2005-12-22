@@ -1,11 +1,11 @@
-# $Id: 22-query.t,v 1.4 2005-12-22 08:58:27 mike Exp $
+# $Id: 22-query.t,v 1.5 2005-12-22 09:11:30 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 22-query.t'
 
 use strict;
 use warnings;
-use Test::More tests => 31;
+use Test::More tests => 32;
 BEGIN { use_ok('ZOOM') };
 
 #ZOOM::Log::init_level(ZOOM::Log::mask_str("zoom"));
@@ -67,7 +67,8 @@ $q->destroy();
 ok(1, "[no need to create empty query]");
 eval { $q = new ZOOM::Query::CQL('title=utah and description=epicenter') };
 ok(!$@, "created CQL query");
-#check_failure($conn, $q, 107, "Bib-1");
+check_failure($conn, $q, 107, "Bib-1");
+$q->destroy();
 
 # Client-side compiled CQL: this will fail due to lack of config-file
 ok(1, "[no need to create empty query]");
@@ -84,6 +85,7 @@ eval { $q = new ZOOM::Query::CQL2RPN('title=utah and description=epicenter',
 				     $conn) };
 ok(!$@, "created CQL2RPN query: \@=$@");
 check_record($conn, $q);
+$q->destroy();
 
 $conn->destroy();
 ok(1, "destroyed all objects");
@@ -119,5 +121,4 @@ sub check_failure {
     ok($@ && $@->isa("ZOOM::Exception") &&
        $@->code() == $expected_error && $@->diagset() eq $expected_dset,
        "query rejected: error " . $@->code());
-    $rs->destroy();
 }
