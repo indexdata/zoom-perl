@@ -1,12 +1,14 @@
-# $Id: 12-query.t,v 1.3 2005-10-31 15:04:04 mike Exp $
+# $Id: 12-query.t,v 1.4 2005-12-22 09:16:43 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 12-query.t'
 
 use strict;
 use warnings;
-use Test::More tests => 20;
+use Test::More tests => 32;
 BEGIN { use_ok('Net::Z3950::ZOOM') };
+
+# Net::Z3950::ZOOM::yaz_log_init_level(Net::Z3950::ZOOM::yaz_log_mask_str("zoom"));
 
 my $q = Net::Z3950::ZOOM::query_create();
 ok(defined $q, "create empty query");
@@ -58,23 +60,78 @@ ok(defined $q, "create empty query");
 $res = Net::Z3950::ZOOM::query_prefix($q,
 			'@and @attr 1=4 utah @attr 1=62 epicenter');
 ok($res == 0, "set PQF into query");
-
-my $rs = Net::Z3950::ZOOM::connection_search($conn, $q);
-$errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
-ok($errcode == 0, "search");
-
-my $n = Net::Z3950::ZOOM::resultset_size($rs);
-ok($n == 1, "found 1 record as expected");
-
-my $rec = Net::Z3950::ZOOM::resultset_record($rs, 0);
-ok(1, "got record idenfified by query");
-
-my $len = 0;
-my $data = Net::Z3950::ZOOM::record_get($rec, "render", $len);
-ok(1, "rendered record");
-ok($data =~ /^035    \$a ESDD0006$/m, "record is the expected one");
-
-Net::Z3950::ZOOM::resultset_destroy($rs);
+check_record($conn, $q);
 Net::Z3950::ZOOM::query_destroy($q);
+
+# Now try a CQL query: this will fail due to lack of server support
+$q = Net::Z3950::ZOOM::query_create();
+ok(defined $q, "create empty query");
+$res = Net::Z3950::ZOOM::query_cql($q, 'title=utah and description=epicenter');
+ok($res == 0, "valid CQL accepted");
+check_failure($conn, $q, 107, "Bib-1");
+Net::Z3950::ZOOM::query_destroy($q);
+
+# Client-side compiled CQL: this will fail due to lack of config-file
+$q = Net::Z3950::ZOOM::query_create();
+ok(defined $q, "create empty query");
+$res = Net::Z3950::ZOOM::query_cql2rpn($q,
+				       'title=utah and description=epicenter',
+				       $conn);
+my $diagset = "";
+$errcode = Net::Z3950::ZOOM::connection_error_x($conn, $errmsg, $addinfo,
+						$diagset);
+ok($res < 0 &&
+   $errcode == Net::Z3950::ZOOM::ERROR_CQL_TRANSFORM &&
+   $diagset eq "ZOOM",
+   "can't make CQL2RPN query: error " . $errcode);
+Net::Z3950::ZOOM::query_destroy($q);
+
+# Finally, do a successful client-compiled CQL search
+$q = Net::Z3950::ZOOM::query_create();
+ok(defined $q, "create empty query");
+Net::Z3950::ZOOM::connection_option_set($conn, cqlfile =>
+					"samples/cql/pqf.properties");
+$res = Net::Z3950::ZOOM::query_cql2rpn($q,
+				       'title=utah and description=epicenter',
+				       $conn);
+ok($res == 0, "created CQL2RPN query");
+check_record($conn, $q);
+Net::Z3950::ZOOM::query_destroy($q);
+
 Net::Z3950::ZOOM::connection_destroy($conn);
 ok(1, "destroyed all objects");
+
+
+sub check_record {
+    my($conn, $q) = @_;
+
+    my $rs = Net::Z3950::ZOOM::connection_search($conn, $q);
+    my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
+    $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
+    ok($errcode == 0, "search");
+
+    my $n = Net::Z3950::ZOOM::resultset_size($rs);
+    ok($n == 1, "found 1 record as expected");
+
+    my $rec = Net::Z3950::ZOOM::resultset_record($rs, 0);
+    ok(1, "got record idenfified by query");
+
+    my $len = 0;
+    my $data = Net::Z3950::ZOOM::record_get($rec, "render", $len);
+    ok(1, "rendered record");
+    ok($data =~ /^035    \$a ESDD0006$/m, "record is the expected one");
+
+    Net::Z3950::ZOOM::resultset_destroy($rs);
+}
+
+
+sub check_failure {
+    my($conn, $q, $expected_error, $expected_dset) = @_;
+
+    my $rs = Net::Z3950::ZOOM::connection_search($conn, $q);
+    my($errcode, $errmsg, $addinfo, $diagset) = (undef, "dummy", "dummy", "");
+    $errcode = Net::Z3950::ZOOM::connection_error_x($conn, $errmsg, $addinfo,
+						    $diagset);
+    ok($errcode == $expected_error && $diagset eq $expected_dset,
+       "query rejected: error " . $errcode);
+}
