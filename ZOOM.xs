@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.35 2005-12-21 16:54:45 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.36 2005-12-22 12:37:58 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -524,6 +524,10 @@ ZOOM_connection_last_event(cs)
 int
 yaz_log_mask_str(str)
 	const char *str
+
+int
+yaz_log_module_level(name)
+	const char *name
 
 void
 yaz_log_init(level, prefix, name)
