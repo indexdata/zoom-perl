@@ -1,12 +1,14 @@
-# $Id: 22-query.t,v 1.2 2005-11-26 16:58:03 mike Exp $
+# $Id: 22-query.t,v 1.3 2005-12-22 08:30:15 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 22-query.t'
 
 use strict;
 use warnings;
-use Test::More tests => 20;
+use Test::More tests => 31;
 BEGIN { use_ok('ZOOM') };
+
+#ZOOM::Log::init_level(ZOOM::Log::mask_str("zoom"));
 
 my $q;
 eval { $q = new ZOOM::Query() };
@@ -58,22 +60,63 @@ $conn->option(preferredRecordSyntax => "usmarc");
 ok(1, "[no need to create empty query]");
 eval { $q = new ZOOM::Query::PQF('@and @attr 1=4 utah @attr 1=62 epicenter') };
 ok(!$@, "created PQF query");
-
-my $rs;
-eval { $rs = $conn->search($q) };
-ok(!$@, "search");
-
-my $n = $rs->size();
-ok($n == 1, "found 1 record as expected");
-
-my $rec = $rs->record(0);
-ok(1, "got record idenfified by query");
-
-my $data = $rec->render();
-ok(1, "rendered record");
-ok($data =~ /^035 +\$a ESDD0006$/m, "record is the expected one");
-
-$rs->destroy();
+check_record($conn, $q);
 $q->destroy();
+
+# Now try a CQL query: this will fail due to lack of server support
+ok(1, "[no need to create empty query]");
+eval { $q = new ZOOM::Query::CQL('title=utah and description=epicenter') };
+ok(!$@, "created CQL query");
+#check_failure($conn, $q, 107, "Bib-1");
+
+# Client-side compiled CQL: this will fail due to lack of config-file
+ok(1, "[no need to create empty query]");
+eval { $q = new ZOOM::Query::CQL2RPN('title=utah and description=epicenter',
+				     $conn) };
+ok($@ && $@->isa("ZOOM::Exception") &&
+   $@->code() == ZOOM::Error::CQL_TRANSFORM && $@->diagset() eq "ZOOM",
+   "can't make CQL2RPN query: error " . $@->code());
+
+ok(1, "[no need to create empty query]");
+$conn->option(cqlfile => "samples/cql/pqf.properties");
+eval { $q = new ZOOM::Query::CQL2RPN('title=utah and description=epicenter',
+				     $conn) };
+ok(!$@, "created CQL2RPN query: \@=$@");
+check_record($conn, $q);
+
 $conn->destroy();
 ok(1, "destroyed all objects");
+
+
+sub check_record {
+    my($conn, $q) = @_;
+
+    my $rs;
+    eval { $rs = $conn->search($q) };
+    ok(!$@, "search");
+    die $@ if $@;
+
+    my $n = $rs->size();
+    ok($n == 1, "found 1 record as expected");
+
+    my $rec = $rs->record(0);
+    ok(1, "got record idenfified by query");
+
+    my $data = $rec->render();
+    ok(1, "rendered record");
+    ok($data =~ /^035 +\$a ESDD0006$/m, "record is the expected one");
+
+    $rs->destroy();
+}
+
+
+sub check_failure {
+    my($conn, $q, $expected_error, $expected_dset) = @_;
+
+    my $rs;
+    eval { $rs = $conn->search($q) };
+    ok($@ && $@->isa("ZOOM::Exception") &&
+       $@->code() == $expected_error && $@->diagset() eq $expected_dset,
+       "query rejected: error " . $@->code());
+    $rs->destroy();
+}
