@@ -1,4 +1,4 @@
-# $Id: 22-query.t,v 1.3 2005-12-22 08:30:15 mike Exp $
+# $Id: 22-query.t,v 1.4 2005-12-22 08:58:27 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 22-query.t'
@@ -77,6 +77,7 @@ ok($@ && $@->isa("ZOOM::Exception") &&
    $@->code() == ZOOM::Error::CQL_TRANSFORM && $@->diagset() eq "ZOOM",
    "can't make CQL2RPN query: error " . $@->code());
 
+# Finally, do a successful client-compiled CQL search
 ok(1, "[no need to create empty query]");
 $conn->option(cqlfile => "samples/cql/pqf.properties");
 eval { $q = new ZOOM::Query::CQL2RPN('title=utah and description=epicenter',
