@@ -1,6 +1,4 @@
-### Add documentation for logging.
-
-# $Id: ZOOM.pod,v 1.26 2005-12-22 11:58:03 mike Exp $
+# $Id: ZOOM.pod,v 1.27 2005-12-22 14:11:17 mike Exp $
 
 use strict;
 use warnings;
@@ -57,6 +55,9 @@ C<ZOOM::Query::CQL>,
 C<ZOOM::Query::PQF>
 and
 C<ZOOM::Query::CQL2RPN>.
+Finally, it also provides a
+C<ZOOM::Query::Log>
+module which supplies a useful general-purpose logging facility.
 Many useful ZOOM applications can be built using only the Connection,
 ResultSet, Record and Exception classes, as in the example
 code-snippet above.
@@ -1184,9 +1185,10 @@ C<QUERY_CQL>,
 C<QUERY_PQF>,
 C<SORTBY>,
 C<CLONE>,
-C<PACKAGE>
+C<PACKAGE>,
+C<SCANTERM>
 and
-C<SCANTERM>,
+C<LOGLEVEL>,
 each of which specifies a client-side error.  These codes constitute
 the C<ZOOM> diagnostic set.
 
@@ -1216,6 +1218,111 @@ C<RECV_SEARCH>.
 
 You almost certainly don't need to know about this.  Frankly, I'm not
 sure how to use it myself.
+
+=head1 LOGGING
+
+ ZOOM::Log::init_level(ZOOM::Log::mask_str("zoom,myapp,-warn"));
+ ZOOM::Log::log("myapp", "starting up with pid ", $$);
+
+Logging facilities are provided by a set of functions in the
+C<ZOOM::Log> module.  Note that C<ZOOM::Log> is not a class, and it
+is not possible to create C<ZOOM::Log> objects: the API is imperative,
+reflecting that of the underlying YAZ logging facilities.  Although
+there are nine logging functions altogether, you can ignore nearly
+all of them: most applications that use logging will begin by calling
+C<mask_str()> and C<init_level()> once each, as above, and will then
+repeatedly call C<log()>.
+
+=head2 mask_str()
+
+ $level = ZOOM::Log::mask_str("zoom,myapp,-warn");
+
+Returns an integer corresponding to the log-level specified by the
+parameter.  This is a string of zero or more comma-separated
+module-names, each indicating an individual module to be either added
+to the default log-level or removed from it (for those components
+prefixed by a minus-sign).  The names may be those of either standard
+YAZ-logging modules such as C<fatal>, C<debug> and C<warn>, or custom
+modules such as C<myapp> in the example above.  The module C<zoom>
+requests logging from the ZOOM module itself, which may be helpful for
+debugging.
+
+Note that calling this function does not in any way change the logging
+state: it merely returns a value.  To change the state, this value
+must be passed to C<init_level()>.
+
+=head2 module_level()
+
+ $level = ZOOM::Log::module_level("zoom");
+ ZOOM::Log::log($level, "all systems clear: thrusters invogriated");
+
+Returns the integer corresponding to the single log-level specified as
+the parameter, or zero if that level has not been registered by a
+prior call to C<mask_str()>.  Since C<log()> accepts either a numeric
+log-level or a string, there is no reason to call this function; but,
+what the heck, maybe you enjoy that kind of thing.  Who are we to
+judge?
+
+=head2 init_level()
+
+ ZOOM::Log::init_level($level);
+
+Initialises the log-level to the specified integer, which is a bitmask
+of values, typically as returned from C<mask_str()>.  All subsequent
+calls to C<log()> made with a log-level that matches one of the bits
+in this mask will result in a log-message being emitted.  All logging
+can be turned off by calling C<init_level(0)>.
+
+=head2 init_prefix()
+
+ ZOOM::Log::init_prefix($0);
+
+Initialises a prefix string to be included in all log-messages.
+
+=head2 init_file()
+
+ ZOOM::Log::init_file("/tmp/myapp.log");
+
+Initialises the output file to be used for logging: subsequent
+log-messages are written to the nominated file.  If this function is
+not called, log-messages are written to the standard error stream.
+
+=head2 init()
+
+ ZOOM::Log::init($level, $0, "/tmp/myapp.log");
+
+Initialises the log-level, the logging prefix and the logging output
+file in a single operation.
+
+=head2 time_format()
+
+ ZOOM::Log::time_format("%Y-%m-%d %H:%M:%S");
+
+Sets the format in which log-messages' timestamps are emitted, by
+means of a format-string like that used in the C function
+C<strftime()>.  The example above emits year, month, day, hours,
+minutes and seconds in big-endian order, such that timestamps can be
+sorted lexicographically.
+
+=head2 init_max_size()
+
+(This doesn't seem to work, so I won't bother describing it.)
+
+=head2 log()
+
+ ZOOM::Log::log(8192, "reducing to warp-factor $wf");
+ ZOOM::Log::log("myapp", "starting up with pid ", $$);
+
+Provided that the first argument, log-level, is among the modules
+previously established by C<init_level()>, this function emits a
+log-message made up of a timestamp, the prefix supplied to
+C<init_prefix()>, if any, and the concatenation of all arguments after
+the first.  The message is written to the standard output stream, or
+to the file previous specified by C<init_file()> if this has been
+called.
+
+The log-level argument may be either a numeric value, as returned from
+C<module_level()>, or a string containing the module name.
 
 =head1 SEE ALSO
 
