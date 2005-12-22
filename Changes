@@ -1,4 +1,4 @@
-$Id: Changes,v 1.12 2005-12-21 17:06:55 mike Exp $
+$Id: Changes,v 1.13 2005-12-22 09:26:04 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
@@ -30,9 +30,8 @@ Revision history for Perl extension Net::Z3950::ZOOM.
 	  compiler functionality as a Query subclass.
 	- Add two new error-codes, CQL_PARSE and CQL_TRANSFORM,
 	  returned by the client-side CQL facilities.
-	- The test t/22-query.t is extended to also test client-side
-	  CQL compilation.  ### t/12-query.t needs to be similarly
-	  modified.
+	- The test-scripts t/12-query.t and t/22-query.t are extended
+	  to also test client-side CQL compilation.
 	- Add all the yaz_log*() functions within the Net::Z3950::ZOOM
 	  namespace. 
 	- Add new ZOOM::Log class for logging, providing aliases for
