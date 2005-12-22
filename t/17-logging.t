@@ -1,4 +1,4 @@
-# $Id: 17-logging.t,v 1.1 2005-12-21 16:58:36 mike Exp $
+# $Id: 17-logging.t,v 1.2 2005-12-22 12:52:05 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 17-logging.t'
@@ -30,6 +30,7 @@ sub check_level {
 # side-effects, which makes them painful to write tests for.  At the
 # moment, I think we have better ways to spend the time, so these
 # functions remain untested:
+#	yaz_log_module_level(const char *name)
 #	void yaz_log_init(int level, const char *prefix, const char *name);
 #	void yaz_log_init_file(const char *fname);
 #	void yaz_log_init_level(int level);
