@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.24 2005-12-21 17:01:41 mike Exp $
+# $Id: ZOOM.pm,v 1.25 2005-12-22 12:48:15 mike Exp $
 
 use strict;
 use warnings;
@@ -50,6 +50,7 @@ sub SORTBY { 20004 }
 sub CLONE { 20005 }
 sub PACKAGE { 20006 }
 sub SCANTERM { 20007 }
+sub LOGLEVEL { 20008 }
 
 # The "Event" package contains constants returned by last_event()
 package ZOOM::Event;
@@ -86,6 +87,8 @@ sub diag_str {
 	return "can't create package";
     } elsif ($code == ZOOM::Error::SCANTERM) {
 	return "can't retrieve term from scan-set";
+    } elsif ($code == ZOOM::Error::LOGLEVEL) {
+	return "unregistered log-level";
     }
 
     return Net::Z3950::ZOOM::diag_str($code);
@@ -899,6 +902,7 @@ sub destroy {
 package ZOOM::Log;
 
 sub mask_str      { my($a) = @_; Net::Z3950::ZOOM::yaz_log_mask_str($a); }
+sub module_level  { my($a) = @_; Net::Z3950::ZOOM::yaz_log_module_level($a); }
 sub init          { my($a, $b, $c) = @_;
 		    Net::Z3950::ZOOM::yaz_log_init($a, $b, $c) }
 sub init_file     { my($a) = @_; Net::Z3950::ZOOM::yaz_log_init_file($a) }
@@ -906,7 +910,20 @@ sub init_level    { my($a) = @_; Net::Z3950::ZOOM::yaz_log_init_level($a) }
 sub init_prefix   { my($a) = @_; Net::Z3950::ZOOM::yaz_log_init_prefix($a) }
 sub time_format   { my($a) = @_; Net::Z3950::ZOOM::yaz_log_time_format($a) }
 sub init_max_size { my($a) = @_; Net::Z3950::ZOOM::yaz_log_init_max_size($a) }
-sub log           { my($a,$b) = @_; Net::Z3950::ZOOM::yaz_log($a, $b) }
+
+sub log {
+    my($level, @message) = @_;
+
+    if ($level !~ /^(0x)?\d+$/) {
+	# Assuming its log-level name, we look it up.
+	my $num = module_level($level);
+	ZOOM::_oops(ZOOM::Error::LOGLEVEL, $level)
+	    if $num == 0;
+	$level = $num;
+    }
+
+    Net::Z3950::ZOOM::yaz_log($level, join("", @message));
+}
 
 
 1;
