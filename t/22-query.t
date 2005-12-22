@@ -1,4 +1,4 @@
-# $Id: 22-query.t,v 1.5 2005-12-22 09:11:30 mike Exp $
+# $Id: 22-query.t,v 1.6 2005-12-22 09:25:14 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 22-query.t'
@@ -67,7 +67,11 @@ $q->destroy();
 ok(1, "[no need to create empty query]");
 eval { $q = new ZOOM::Query::CQL('title=utah and description=epicenter') };
 ok(!$@, "created CQL query");
-check_failure($conn, $q, 107, "Bib-1");
+my $rs;
+eval { $rs = $conn->search($q) };
+ok($@ && $@->isa("ZOOM::Exception") &&
+   $@->code() == 107 && $@->diagset() eq "Bib-1",
+   "query rejected: error " . $@->code());
 $q->destroy();
 
 # Client-side compiled CQL: this will fail due to lack of config-file
@@ -110,15 +114,4 @@ sub check_record {
     ok($data =~ /^035 +\$a ESDD0006$/m, "record is the expected one");
 
     $rs->destroy();
-}
-
-
-sub check_failure {
-    my($conn, $q, $expected_error, $expected_dset) = @_;
-
-    my $rs;
-    eval { $rs = $conn->search($q) };
-    ok($@ && $@->isa("ZOOM::Exception") &&
-       $@->code() == $expected_error && $@->diagset() eq $expected_dset,
-       "query rejected: error " . $@->code());
 }

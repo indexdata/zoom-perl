@@ -1,4 +1,4 @@
-# $Id: 12-query.t,v 1.4 2005-12-22 09:16:43 mike Exp $
+# $Id: 12-query.t,v 1.5 2005-12-22 09:23:52 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 12-query.t'
@@ -68,7 +68,12 @@ $q = Net::Z3950::ZOOM::query_create();
 ok(defined $q, "create empty query");
 $res = Net::Z3950::ZOOM::query_cql($q, 'title=utah and description=epicenter');
 ok($res == 0, "valid CQL accepted");
-check_failure($conn, $q, 107, "Bib-1");
+my $rs = Net::Z3950::ZOOM::connection_search($conn, $q);
+my $diagset = "dummy";
+$errcode = Net::Z3950::ZOOM::connection_error_x($conn, $errmsg, $addinfo,
+						$diagset);
+ok($errcode == 107 && $diagset eq "Bib-1",
+   "query rejected: error " . $errcode);
 Net::Z3950::ZOOM::query_destroy($q);
 
 # Client-side compiled CQL: this will fail due to lack of config-file
@@ -77,7 +82,6 @@ ok(defined $q, "create empty query");
 $res = Net::Z3950::ZOOM::query_cql2rpn($q,
 				       'title=utah and description=epicenter',
 				       $conn);
-my $diagset = "";
 $errcode = Net::Z3950::ZOOM::connection_error_x($conn, $errmsg, $addinfo,
 						$diagset);
 ok($res < 0 &&
@@ -122,16 +126,4 @@ sub check_record {
     ok($data =~ /^035    \$a ESDD0006$/m, "record is the expected one");
 
     Net::Z3950::ZOOM::resultset_destroy($rs);
-}
-
-
-sub check_failure {
-    my($conn, $q, $expected_error, $expected_dset) = @_;
-
-    my $rs = Net::Z3950::ZOOM::connection_search($conn, $q);
-    my($errcode, $errmsg, $addinfo, $diagset) = (undef, "dummy", "dummy", "");
-    $errcode = Net::Z3950::ZOOM::connection_error_x($conn, $errmsg, $addinfo,
-						    $diagset);
-    ok($errcode == $expected_error && $diagset eq $expected_dset,
-       "query rejected: error " . $errcode);
 }
