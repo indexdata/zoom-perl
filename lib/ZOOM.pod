@@ -1,4 +1,4 @@
-# $Id: ZOOM.pod,v 1.27 2005-12-22 14:11:17 mike Exp $
+# $Id: ZOOM.pod,v 1.28 2006-01-04 17:27:10 mike Exp $
 
 use strict;
 use warnings;
@@ -822,7 +822,7 @@ thrown if the server cannot execute the requested operations; and
 finally, destroy the package.
 
 Package options are listed at
-http://indexdata.com/yaz/doc/zoom.ext.html
+http://indexdata.com/yaz/doc/zoom.ext.tkl
 
 The particular options that have meaning are determined by the
 top-level operation string specified as the argument to C<send()>.
