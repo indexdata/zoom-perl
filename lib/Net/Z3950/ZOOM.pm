@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.7 2006-01-04 17:23:43 mike Exp $
+# $Id: ZOOM.pm,v 1.8 2006-01-20 12:33:30 mike Exp $
 
 package Net::Z3950::ZOOM; 
 
@@ -11,6 +11,15 @@ our $VERSION = '1.02';
 require XSLoader;
 XSLoader::load('Net::Z3950::ZOOM', $VERSION);
 
+my($vs, $ss) = ("", "");
+my $version = Net::Z3950::ZOOM::yaz_version($vs, $ss);
+if ($version < 0x02010B) {
+    warn <<__EOT__;
+*** WARNING!
+ZOOM-Perl requires at least version 2.0.11 of YAZ, but is currently
+running against only version $vs.  Some things may not work.
+__EOT__
+}
 
 # The only thing this module does is define the following constants,
 # which MUST BE KEPT SYNCHRONISED with the definitions in <yaz/zoom.h>
