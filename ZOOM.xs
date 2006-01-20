@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.36 2005-12-22 12:37:58 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.37 2006-01-20 12:33:14 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -564,4 +564,14 @@ yaz_log(level, str)
 	const char *str
 	CODE:
 		yaz_log(level, "%s", str);
+
+# This is also not strictly part of ZOOM
+unsigned long
+yaz_version(version_str, sys_str)
+	char *version_str
+	char *sys_str
+	OUTPUT:
+		RETVAL
+		version_str
+		sys_str
 
