@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.9 2006-01-31 15:39:05 mike Exp $
+# $Id: ZOOM.pm,v 1.10 2006-01-31 16:13:05 mike Exp $
 
 package Net::Z3950::ZOOM; 
 
@@ -11,13 +11,14 @@ our $VERSION = '1.02';
 require XSLoader;
 XSLoader::load('Net::Z3950::ZOOM', $VERSION);
 
-my($vs, $ss) = ("", "");
+my($vs, $ss) = ("x" x 100, "x" x 100); # allocate space for these strings
 my $version = Net::Z3950::ZOOM::yaz_version($vs, $ss);
 if ($version < 0x02010B && ! -f "/tmp/ignore-ZOOM-YAZ-version-mismatch") {
     warn <<__EOT__;
 *** WARNING!
 ZOOM-Perl requires at least version 2.0.11 of YAZ, but is currently
-running against only version $vs.  Some things may not work.
+running against only version $vs (sys-string '$ss').
+Some things may not work.
 __EOT__
 }
 
