@@ -1,11 +1,12 @@
-$Id: Changes,v 1.16 2006-01-20 12:33:03 mike Exp $
+$Id: Changes,v 1.17 2006-01-31 15:39:05 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
 1.02  [IN PROGRESS]
 	- Add interface to yaz_version().
-	- Emit big warning at startup time if YAZ version is less that
-	  2.0.11, which is what ZOOM-Perl 1.02 requires.
+	- Emit big warning at startup time if YAZ version is less than
+	  2.0.11 (which is what ZOOM-Perl 1.02 requires) unless the
+	  file /tmp/ignore-ZOOM-YAZ-version-mismatch exists.
 	- Fix incorrect ZOOM-package URL in documentation.
 
 1.01  Thu Dec 22 14:13:34 GMT 2005
