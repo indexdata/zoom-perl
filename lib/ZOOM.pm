@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.25 2005-12-22 12:48:15 mike Exp $
+# $Id: ZOOM.pm,v 1.26 2006-02-10 16:24:34 mike Exp $
 
 use strict;
 use warnings;
@@ -353,6 +353,7 @@ sub connect {
     my $this = shift();
     my($host, $port) = @_;
 
+    $port = 0 if !defined $port;
     Net::Z3950::ZOOM::connection_connect($this->_conn(), $host, $port);
     $this->_check();
     # No return value

@@ -1,4 +1,4 @@
-$Id: Changes,v 1.17 2006-01-31 15:39:05 mike Exp $
+$Id: Changes,v 1.18 2006-02-10 16:24:19 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
@@ -8,6 +8,9 @@ Revision history for Perl extension Net::Z3950::ZOOM.
 	  2.0.11 (which is what ZOOM-Perl 1.02 requires) unless the
 	  file /tmp/ignore-ZOOM-YAZ-version-mismatch exists.
 	- Fix incorrect ZOOM-package URL in documentation.
+	- The ZOOM::Connection constructor may now be called with only
+	  a single argument (host-string) and does not require a
+	  dummy port-number argument.
 
 1.01  Thu Dec 22 14:13:34 GMT 2005
 	- Place some CODE: chunks in "ZOOM.xs" inside curly brackets
