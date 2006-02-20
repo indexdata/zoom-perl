@@ -1,4 +1,4 @@
-# $Id: ZOOM.pod,v 1.28 2006-01-04 17:27:10 mike Exp $
+# $Id: ZOOM.pod,v 1.29 2006-02-20 11:30:58 mike Exp $
 
 use strict;
 use warnings;
@@ -866,7 +866,7 @@ http://indexdata.com/yaz/doc/zoom.ext.tkl
 
 =head4 send()
 
- $p->send("createdb");
+ $p->send("create");
 
 Sends a package to the server associated with the Connection that
 created it.  Problems are reported by throwing an exception.  The
