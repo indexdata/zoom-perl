@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.26 2006-02-10 16:24:34 mike Exp $
+# $Id: ZOOM.pm,v 1.27 2006-03-09 12:57:19 mike Exp $
 
 use strict;
 use warnings;
@@ -6,7 +6,6 @@ use Net::Z3950::ZOOM;
 
 
 package ZOOM;
-
 
 # Member naming convention: hash-element names which begin with an
 # underscore represent underlying ZOOM-C object descriptors; those
@@ -275,7 +274,7 @@ package ZOOM::Connection;
 
 sub new {
     my $class = shift();
-    my($host, $port) = @_;
+    my($host, $port, @options) = @_;
 
     my $_conn = Net::Z3950::ZOOM::connection_new($host, $port || 0);
     my $conn = bless {
@@ -283,6 +282,16 @@ sub new {
 	port => $port,
 	_conn => $_conn,
     };
+
+    while (@options >= 2) {
+	my $key = shift(@options);
+	my $val = shift(@options);
+	$conn->option($key, $val);
+    }
+
+    die "Odd number of options specified"
+	if @options;
+
     $conn->_check();
     return $conn;
 }

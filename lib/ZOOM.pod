@@ -1,4 +1,4 @@
-# $Id: ZOOM.pod,v 1.29 2006-02-20 11:30:58 mike Exp $
+# $Id: ZOOM.pod,v 1.30 2006-03-09 12:57:19 mike Exp $
 
 use strict;
 use warnings;
@@ -11,7 +11,8 @@ ZOOM - Perl extension implementing the ZOOM API for Information Retrieval
 
  use ZOOM;
  eval {
-     $conn = new ZOOM::Connection($host, $port)
+     $conn = new ZOOM::Connection($host, $port,
+                                  databaseName => "mydb");
      $conn->option(preferredRecordSyntax => "usmarc");
      $rs = $conn->search_pqf('@attr 1=4 dinosaur');
      $n = $rs->size();
@@ -159,6 +160,9 @@ http://zoom.z3950.org/api/zoom-current.html#3.2
  $conn = new ZOOM::Connection("indexdata.dk:210/gils");
  $conn = new ZOOM::Connection("tcp:indexdata.dk:210/gils");
  $conn = new ZOOM::Connection("http:indexdata.dk:210/gils");
+ $conn = new ZOOM::Connection("indexdata.dk", 210,
+                               databaseName => "mydb",
+                               preferredRecordSyntax => "marc");
 
 Creates a new Connection object, and immediately connects it to the
 specified server.  If you want to make a new Connection object but
@@ -169,6 +173,14 @@ This constructor can be called with two arguments or a single
 argument.  In the former case, the arguments are the name and port
 number of the Z39.50 server to connect to; in the latter case, the
 single argument is a YAZ service-specifier string of the form
+
+When the two-option form is used (which may be done using a vacuous
+second argument of zero), any number of additional argument pairs may
+be provided, which are interpreted as key-value pairs to be set as
+options after the Connection object is created but before it is
+connected to the server.  This is a convenient way to set options,
+including those that must be set before connecting such as
+authentication tokens.
 
 =over 4
 
