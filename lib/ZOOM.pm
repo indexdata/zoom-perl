@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.27 2006-03-09 12:57:19 mike Exp $
+# $Id: ZOOM.pm,v 1.28 2006-04-03 14:00:00 mike Exp $
 
 use strict;
 use warnings;
@@ -711,22 +711,27 @@ sub _rec {
 sub render {
     my $this = shift();
 
-    my $len = 0;
-    my $string = Net::Z3950::ZOOM::record_get($this->_rec(), "render", $len);
-    # I don't think we need '$len' at all.  ### Probably the Perl-to-C
-    # glue code should use the value of `len' as well as the opaque
-    # data-pointer returned, to ensure that the SV contains all of the
-    # returned data and does not stop at the first NUL character in
-    # binary data.  Carefully check the ZOOM_record_get() documentation.
-    return $string;
+    return $this->get("render", @_);
 }
 
 sub raw {
     my $this = shift();
 
+    return $this->get("raw", @_);
+}
+
+sub get {
+    my $this = shift();
+    my($type, $args) = @_;
+
+    $type = "$type;$args" if defined $args;
     my $len = 0;
-    my $string = Net::Z3950::ZOOM::record_get($this->_rec(), "raw", $len);
-    # See comment about $len in render()
+    my $string = Net::Z3950::ZOOM::record_get($this->_rec(), $type, $len);
+    # I don't think we need '$len' at all.  ### Probably the Perl-to-C
+    # glue code should use the value of `len' as well as the opaque
+    # data-pointer returned, to ensure that the SV contains all of the
+    # returned data and does not stop at the first NUL character in
+    # binary data.  Carefully check the ZOOM_record_get() documentation.
     return $string;
 }
 
