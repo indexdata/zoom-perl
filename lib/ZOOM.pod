@@ -1,4 +1,4 @@
-# $Id: ZOOM.pod,v 1.30 2006-03-09 12:57:19 mike Exp $
+# $Id: ZOOM.pod,v 1.31 2006-04-03 14:08:29 mike Exp $
 
 use strict;
 use warnings;
@@ -605,19 +605,24 @@ http://zoom.z3950.org/api/zoom-current.html#3.5
 
 =head4 render()
 
- print $rec->render()
+ print $rec->render();
+ print $rec->render("charset=latin1,utf8");
 
 Returns a human-readable representation of the record.  Beyond that,
 no promises are made: careful programs should not make assumptions
 about the format of the returned string.
 
+If the optional argument is provided, then it is interpreted as in the
+C<get()> method (q.v.)
+
 This method is useful mostly for debugging.
 
 =head4 raw()
 
- use MARC::Record
+ use MARC::Record;
  $raw = $rec->raw();
  $marc = new_from_usmarc MARC::Record($raw);
+ $trans = $rec->render("charset=latin1,utf8");
 
 Returns an opaque blob of data that is the raw form of the record.
 Exactly what this is, and what you can do with it, varies depending on
@@ -626,6 +631,31 @@ well, XML; MARC records will be returned as ISO 2709-encoded blocks
 that can be decoded by software such as the fine C<Marc::Record>
 module; GRS-1 record will be ... gosh, what an interesting question.
 But no-one uses GRS-1 any more, do they?
+
+If the optional argument is provided, then it is interpreted as in the
+C<get()> method (q.v.)
+
+=head4 get()
+
+ $raw = $rec->get("raw");
+ $rendered = $rec->get("render");
+ $trans = $rec->get("render;charset=latin1,utf8");
+ $trans = $rec->get("render", "charset=latin1,utf8");
+
+This is the underlying method used by C<render()> and C<raw()>, and
+which in turn delegates to the C<ZOOM_record_get()> function of the
+underlying ZOOM-C library.  Most applications will find it more
+natural to work with C<render()> and C<raw()>.
+
+C<get()> may be called with either one or two arguments.  The
+two-argument form is syntactic sugar: the two arguments are simply
+joined with a semi-colon to make a single argument, so the third and
+fourth example invocations above are equivalent.  The second argument
+(or portion of the first argument following the semicolon) is used in
+the C<type> argument of C<ZOOM_record_get()>, as described in
+http://www.indexdata.com/yaz/doc/zoom.records.tkl
+This is useful primarily for invoking the character-set transformation
+- in the examples above, from ISO Latin-1 to UTF-8 Unicode.
 
 =head4 clone() / destroy()
 
