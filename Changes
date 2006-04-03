@@ -1,6 +1,12 @@
-$Id: Changes,v 1.21 2006-03-09 12:57:19 mike Exp $
+$Id: Changes,v 1.22 2006-04-03 13:58:23 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
+
+1.04  Mon Apr  3 14:56:11 BST 2006
+	- The ZOOM-Perl layer now provides access to the underlying
+	  ZOOM-C's character-translation functionality, through new
+	  optional arguments to ZOOM::Record's render() and raw()
+	  methods, and a new underlying get() method.
 
 1.03  Thu Mar  9 12:55:23 GMT 2006
 	- Allow additional key => value pairs as arguments to the
