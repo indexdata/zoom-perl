@@ -1,4 +1,4 @@
-# $Id: MANIFEST,v 1.22 2006-04-03 17:26:21 mike Exp $
+# $Id: MANIFEST,v 1.23 2006-04-06 12:53:44 mike Exp $
 
 Changes
 Makefile.PL
@@ -15,6 +15,7 @@ t/14-sorting.t
 t/15-scan.t
 t/16-packages.t
 t/17-logging.t
+t/19-events.t
 t/2-ZOOM.t
 t/20-options.t
 t/21-option-callback.t
