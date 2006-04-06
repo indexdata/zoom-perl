@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.38 2006-04-06 12:41:25 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.39 2006-04-06 12:50:41 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -526,26 +526,22 @@ ZOOM_event(conns)
 		/*printf("* in ZOOM_event(%p)\n", conns);*/
 		if (!SvROK(conns)) {
 			/*printf("* argument is not a reference\n");*/
-			RETVAL = -1;
-			XSRETURN(1);
+			XSRETURN_IV(-1);
 		}
 		realconns = SvRV(conns);
 		/*printf("* realconns = %p\n", realconns);*/
 		if (SvTYPE(realconns) != SVt_PVAV) {
 			/*printf("* reference is not to an array\n");*/
-			RETVAL = -2;
-			XSRETURN(1);
+			XSRETURN_IV(-2);
 		}
 		n = av_len((AV*) realconns);
 		n++; /* The av_len() return-value is zero-based */
 		if (n == 0) {
 			/*printf("* No connections in referenced array\n");*/
-			RETVAL = -3;
-			XSRETURN(1);
+			XSRETURN_IV(-3);
 		} else if (n >= sizeof(cs)/sizeof(cs[0])) {
 			/*printf("* Too many connections (%d)\n", (int) n);*/
-			RETVAL = -4;
-			XSRETURN(1);
+			XSRETURN_IV(-4);
 		}
 
 		/*printf("* n = %d\n", n);*/
