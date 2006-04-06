@@ -1,6 +1,9 @@
-$Id: Changes,v 1.22 2006-04-03 13:58:23 mike Exp $
+$Id: Changes,v 1.23 2006-04-06 12:51:26 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
+
+1.05  [IN PROGRESS]
+	- Implementation of asynchronous events through ZOOM_event().
 
 1.04  Mon Apr  3 14:56:11 BST 2006
 	- The ZOOM-Perl layer now provides access to the underlying
