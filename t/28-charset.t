@@ -1,4 +1,4 @@
-# $Id: 28-charset.t,v 1.1 2006-04-03 17:23:56 mike Exp $
+# $Id: 28-charset.t,v 1.2 2006-04-06 08:15:43 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 28-charset.t'
@@ -16,13 +16,13 @@ ok(!$@, "connection to '$host'");
 
 $conn->option(preferredRecordSyntax => 'usmarc');
 
-my $qstr = '@attr 1=1003 gunter';
+my $qstr = '@attr 1=7 3879093520';
 my $rs;
 eval { $rs = $conn->search_pqf($qstr) };
 ok(!$@, "search for '$qstr'");
 
 my $n = $rs->size();
-ok($n == 10000, "found $n records (expected 10000)");
+ok($n == 1, "found $n records (expected 1)");
 
 my $rec = $rs->record(0);
 ok(defined $rec, "got first record");
@@ -30,12 +30,12 @@ ok(defined $rec, "got first record");
 my $xml = $rec->get('xml');
 ok(defined $xml, "got XML");
 
-ok($xml =~ m(<subfield code="a">10\. .* f\350ur),
+ok($xml =~ m(<subfield code="b">aus der .* f\350ur),
    "got MARC pre-accented composed characters");
 
 $xml = $rec->get('xml', 'charset=marc-8,utf-8');
 ok(defined $xml, "got XML in Unicode");
 
-ok($xml =~ m(<subfield code="a">10\. .* für),
+ok($xml =~ m(<subfield code="b">aus der .* für),
    "got Unicode post-accented composed characters");
 
