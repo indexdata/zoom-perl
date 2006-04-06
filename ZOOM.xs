@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.37 2006-01-20 12:33:14 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.38 2006-04-06 12:41:25 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -507,10 +507,76 @@ ZOOM_package_option_set(p, key, val)
 	const char *	val
 
 # UNTESTED
+#
+# This has to be called with a single argument which is a _reference_
+# to an array -- rather than directly with an array, which is of
+# course identical to passing arbitrarily many arguments.  This is
+# because there doesn't seem to be a way to do varargs in an XS
+# function.
+#
 int
-ZOOM_event(no, cs)
-	int	no
-	ZOOM_connection *	cs
+ZOOM_event(conns)
+	SV* conns
+	INIT:
+		SV *realconns;
+		I32 n, i;
+		int res;
+		ZOOM_connection cs[100];
+	CODE:
+		/*printf("* in ZOOM_event(%p)\n", conns);*/
+		if (!SvROK(conns)) {
+			/*printf("* argument is not a reference\n");*/
+			RETVAL = -1;
+			XSRETURN(1);
+		}
+		realconns = SvRV(conns);
+		/*printf("* realconns = %p\n", realconns);*/
+		if (SvTYPE(realconns) != SVt_PVAV) {
+			/*printf("* reference is not to an array\n");*/
+			RETVAL = -2;
+			XSRETURN(1);
+		}
+		n = av_len((AV*) realconns);
+		n++; /* The av_len() return-value is zero-based */
+		if (n == 0) {
+			/*printf("* No connections in referenced array\n");*/
+			RETVAL = -3;
+			XSRETURN(1);
+		} else if (n >= sizeof(cs)/sizeof(cs[0])) {
+			/*printf("* Too many connections (%d)\n", (int) n);*/
+			RETVAL = -4;
+			XSRETURN(1);
+		}
+
+		/*printf("* n = %d\n", n);*/
+		for (i = 0; i < n; i++) {
+		    SV **connp = av_fetch((AV*) realconns, i, (I32) 0);
+		    /*printf("* %d of %d: connp = %p\n", (int) i, (int) n,connp);*/
+		    assert(connp != 0);
+		    SV *conn = *connp;
+		    /*printf("* conn = %p\n", conn);*/
+		    /*
+		     * From here on, the tests and assertions seem to
+		     * be ignored: if I pass in a reference to
+		     * something other than a ZOOM_connection, or even
+		     * if I pass a non-reference, the assertions still
+		     * pass and everything seems to work until the
+		     * segmentation fault bites.
+		     */
+		    assert(sv_derived_from(conn, "ZOOM_connection"));
+		    /*printf("* passed assert(isa(ZOOM_connection))\n");*/
+		    assert(SvROK(conn));
+		    /*printf("* passed assert SvROK()\n");*/
+		    SV *sv = (SV*) SvRV(conn);
+		    /*printf("* sv = %p\n", sv);*/
+		    IV tmp = SvIV(sv);
+		    /*printf("* tmp = %d\n", tmp);	*/
+		    cs[i] = INT2PTR(ZOOM_connection, tmp);
+		    /*printf("got cs[%d] of %d = %p\n", (int) i, (int) n, cs[i]);*/
+		}
+		RETVAL = ZOOM_event((int) n, cs);
+	OUTPUT:
+		RETVAL
 
 # UNTESTED
 int
