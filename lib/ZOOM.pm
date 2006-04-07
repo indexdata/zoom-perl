@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.28 2006-04-03 14:00:00 mike Exp $
+# $Id: ZOOM.pm,v 1.29 2006-04-07 11:05:14 mike Exp $
 
 use strict;
 use warnings;
@@ -91,6 +91,19 @@ sub diag_str {
     }
 
     return Net::Z3950::ZOOM::diag_str($code);
+}
+
+### Undocumented
+sub event_str {
+    return Net::Z3950::ZOOM::event_str(@_);
+}
+
+### Undocumented
+sub event {
+    my($connsref) = @_;
+
+    my @_connsref = map { $_->_conn() } @$connsref;
+    return Net::Z3950::ZOOM::event(\@_connsref);
 }
 
 sub _oops {
@@ -296,7 +309,7 @@ sub new {
     return $conn;
 }
 
-# PRIVATE to this class and to ZOOM::Query::CQL2RPN::new()
+# PRIVATE to this class, to ZOOM::event() and to ZOOM::Query::CQL2RPN::new()
 sub _conn {
     my $this = shift();
 
@@ -441,6 +454,13 @@ sub package {
 	or ZOOM::_oops(ZOOM::Error::PACKAGE);
 
     return _new ZOOM::Package($this, $options, $_p);
+}
+
+### Undocumented
+sub last_event {
+    my $this = shift();
+
+    return Net::Z3950::ZOOM::connection_last_event($this->_conn());
 }
 
 sub destroy {
