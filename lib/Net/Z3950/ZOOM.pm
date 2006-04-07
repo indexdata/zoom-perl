@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.15 2006-04-07 11:03:35 mike Exp $
+# $Id: ZOOM.pm,v 1.16 2006-04-07 12:05:41 mike Exp $
 
 package Net::Z3950::ZOOM; 
 
@@ -52,6 +52,7 @@ sub EVENT_SEND_APDU { 6 }
 sub EVENT_RECV_APDU { 7 }
 sub EVENT_RECV_RECORD { 8 }
 sub EVENT_RECV_SEARCH { 9 }
+sub EVENT_RECV_END { 10 }	# In YAZ 2.1.17 and later
 
 
 =head1 NAME
@@ -110,6 +111,8 @@ sub event_str {
 	return "receive record";
     } elsif ($code == EVENT_RECV_SEARCH) {
 	return "receive search";
+    } elsif ($code == EVENT_RECV_END) {
+	return "receive end";
     }
     return "impossible event " . $code;
 }
