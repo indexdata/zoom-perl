@@ -1,4 +1,4 @@
-# $Id: zoomtst3.pl,v 1.5 2006-04-07 12:15:03 mike Exp $
+# $Id: zoomtst3.pl,v 1.6 2006-04-07 12:37:26 mike Exp $
 #
 # See ../README for a description of this program.
 # perl -I../../blib/lib -I../../blib/arch zoomtst3.pl <t1> [...] <tN> <query>
@@ -23,7 +23,7 @@ Net::Z3950::ZOOM::options_set($o, count => 10);
 
 # Preferred record syntax
 Net::Z3950::ZOOM::options_set($o, preferredRecordSyntax => "usmarc");
-Net::Z3950::ZOOM::options_set($o, elementSetName => "F");
+Net::Z3950::ZOOM::options_set($o, elementSetName => "B");
 
 # Connect to all targets: options are the same for all of them
 for (my $i = 0; $i < $n; $i++) {
