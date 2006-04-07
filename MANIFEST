@@ -1,4 +1,4 @@
-# $Id: MANIFEST,v 1.24 2006-04-06 13:08:46 mike Exp $
+# $Id: MANIFEST,v 1.25 2006-04-07 11:13:09 mike Exp $
 
 Changes
 Makefile.PL
@@ -37,5 +37,7 @@ samples/README
 samples/cql/pqf.properties
 samples/records/esdd0006.grs
 samples/net-z3950-zoom/zoomtst1.pl
+samples/net-z3950-zoom/zoomtst3.pl
 samples/net-z3950/zoomtst1.pl
 samples/zoom/zoomtst1.pl
+samples/zoom/zoomtst3.pl
