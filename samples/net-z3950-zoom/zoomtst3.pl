@@ -1,4 +1,4 @@
-# $Id: zoomtst3.pl,v 1.2 2006-04-07 07:18:27 mike Exp $
+# $Id: zoomtst3.pl,v 1.3 2006-04-07 07:49:11 mike Exp $
 #
 # See ../README for a description of this program.
 # perl -I../../blib/lib -I../../blib/arch zoomtst3.pl <t1> [...] <tN> <query>
@@ -41,6 +41,7 @@ while ((my $i = Net::Z3950::ZOOM::event([ @z ])) != 0) {
     my $ev = Net::Z3950::ZOOM::connection_last_event($z[$i-1]);
     print("connection ", $i-1, ": event $ev (",
 	  Net::Z3950::ZOOM::eventstr($ev), ")\n");
+    ### It would be nice to display results as they come in.
 }
 
 # No more to be done.  Inspect results
@@ -70,10 +71,11 @@ for (my $i = 0; $i < $n; $i++) {
 	    next;
 	}
 	my $rec = Net::Z3950::ZOOM::record_get($tmp, "render", $len);
-	# if rec is non-null, we got a record for display
-	if (defined $rec) {
-	    print $pos+1, "\n", $rec, "\n";
+	if (!defined $rec) {
+	    print "$tname: can't render record ", $pos+1, "\n";
+	    next;
 	}
+	print $pos+1, "\n", $rec, "\n";
     }
 }
 
