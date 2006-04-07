@@ -1,4 +1,4 @@
-# $Id: zoomtst3.pl,v 1.1 2006-04-07 11:07:12 mike Exp $
+# $Id: zoomtst3.pl,v 1.2 2006-04-07 11:25:58 mike Exp $
 #
 # See ../README for a description of this program.
 # perl -I../../blib/lib -I../../blib/arch zoomtst3.pl <t1> [...] <tN> <query>
@@ -28,7 +28,7 @@ $o->option(elementSetName => "F");
 # Connect to all targets: options are the same for all of them
 for (my $i = 0; $i < $n; $i++) {
     $z[$i] = create ZOOM::Connection($o);
-    $z[$i]->connect($ARGV[$i], 0); ### remove the "0"?
+    $z[$i]->connect($ARGV[$i]);
 }
 
 # Search all
