@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.17 2006-04-07 12:06:08 mike Exp $
+# $Id: ZOOM.pm,v 1.18 2006-04-07 12:07:23 mike Exp $
 
 package Net::Z3950::ZOOM; 
 
@@ -112,7 +112,7 @@ sub event_str {
     } elsif ($code == EVENT_RECV_SEARCH) {
 	return "receive search";
     } elsif ($code == EVENT_END) {
-	return "receive end";
+	return "end";
     }
     return "impossible event " . $code;
 }
