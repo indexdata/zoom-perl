@@ -1,4 +1,4 @@
-$Id: Changes,v 1.24 2006-04-07 11:32:08 mike Exp $
+$Id: Changes,v 1.25 2006-04-07 13:08:43 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
@@ -13,6 +13,7 @@ Revision history for Perl extension Net::Z3950::ZOOM.
 	  samples/zoom/zoomtst3.pl respectively.
 	- ### documentation
 	- ### test-case
+	- ### complete and test "update.pl"
 
 1.04  Mon Apr  3 14:56:11 BST 2006
 	- The ZOOM-Perl layer now provides access to the underlying
