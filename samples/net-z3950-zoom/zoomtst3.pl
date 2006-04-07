@@ -1,4 +1,4 @@
-# $Id: zoomtst3.pl,v 1.3 2006-04-07 07:49:11 mike Exp $
+# $Id: zoomtst3.pl,v 1.4 2006-04-07 10:59:18 mike Exp $
 #
 # See ../README for a description of this program.
 # perl -I../../blib/lib -I../../blib/arch zoomtst3.pl <t1> [...] <tN> <query>
@@ -37,10 +37,10 @@ for (my $i = 0; $i < $n; $i++) {
 }
 
 # Network I/O.  Pass number of connections and array of connections
-while ((my $i = Net::Z3950::ZOOM::event([ @z ])) != 0) {
+while ((my $i = Net::Z3950::ZOOM::event(\@z)) != 0) {
     my $ev = Net::Z3950::ZOOM::connection_last_event($z[$i-1]);
     print("connection ", $i-1, ": event $ev (",
-	  Net::Z3950::ZOOM::eventstr($ev), ")\n");
+	  Net::Z3950::ZOOM::event_str($ev), ")\n");
     ### It would be nice to display results as they come in.
 }
 
