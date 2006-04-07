@@ -1,9 +1,9 @@
-# $Id: zoomtst3.pl,v 1.3 2006-04-07 12:03:27 mike Exp $
+# $Id: zoomtst3.pl,v 1.4 2006-04-07 12:36:00 mike Exp $
 #
 # See ../README for a description of this program.
 # perl -I../../blib/lib -I../../blib/arch zoomtst3.pl <t1> [...] <tN> <query>
 # for example:
-# perl -I../../blib/lib -I../../blib/arch zoomtst3.pl z3950.loc.gov:7090/Voyager bagel.indexdata.com:210/gils mineral
+# perl -I../../blib/lib -I../../blib/arch zoomtst3.pl z3950.loc.gov:7090/Voyager bagel.indexdata.com:210/gils endeavor.flo.org:7090/Voyager mineral
 
 use strict;
 use warnings;
