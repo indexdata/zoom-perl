@@ -1,4 +1,4 @@
-# $Id: zoomtst3.pl,v 1.4 2006-04-07 10:59:18 mike Exp $
+# $Id: zoomtst3.pl,v 1.5 2006-04-07 12:15:03 mike Exp $
 #
 # See ../README for a description of this program.
 # perl -I../../blib/lib -I../../blib/arch zoomtst3.pl <t1> [...] <tN> <query>
@@ -41,7 +41,11 @@ while ((my $i = Net::Z3950::ZOOM::event(\@z)) != 0) {
     my $ev = Net::Z3950::ZOOM::connection_last_event($z[$i-1]);
     print("connection ", $i-1, ": event $ev (",
 	  Net::Z3950::ZOOM::event_str($ev), ")\n");
-    ### It would be nice to display results as they come in.
+    # It would be nice to display results as they come in, but the
+    # ability to do so is dependent on the END event, which was
+    # introduced only in YAZ 2.1.17.  If you have a sufficiently new
+    # YAZ, please use the alternative "async.pl", which is similar to
+    # this program except in its asynchronous display.
 }
 
 # No more to be done.  Inspect results
