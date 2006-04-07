@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.13 2006-04-06 12:52:00 mike Exp $
+# $Id: ZOOM.pm,v 1.14 2006-04-07 07:48:42 mike Exp $
 
 package Net::Z3950::ZOOM; 
 
@@ -79,6 +79,40 @@ To enforce the don't-use-this-module prohibition, I am not even going
 to document it.  If you really, really, really want to use it, then it
 pretty much follows the API described in the ZOOM-C documentation at
 http://www.indexdata.dk/yaz/doc/zoom.tkl
+
+The only additional (non-ZOOM-C) function provided by this module is
+C<eventstr()>, which takes as its argument an event code such as
+C<Net::Z3950::ZOOM::EVENT_SEND_APDU>, and returns a corresponding
+short string.
+
+=cut
+
+sub eventstr {
+    my($code) = @_;
+
+    if ($code == EVENT_NONE) {
+	return "none";
+    } elsif ($code == EVENT_CONNECT) {
+	return "connect";
+    } elsif ($code == EVENT_SEND_DATA) {
+	return "send data";
+    } elsif ($code == EVENT_RECV_DATA) {
+	return "receive data";
+    } elsif ($code == EVENT_TIMEOUT) {
+	return "timeout";
+    } elsif ($code == EVENT_UNKNOWN) {
+	return "unknown";
+    } elsif ($code == EVENT_SEND_APDU) {
+	return "send apdu";
+    } elsif ($code == EVENT_RECV_APDU) {
+	return "receive apdu";
+    } elsif ($code == EVENT_RECV_RECORD) {
+	return "receive record";
+    } elsif ($code == EVENT_RECV_SEARCH) {
+	return "receive search";
+    }
+    return "impossible event " . $code;
+}
 
 =head1 SEE ALSO
 
