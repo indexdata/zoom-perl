@@ -1,4 +1,4 @@
-# $Id: zoomtst3.pl,v 1.1 2006-04-06 13:47:55 mike Exp $
+# $Id: zoomtst3.pl,v 1.2 2006-04-07 07:18:27 mike Exp $
 #
 # See ../README for a description of this program.
 # perl -I../../blib/lib -I../../blib/arch zoomtst3.pl <t1> [...] <tN> <query>
@@ -38,8 +38,9 @@ for (my $i = 0; $i < $n; $i++) {
 
 # Network I/O.  Pass number of connections and array of connections
 while ((my $i = Net::Z3950::ZOOM::event([ @z ])) != 0) {
-    print("n = ", $i-1, " event = ",
-	  Net::Z3950::ZOOM::connection_last_event($z[$i-1]), "\n");
+    my $ev = Net::Z3950::ZOOM::connection_last_event($z[$i-1]);
+    print("connection ", $i-1, ": event $ev (",
+	  Net::Z3950::ZOOM::eventstr($ev), ")\n");
 }
 
 # No more to be done.  Inspect results
@@ -61,9 +62,13 @@ for (my $i = 0; $i < $n; $i++) {
     # Go through all records at target
     $size = 10 if $size > 10;
     for (my $pos = 0; $pos < $size; $pos++) {
-	my $len; # length of buffer rec
-	print "$tname: fetching $pos of $size\n";
+	my $len = 0; # length of buffer rec
+	print "$tname: fetching ", $pos+1, " of $size\n";
 	my $tmp = Net::Z3950::ZOOM::resultset_record($r[$i], $pos);
+	if (!defined $tmp) {
+	    print "$tname: can't get record ", $pos+1, "\n";
+	    next;
+	}
 	my $rec = Net::Z3950::ZOOM::record_get($tmp, "render", $len);
 	# if rec is non-null, we got a record for display
 	if (defined $rec) {
