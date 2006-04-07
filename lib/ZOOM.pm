@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.30 2006-04-07 12:17:54 mike Exp $
+# $Id: ZOOM.pm,v 1.31 2006-04-07 12:58:19 mike Exp $
 
 use strict;
 use warnings;
@@ -63,7 +63,7 @@ sub SEND_APDU { Net::Z3950::ZOOM::EVENT_SEND_APDU }
 sub RECV_APDU { Net::Z3950::ZOOM::EVENT_RECV_APDU }
 sub RECV_RECORD { Net::Z3950::ZOOM::EVENT_RECV_RECORD }
 sub RECV_SEARCH { Net::Z3950::ZOOM::EVENT_RECV_SEARCH }
-sub END { Net::Z3950::ZOOM::EVENT_END }
+sub ZEND { Net::Z3950::ZOOM::EVENT_END }
 
 # ----------------------------------------------------------------------------
 
