@@ -1,4 +1,4 @@
-$Id: README,v 1.4 2005-12-22 14:13:01 mike Exp $
+$Id: README,v 1.5 2006-04-07 12:00:31 mike Exp $
 
 The Net::Z3950::ZOOM, ZOOM and Net::Z3950 modules
 =================================================
@@ -46,8 +46,10 @@ This module requires these other modules and libraries:
   straightforward that you probably expect.  You can get it from
   http://indexdata.com/yaz/
 
-  NOTE THAT THE ZOOM-Perl MODULE REQUIRES RELEASE 2.0.11 OR BETTER OF
-  THE YAZ TOOLKIT.  THIS MAY NOT YET HAVE BEEN RELEASED.
+  NOTE THAT THE ZOOM-Perl MODULE ABSOLUTELY REQUIRES RELEASE 2.0.11 OR
+  BETTER OF THE YAZ TOOLKIT.  You need version 2.1.17 or better if you
+  want to run clever asynchronous programs that use the END event,
+  which did not exist prior to that release.
 
 COPYRIGHT AND LICENCE
 
