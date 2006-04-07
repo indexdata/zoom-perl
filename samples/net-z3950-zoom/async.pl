@@ -1,7 +1,9 @@
-# $Id: async.pl,v 1.1 2006-04-07 12:29:12 mike Exp $
+# $Id: async.pl,v 1.2 2006-04-07 12:36:34 mike Exp $
 #
 # See ../README for a description of this program.
 # perl -I../../blib/lib -I../../blib/arch zoomtst3.pl <t1> [...] <tN> <query>
+# for example:
+# perl -I../../blib/lib -I../../blib/arch async.pl z3950.loc.gov:7090/Voyager bagel.indexdata.com:210/gils endeavor.flo.org:7090/Voyager mineral
 
 use strict;
 use warnings;
