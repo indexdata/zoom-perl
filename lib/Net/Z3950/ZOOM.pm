@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.14 2006-04-07 07:48:42 mike Exp $
+# $Id: ZOOM.pm,v 1.15 2006-04-07 11:03:35 mike Exp $
 
 package Net::Z3950::ZOOM; 
 
@@ -81,13 +81,13 @@ pretty much follows the API described in the ZOOM-C documentation at
 http://www.indexdata.dk/yaz/doc/zoom.tkl
 
 The only additional (non-ZOOM-C) function provided by this module is
-C<eventstr()>, which takes as its argument an event code such as
+C<event_str()>, which takes as its argument an event code such as
 C<Net::Z3950::ZOOM::EVENT_SEND_APDU>, and returns a corresponding
 short string.
 
 =cut
 
-sub eventstr {
+sub event_str {
     my($code) = @_;
 
     if ($code == EVENT_NONE) {
