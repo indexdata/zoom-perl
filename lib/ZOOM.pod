@@ -1,4 +1,4 @@
-# $Id: ZOOM.pod,v 1.31 2006-04-03 14:08:29 mike Exp $
+# $Id: ZOOM.pod,v 1.32 2006-04-11 16:38:38 mike Exp $
 
 use strict;
 use warnings;
@@ -99,10 +99,10 @@ enumeration or drawn from the BIB-1 diagnostic set.
 
 =head2 ZOOM::event()
 
-B<Warning.>
-Lark's vomit.  Do not read this section.
-
- $which = ZOOM::event([ $conn1, $conn2, $conn3 ]);
+ $connsRef = [ $conn1, $conn2, $conn3 ];
+ $which = ZOOM::event($connsRef);
+ $ev = $connsRef->[$which-1]->last_event()
+     if ($which != 0);
 
 Used only in complex asynchronous applications, this function takes a
 reference to a list of Connection objects, waits until an event
@@ -111,8 +111,7 @@ the connections it occurred on.  The return value is a 1-based index
 into the list; 0 is returned if no event occurs within the longest
 timeout specified by the C<timeout> options of all the connections.
 
-B<Warning.>
-This function is not yet implemented.
+See the section below on asynchronous applications.
 
 =head1 CLASSES
 
@@ -418,11 +417,8 @@ the C<ZOOM::Package> documentation.
 
 Returns a C<ZOOM::Event> enumerated value indicating the type of the
 last event that occurred on the connection.  This is used only in
-complex asynchronous applications - see the section below on
-C<ZOOM::Event> for more information.
-
-B<Warning.>
-This method has not been tested.
+complex asynchronous applications - see the sections below on the
+C<ZOOM::Event> enumeration and asynchronous applications.
 
 =head4 destroy()
 
@@ -1255,11 +1251,10 @@ applications - The C<ZOOM::Connection::last_event()> method is used to
 return an indication of the last event that occurred on a particular
 connection.  It always returns a value drawn from this enumeration,
 that is, one of C<NONE>, C<CONNECT>, C<SEND_DATA>, C<RECV_DATA>,
-C<TIMEOUT>, C<UNKNOWN>, C<SEND_APDU>, C<RECV_APDU>, C<RECV_RECORD> or
-C<RECV_SEARCH>.
+C<TIMEOUT>, C<UNKNOWN>, C<SEND_APDU>, C<RECV_APDU>, C<RECV_RECORD>,
+C<RECV_SEARCH> or C<ZEND>.
 
-You almost certainly don't need to know about this.  Frankly, I'm not
-sure how to use it myself.
+See the section below on asynchronous applications.
 
 =head1 LOGGING
 
@@ -1365,6 +1360,69 @@ called.
 
 The log-level argument may be either a numeric value, as returned from
 C<module_level()>, or a string containing the module name.
+
+=head1 ASYNCHRONOUS APPLICATIONS
+
+Although asynchronous applications are conceptually complex, the ZOOM
+support for them is provided through a very simple interface,
+consisting of one option (C<async>), one function (C<ZOOM::event()>),
+one Connection method (C<last_event()> and an enumeration
+(C<ZOOM::Event>).
+
+The approach is as follows:
+
+=over 4
+
+=item Initialisation
+
+Create several connections to the various servers, each of them having
+the option C<async> set, and with whatever additional options are
+required - e.g. setting the piggyback retrieval record-count so that
+records will be returned in search responses.
+
+=item Operations
+
+Send searches to the connections, request record retrieval, etc.
+
+=item Event harvesting
+
+Repeatedly call C<ZOOM::event()> to discover what responses are being
+received from the servers.  Each time this function returns, it
+indicates which of the connections has fired; this connection can then
+be interrogated with the C<last_event()> method to discover what event
+has occurred, and the return value - an element of the C<ZOOM::Event>
+enumeration can be used to determine what to do next.  For example,
+the C<ZEND> operation indicates that no further operations are
+outstanding on the connection, so any fetched records can now be
+immediately obtained.
+
+=back
+
+Here is a very short program (omitting all error-checking!) which
+demonstrates this process.  It parallel-searches two servers (or more
+of you add them the list), displaying the first record in the
+result-set of each server as soon as it becomes available.
+
+ use ZOOM;
+ @servers = ('z3950.loc.gov:7090/Voyager',
+             'bagel.indexdata.com:210/gils');
+ for ($i = 0; $i < @servers; $i++) {
+     $z[$i] = new ZOOM::Connection($servers[$i], 0,
+                                   async => 1, # asynchronous mode
+                                   count => 1, # piggyback retrieval count
+                                   preferredRecordSyntax => "usmarc");
+     $r[$i] = $z[$i]->search_pqf("mineral");
+ }
+ while (($i = ZOOM::event(\@z)) != 0) {
+     $ev = $z[$i-1]->last_event();
+     print("connection ", $i-1, ": ", ZOOM::event_str($ev), "\n");
+     if ($ev == ZOOM::Event::ZEND) {
+         $size = $r[$i-1]->size();
+         print "connection ", $i-1, ": $size hits\n";
+         print $r[$i-1]->record(0)->render()
+             if $size > 0;
+     }
+ }
 
 =head1 SEE ALSO
 
