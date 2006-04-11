@@ -1,8 +1,8 @@
 use ZOOM;
-@targets = ('z3950.loc.gov:7090/Voyager',
+@servers = ('z3950.loc.gov:7090/Voyager',
 	    'bagel.indexdata.com:210/gils');
-for ($i = 0; $i < @targets; $i++) {
-    $z[$i] = new ZOOM::Connection($targets[$i], 0,
+for ($i = 0; $i < @servers; $i++) {
+    $z[$i] = new ZOOM::Connection($servers[$i], 0,
 				  async => 1, # asynchronous mode
 				  count => 1, # piggyback retrieval count
 				  preferredRecordSyntax => "usmarc");
