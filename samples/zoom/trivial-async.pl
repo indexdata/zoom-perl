@@ -1,13 +1,11 @@
 use ZOOM;
 @targets = ('z3950.loc.gov:7090/Voyager',
 	    'bagel.indexdata.com:210/gils');
-$o = new ZOOM::Options();
-$o->option(async => 1);		# asynchronous mode
-$o->option(count => 1);		# piggyback retrieval count
-$o->option(preferredRecordSyntax => "usmarc");
 for ($i = 0; $i < @targets; $i++) {
-    $z[$i] = create ZOOM::Connection($o);
-    $z[$i]->connect($targets[$i]);
+    $z[$i] = new ZOOM::Connection($targets[$i], 0,
+				  async => 1, # asynchronous mode
+				  count => 1, # piggyback retrieval count
+				  preferredRecordSyntax => "usmarc");
     $r[$i] = $z[$i]->search_pqf("mineral");
 }
 while (($i = ZOOM::event(\@z)) != 0) {
