@@ -1,4 +1,4 @@
-# $Id: 26-packages.t,v 1.6 2005-12-14 09:30:48 mike Exp $
+# $Id: 26-packages.t,v 1.7 2006-04-12 12:29:49 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 26-packages.t'
@@ -57,8 +57,7 @@ count_hits($conn, "the", 0, 2);
 dropdb($conn, $dbname, 0);
 
 # A second dropping should fail, as the database is no longer there.
-### But at present, it's "always successful" (though not really)
-dropdb($conn, $dbname, 0);
+dropdb($conn, $dbname, 10004);
 
 
 sub makeconn {
@@ -119,8 +118,7 @@ sub dropdb {
     my $p = $conn->package();
     # No need to keep ok()ing this, or checking the option-setting
     $p->option(databaseName => $dbname);
-    ### Don't send the package at the moment -- it corrupts Zebra
-    #$p->send("drop");
+    eval { $p->send("drop") };
     my($errcode, $errmsg, $addinfo) = maybe_error($@);
     ok($errcode == $expected_error,
        "database drop '$dbname'"  . ($errcode ? " refused $errcode" : ""));
