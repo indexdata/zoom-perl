@@ -1,4 +1,4 @@
-# $Id: MANIFEST,v 1.27 2006-04-11 16:40:41 mike Exp $
+# $Id: MANIFEST,v 1.28 2006-04-12 12:20:11 mike Exp $
 
 Changes
 Makefile.PL
@@ -27,6 +27,7 @@ t/25-scan.t
 t/26-packages.t
 t/27-logging.t
 t/28-charset.t
+t/29-events.t
 lib/Net/Z3950/ZOOM.pm
 lib/ZOOM.pm
 lib/ZOOM.pod
