@@ -1,7 +1,7 @@
 use ZOOM;
 @servers = ('z3950.loc.gov:7090/Voyager',
 	    'bagel.indexdata.com:210/gils',
-	    'agricola.nal.usda.gov:71Voyager');
+	    'agricola.nal.usda.gov:7190/Voyager');
 for ($i = 0; $i < @servers; $i++) {
     $z[$i] = new ZOOM::Connection($servers[$i], 0,
 				  async => 1, # asynchronous mode
