@@ -1,8 +1,8 @@
-$Id: Changes,v 1.27 2006-04-12 12:19:49 mike Exp $
+$Id: Changes,v 1.28 2006-04-12 12:31:32 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
-1.05  [IN PROGRESS]
+1.05  Wed Apr 12 13:31:27 BST 2006
 	- Implementation of asynchronous events!  The Net::Z3950::ZOOM
 	  interface provides this through the event, last_event() and
 	  event_str() functions.  The ZOOM interface provides it
