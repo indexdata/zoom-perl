@@ -1,4 +1,4 @@
-# $Id: 16-packages.t,v 1.10 2005-12-14 09:30:58 mike Exp $
+# $Id: 16-packages.t,v 1.11 2006-04-12 12:23:02 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 16-packages.t'
@@ -66,8 +66,7 @@ count_hits($conn, "the", 0, 2);
 dropdb($conn, $dbname, 0);
 
 # A second dropping should fail, as the database is no longer there.
-### But at present, it's "always successful" (though not really)
-dropdb($conn, $dbname, 0);
+dropdb($conn, $dbname, 10004);
 
 
 sub makeconn {
@@ -132,8 +131,7 @@ sub dropdb {
     # No need to keep ok()ing this, or checking the option-setting
     Net::Z3950::ZOOM::package_option_set($p, databaseName => $dbname);
 
-    ### Don't send the package at the moment -- it corrupts Zebra
-    #Net::Z3950::ZOOM::package_send($p, "drop");
+    Net::Z3950::ZOOM::package_send($p, "drop");
     my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
     $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
     ok($errcode == $expected_error,
