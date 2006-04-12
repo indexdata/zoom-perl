@@ -1,4 +1,4 @@
-$Id: Changes,v 1.26 2006-04-11 16:27:58 mike Exp $
+$Id: Changes,v 1.27 2006-04-12 12:19:49 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
@@ -10,14 +10,17 @@ Revision history for Perl extension Net::Z3950::ZOOM.
 	  and the ZOOM::Connection class's last_event() function.
 	- New sample programs added illustrating both asynchronous
 	  interfaces: samples/net-z3950-zoom/zoomtst3.pl and
-	  samples/zoom/zoomtst3.pl respectively.
+	  samples/zoom/zoomtst3.pl respectively.  Additional sample
+	  programs "async.pl" and "trivial-async.pl" for the ZOOM
+	  interface only, the latter being a "shortest possible
+	  broadcast search application".
 	- Added documentation on writing asynchronous applications.
-	- ### test-case for asynchronous operations.
+	- Added test-scripts "t/19-events.t" and "t/29-event.t" for
+	  events on an asynchronous connection.
 	- Fix ZOOM::Connection::new so that options are handled in
 	  accordance with the documentation: applied _before_ the
 	  connection is forged, so that "async" and similar options
 	  can take effect.
-	- ### complete and test "update.pl"
 
 1.04  Mon Apr  3 14:56:11 BST 2006
 	- The ZOOM-Perl layer now provides access to the underlying
@@ -90,17 +93,13 @@ Revision history for Perl extension Net::Z3950::ZOOM.
 --
 
 To be done in future releases:
+	- Complete, test and document "update.pl"
 	- Fix Net::Z3950::ZOOM::record_get() to use a struct datachunk
 	  _when_ appropriate, e.g. for "render" but probably not for
 	  "database" and "syntax".
-	- Support for asynchronous multiplexing: implement
-	  ZOOM::event() and test ZOOM::Connection::last_event().
-	- Write example programs for "samples" direction.
 	- Create old-style Net::Z3950 compatibility layer.
 	- Fix memory leaks in callback functions for option sets.
 	- Fix limitation that option-set callback functions must be
 	  specified as strings containing package-qualified function
 	  names.
-	- Fix test-suite to actually send the "drop" packages once
-	  Zebra's been fixed so this doesn't current the store.
 
