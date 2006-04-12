@@ -1,13 +1,16 @@
-# $Id: 19-events.t,v 1.4 2006-04-12 11:59:20 mike Exp $
+# $Id: 19-events.t,v 1.5 2006-04-12 12:07:32 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 19-events.t'
 
 use strict;
 use warnings;
-use Test::More tests => 22;
+use Test::More tests => 23;
 
 BEGIN { use_ok('Net::Z3950::ZOOM') };
+
+ok(Net::Z3950::ZOOM::event_str(Net::Z3950::ZOOM::EVENT_CONNECT) eq "connect",
+   "connect event properly translated");
 
 my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
 
