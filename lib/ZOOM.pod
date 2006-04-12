@@ -1,4 +1,4 @@
-# $Id: ZOOM.pod,v 1.34 2006-04-12 08:49:20 mike Exp $
+# $Id: ZOOM.pod,v 1.35 2006-04-12 12:03:10 mike Exp $
 
 use strict;
 use warnings;
@@ -39,8 +39,8 @@ API such as ZOOM is that all implementations should be compatible
 anyway; but knowing that the same code is running is reassuring.)
 
 The ZOOM module provides two enumerations (C<ZOOM::Error> and
-C<ZOOM::Event>), two utility functions C<diag_str()> and C<event()> in
-the C<ZOOM> package itself, and eight classes:
+C<ZOOM::Event>), three utility functions C<diag_str()>, C<event_str()>
+and C<event()> in the C<ZOOM> package itself, and eight classes:
 C<ZOOM::Exception>,
 C<ZOOM::Options>,
 C<ZOOM::Connection>,
@@ -96,6 +96,14 @@ or
 C<ZOOM::Connection::errcode()>,
 irrespective of whether it is a member of the C<ZOOM::Error>
 enumeration or drawn from the BIB-1 diagnostic set.
+
+=head2 ZOOM::event_str()
+
+ $msg = ZOOM::event_str(ZOOM::Event::RECV_APDU);
+
+Returns a human-readable English-language string corresponding to the
+event code that is its own parameter.  This works for any value of the
+C<ZOOM::Event> enumeration.
 
 =head2 ZOOM::event()
 
