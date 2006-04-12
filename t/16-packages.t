@@ -1,4 +1,4 @@
-# $Id: 16-packages.t,v 1.11 2006-04-12 12:23:02 mike Exp $
+# $Id: 16-packages.t,v 1.12 2006-04-12 12:30:09 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 16-packages.t'
@@ -130,7 +130,6 @@ sub dropdb {
     my $p = Net::Z3950::ZOOM::connection_package($conn, $o);
     # No need to keep ok()ing this, or checking the option-setting
     Net::Z3950::ZOOM::package_option_set($p, databaseName => $dbname);
-
     Net::Z3950::ZOOM::package_send($p, "drop");
     my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
     $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
