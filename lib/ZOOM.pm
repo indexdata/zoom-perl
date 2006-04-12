@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.32 2006-04-11 16:27:01 mike Exp $
+# $Id: ZOOM.pm,v 1.33 2006-04-12 12:00:48 mike Exp $
 
 use strict;
 use warnings;
@@ -94,12 +94,10 @@ sub diag_str {
     return Net::Z3950::ZOOM::diag_str($code);
 }
 
-### Undocumented
 sub event_str {
     return Net::Z3950::ZOOM::event_str(@_);
 }
 
-### Undocumented
 sub event {
     my($connsref) = @_;
 
@@ -301,7 +299,7 @@ sub new {
 	if @options;
 
     my $_conn = Net::Z3950::ZOOM::connection_create($_opts);
-    Net::Z3950::ZOOM::connection_connect($_conn, $host, $port);
+    Net::Z3950::ZOOM::connection_connect($_conn, $host, $port || 0);
     my $conn = bless {
 	host => $host,
 	port => $port,
@@ -459,7 +457,6 @@ sub package {
     return _new ZOOM::Package($this, $options, $_p);
 }
 
-### Undocumented
 sub last_event {
     my $this = shift();
 
