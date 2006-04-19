@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.39 2006-04-06 12:50:41 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.40 2006-04-19 20:11:21 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -547,9 +547,10 @@ ZOOM_event(conns)
 		/*printf("* n = %d\n", n);*/
 		for (i = 0; i < n; i++) {
 		    SV **connp = av_fetch((AV*) realconns, i, (I32) 0);
+		    SV *conn, *sv;
 		    /*printf("* %d of %d: connp = %p\n", (int) i, (int) n,connp);*/
 		    assert(connp != 0);
-		    SV *conn = *connp;
+		    conn = *connp;
 		    /*printf("* conn = %p\n", conn);*/
 		    /*
 		     * From here on, the tests and assertions seem to
@@ -563,11 +564,9 @@ ZOOM_event(conns)
 		    /*printf("* passed assert(isa(ZOOM_connection))\n");*/
 		    assert(SvROK(conn));
 		    /*printf("* passed assert SvROK()\n");*/
-		    SV *sv = (SV*) SvRV(conn);
+		    sv = (SV*) SvRV(conn);
 		    /*printf("* sv = %p\n", sv);*/
-		    IV tmp = SvIV(sv);
-		    /*printf("* tmp = %d\n", tmp);	*/
-		    cs[i] = INT2PTR(ZOOM_connection, tmp);
+		    cs[i] = INT2PTR(ZOOM_connection, SvIV(sv));
 		    /*printf("got cs[%d] of %d = %p\n", (int) i, (int) n, cs[i]);*/
 		}
 		RETVAL = ZOOM_event((int) n, cs);
