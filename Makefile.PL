@@ -1,4 +1,4 @@
-# $Id: Makefile.PL,v 1.6 2005-12-13 12:31:58 mike Exp $
+# $Id: Makefile.PL,v 1.7 2006-04-19 20:11:03 mike Exp $
 
 use 5.008;
 use ExtUtils::MakeMaker;
@@ -32,4 +32,6 @@ WriteMakefile(
     INC               => $yazinc, # e.g., '-I/usr/include/other'
 	# Un-comment this if you add C files to link with later:
     # OBJECT            => '$(O_FILES)', # link all the C files too
+# Use this to test for illegal code that GCC stupidly permits by default:
+#   OPTIMIZE          => "-Wdeclaration-after-statement"
 );
