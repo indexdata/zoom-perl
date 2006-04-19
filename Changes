@@ -1,8 +1,8 @@
-$Id: Changes,v 1.29 2006-04-19 20:07:24 mike Exp $
+$Id: Changes,v 1.30 2006-04-19 20:12:02 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
-1.06  IN PROGRESS
+1.06  Wed Apr 19 21:11:52 BST 2006
 	- Avoid mixed statement/declaration in ZOOM.xs.  *sigh*  Why
 	  the heck GCC allows this by default I will never understand.
 	- Add (commented out) OPTIMIZE option to Makefile.PL, to turn
