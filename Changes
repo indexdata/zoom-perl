@@ -1,8 +1,8 @@
-$Id: Changes,v 1.31 2006-05-11 16:44:24 mike Exp $
+$Id: Changes,v 1.32 2006-05-11 16:45:51 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
-1.07  Thu May 11 17:44:11 BST 2006
+1.07  Thu May 11 17:45:37 BST 2006
 	- Makefile.PL checks for at least version 2.1.11 of YAZ, and
 	  refuses to build if it's not present.  Thanks to "gregor"
 	  (an otherwise anonymous CPAN tester) for notifying me of the
