@@ -1,4 +1,4 @@
-# $Id: Makefile.PL,v 1.9 2006-05-11 16:45:04 mike Exp $
+# $Id: Makefile.PL,v 1.10 2006-05-11 21:40:29 mike Exp $
 
 use 5.008;
 use ExtUtils::MakeMaker;
@@ -16,7 +16,7 @@ will also need to install "libyaz-dev" in order to build this module.
 }
 
 chomp($yazver);
-check_version($yazver, "2.0.11");
+check_version($yazver, "2.1.11");
 
 # For Windows use
 # $yazinc = '-Ic:\yaz\include'
