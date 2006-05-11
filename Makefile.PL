@@ -1,4 +1,4 @@
-# $Id: Makefile.PL,v 1.8 2006-05-11 16:43:40 mike Exp $
+# $Id: Makefile.PL,v 1.9 2006-05-11 16:45:04 mike Exp $
 
 use 5.008;
 use ExtUtils::MakeMaker;
@@ -46,14 +46,7 @@ sub check_version {
     my($got, $want) = @_;
 
     my($gmajor, $gminor, $gtrivial) = ($got =~ /(\d+)\.(\d+)\.(\d+)/);
-    print "gmajor=$gmajor\n";
-    print "gminor=$gminor\n";
-    print "gtrivial=$gtrivial\n";
     my($wmajor, $wminor, $wtrivial) = ($want =~ /(\d+)\.(\d+)\.(\d+)/);
-    print "wmajor=$wmajor\n";
-    print "wminor=$wminor\n";
-    print "wtrivial=$wtrivial\n";
-
     if (($gmajor < $wmajor) ||
 	($gmajor == $wmajor && $gminor < $wminor) ||
 	($gmajor == $wmajor && $gminor == $wminor && $gtrivial < $wtrivial)) {
