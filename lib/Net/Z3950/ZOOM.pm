@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.20 2006-05-11 16:35:54 mike Exp $
+# $Id: ZOOM.pm,v 1.21 2006-05-11 21:40:15 mike Exp $
 
 package Net::Z3950::ZOOM; 
 
@@ -6,7 +6,7 @@ use 5.008;
 use strict;
 use warnings;
 
-our $VERSION = '1.07';
+our $VERSION = '1.08';
 
 require XSLoader;
 XSLoader::load('Net::Z3950::ZOOM', $VERSION);
@@ -16,7 +16,7 @@ my $version = Net::Z3950::ZOOM::yaz_version($vs, $ss);
 if ($version < 0x02010B && ! -f "/tmp/ignore-ZOOM-YAZ-version-mismatch") {
     warn <<__EOT__;
 *** WARNING!
-ZOOM-Perl requires at least version 2.0.11 of YAZ, but is currently
+ZOOM-Perl requires at least version 2.1.11 of YAZ, but is currently
 running against only version $vs (sys-string '$ss').
 Some things may not work.
 __EOT__
