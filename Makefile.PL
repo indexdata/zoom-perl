@@ -1,17 +1,22 @@
-# $Id: Makefile.PL,v 1.7 2006-04-19 20:11:03 mike Exp $
+# $Id: Makefile.PL,v 1.8 2006-05-11 16:43:40 mike Exp $
 
 use 5.008;
 use ExtUtils::MakeMaker;
+use strict;
 
+my $yazver = `yaz-config --version`;
 my $yazinc = `yaz-config --cflags threads`;
 my $yazlibs = `yaz-config --libs threads`;
-if (!$yazinc || !$yazlibs) {
+if (!$yazver || !$yazinc || !$yazlibs) {
     die qq[
 ERROR: Unable to call script: yaz-config
 If you are using a YAZ installation from the Debian package "yaz", you
 will also need to install "libyaz-dev" in order to build this module.
 ];
 }
+
+chomp($yazver);
+check_version($yazver, "2.0.11");
 
 # For Windows use
 # $yazinc = '-Ic:\yaz\include'
@@ -22,7 +27,7 @@ will also need to install "libyaz-dev" in order to build this module.
 WriteMakefile(
     NAME              => 'Net::Z3950::ZOOM',
     VERSION_FROM      => 'lib/Net/Z3950/ZOOM.pm', # finds $VERSION
-    PREREQ_PM         => { MARC::Record => 1.38 }, # e.g., Module::Name => 1.1
+    PREREQ_PM         => { "MARC::Record" => 1.38 },
     ($] >= 5.005 ?     ## Add these new keywords supported since 5.005
       (ABSTRACT_FROM  => 'lib/Net/Z3950/ZOOM.pm', # retrieve abstract from module
        AUTHOR         => 'Mike Taylor <mike@>') : ()),
@@ -35,3 +40,28 @@ WriteMakefile(
 # Use this to test for illegal code that GCC stupidly permits by default:
 #   OPTIMIZE          => "-Wdeclaration-after-statement"
 );
+
+
+sub check_version {
+    my($got, $want) = @_;
+
+    my($gmajor, $gminor, $gtrivial) = ($got =~ /(\d+)\.(\d+)\.(\d+)/);
+    print "gmajor=$gmajor\n";
+    print "gminor=$gminor\n";
+    print "gtrivial=$gtrivial\n";
+    my($wmajor, $wminor, $wtrivial) = ($want =~ /(\d+)\.(\d+)\.(\d+)/);
+    print "wmajor=$wmajor\n";
+    print "wminor=$wminor\n";
+    print "wtrivial=$wtrivial\n";
+
+    if (($gmajor < $wmajor) ||
+	($gmajor == $wmajor && $gminor < $wminor) ||
+	($gmajor == $wmajor && $gminor == $wminor && $gtrivial < $wtrivial)) {
+	print <<__EOT__;
+*** WARNING!
+ZOOM-Perl requires at least version $want of YAZ,
+but is currently you only have version $got.
+__EOT__
+	exit 1;
+    }
+}
