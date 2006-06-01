@@ -1,4 +1,4 @@
-$Id: README,v 1.5 2006-04-07 12:00:31 mike Exp $
+$Id: README,v 1.6 2006-06-01 08:29:24 marc Exp $
 
 The Net::Z3950::ZOOM, ZOOM and Net::Z3950 modules
 =================================================
@@ -33,6 +33,13 @@ To install this module type the following:
    make
    make test
    make install
+
+
+DEBIAN PACKAGES
+
+To build Debian packages issue:
+
+   dh-make-perl --build
 
 
 DEPENDENCIES
