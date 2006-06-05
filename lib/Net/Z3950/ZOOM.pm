@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.21 2006-05-11 21:40:15 mike Exp $
+# $Id: ZOOM.pm,v 1.22 2006-06-05 16:36:24 mike Exp $
 
 package Net::Z3950::ZOOM; 
 
@@ -6,7 +6,7 @@ use 5.008;
 use strict;
 use warnings;
 
-our $VERSION = '1.08';
+our $VERSION = '1.09';
 
 require XSLoader;
 XSLoader::load('Net::Z3950::ZOOM', $VERSION);
