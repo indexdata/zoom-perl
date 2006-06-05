@@ -1,4 +1,4 @@
-# $Id: MANIFEST,v 1.28 2006-04-12 12:20:11 mike Exp $
+# $Id: MANIFEST,v 1.29 2006-06-05 16:35:49 mike Exp $
 
 Changes
 Makefile.PL
@@ -45,3 +45,4 @@ samples/zoom/zoomtst1.pl
 samples/zoom/zoomtst3.pl
 samples/zoom/async.pl
 samples/zoom/trivial-async.pl
+samples/zoom/update.pl
