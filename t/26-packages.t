@@ -1,4 +1,4 @@
-# $Id: 26-packages.t,v 1.7 2006-04-12 12:29:49 mike Exp $
+# $Id: 26-packages.t,v 1.8 2006-06-07 09:58:56 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 26-packages.t'
@@ -191,3 +191,13 @@ sub maybe_error {
 	return (0, undef, undef);
     }
 }
+
+
+# To investigate the set of databases created, use Explain Classic:
+#
+#	$ yaz-client -u admin/fish test.indexdata.com:2118/IR-Explain-1
+#	Z> find @attr exp1 1=1 databaseinfo
+#	Z> format xml
+#	Z> show 3
+#
+# It seems that Explain still knows about dropped databases.
