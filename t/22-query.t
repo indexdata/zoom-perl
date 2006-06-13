@@ -1,11 +1,11 @@
-# $Id: 22-query.t,v 1.6 2005-12-22 09:25:14 mike Exp $
+# $Id: 22-query.t,v 1.7 2006-06-13 16:14:58 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 22-query.t'
 
 use strict;
 use warnings;
-use Test::More tests => 32;
+use Test::More tests => 41;
 BEGIN { use_ok('ZOOM') };
 
 #ZOOM::Log::init_level(ZOOM::Log::mask_str("zoom"));
@@ -82,12 +82,27 @@ ok($@ && $@->isa("ZOOM::Exception") &&
    $@->code() == ZOOM::Error::CQL_TRANSFORM && $@->diagset() eq "ZOOM",
    "can't make CQL2RPN query: error " . $@->code());
 
-# Finally, do a successful client-compiled CQL search
+# Do a successful client-compiled CQL search
 ok(1, "[no need to create empty query]");
 $conn->option(cqlfile => "samples/cql/pqf.properties");
 eval { $q = new ZOOM::Query::CQL2RPN('title=utah and description=epicenter',
 				     $conn) };
 ok(!$@, "created CQL2RPN query: \@=$@");
+check_record($conn, $q);
+$q->destroy();
+
+# Client-side compiled CCL: this will fail due to lack of config-file
+ok(1, "[no need to create empty query]");
+eval { $q = new ZOOM::Query::CCL2RPN('ti=utah and ab=epicenter', $conn) };
+ok($@ && $@->isa("ZOOM::Exception") &&
+   $@->code() == ZOOM::Error::CCL_CONFIG && $@->diagset() eq "ZOOM",
+   "can't make CCL2RPN query: error " . $@->code());
+
+# Do a successful client-compiled CCL search
+ok(1, "[no need to create empty query]");
+$conn->option(cclfile => "samples/ccl/default.bib");
+eval { $q = new ZOOM::Query::CCL2RPN('ti=utah and ab=epicenter', $conn) };
+ok(!$@, "created CCL2RPN query: \@=$@");
 check_record($conn, $q);
 $q->destroy();
 

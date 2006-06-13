@@ -1,11 +1,11 @@
-# $Id: 12-query.t,v 1.5 2005-12-22 09:23:52 mike Exp $
+# $Id: 12-query.t,v 1.6 2006-06-13 16:15:12 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 12-query.t'
 
 use strict;
 use warnings;
-use Test::More tests => 32;
+use Test::More tests => 41;
 BEGIN { use_ok('Net::Z3950::ZOOM') };
 
 # Net::Z3950::ZOOM::yaz_log_init_level(Net::Z3950::ZOOM::yaz_log_mask_str("zoom"));
@@ -90,7 +90,7 @@ ok($res < 0 &&
    "can't make CQL2RPN query: error " . $errcode);
 Net::Z3950::ZOOM::query_destroy($q);
 
-# Finally, do a successful client-compiled CQL search
+# Do a successful client-compiled CQL search
 $q = Net::Z3950::ZOOM::query_create();
 ok(defined $q, "create empty query");
 Net::Z3950::ZOOM::connection_option_set($conn, cqlfile =>
@@ -99,6 +99,32 @@ $res = Net::Z3950::ZOOM::query_cql2rpn($q,
 				       'title=utah and description=epicenter',
 				       $conn);
 ok($res == 0, "created CQL2RPN query");
+check_record($conn, $q);
+Net::Z3950::ZOOM::query_destroy($q);
+
+# Client-side compiled CCL: this will fail due to lack of qualifier-file
+$q = Net::Z3950::ZOOM::query_create();
+ok(defined $q, "create empty query");
+$res = Net::Z3950::ZOOM::query_ccl2rpn($q,
+				       'ti=utah and ab=epicenter',
+				       $conn);
+$errcode = Net::Z3950::ZOOM::connection_error_x($conn, $errmsg, $addinfo,
+						$diagset);
+ok($res < 0 &&
+   $errcode == Net::Z3950::ZOOM::ERROR_CCL_CONFIG &&
+   $diagset eq "ZOOM",
+   "can't make CCL2RPN query: error " . $errcode);
+Net::Z3950::ZOOM::query_destroy($q);
+
+# Do a successful client-compiled CCL search
+$q = Net::Z3950::ZOOM::query_create();
+ok(defined $q, "create empty query");
+Net::Z3950::ZOOM::connection_option_set($conn, cclfile =>
+					"samples/ccl/default.bib");
+$res = Net::Z3950::ZOOM::query_ccl2rpn($q,
+				       'ti=utah and ab=epicenter',
+				       $conn);
+ok($res == 0, "created CCL2RPN query");
 check_record($conn, $q);
 Net::Z3950::ZOOM::query_destroy($q);
 
