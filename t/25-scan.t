@@ -1,11 +1,11 @@
-# $Id: 25-scan.t,v 1.7 2005-12-21 00:43:54 mike Exp $
+# $Id: 25-scan.t,v 1.8 2006-06-13 16:44:21 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 25-scan.t'
 
 use strict;
 use warnings;
-use Test::More tests => 81;
+use Test::More tests => 87;
 
 BEGIN { use_ok('ZOOM') };
 
@@ -71,6 +71,18 @@ ok(defined $term,
 $ss->destroy();
 ok(1, "destroyed third scanset");
 
+$conn->option(cclfile => "samples/ccl/default.bib");
+($ss, $n) = scan($conn, 1, new ZOOM::Query::CCL2RPN('ti=w', $conn), 4);
+# Get last term and use it as seed for next scan
+($term, $occ) = $ss->term($n-1);
+ok($ss->option("position") == 1,
+   "seed-term is start of returned list");
+ok(defined $term,
+   "got last title term '$term' to use as seed");
+
+$ss->destroy();
+ok(1, "destroyed fourth scanset");
+
 # We want the seed-term to be in "position zero", i.e. just before the start
 $conn->option(position => 0);
 ($ss, $n) = scan($conn, 0, "\@attr 1=4 $term", 2);
@@ -83,7 +95,7 @@ ok($ss->option("position") eq "fruit",
    "option setting/getting works");
 
 $ss->destroy();
-ok(1, "destroyed fourth scanset");
+ok(1, "destroyed fifth scanset");
 
 # Some more testing still to do: see comment in "15-scan.t"
 

@@ -1,8 +1,22 @@
-$Id: Changes,v 1.34 2006-06-05 16:34:40 mike Exp $
+$Id: Changes,v 1.35 2006-06-13 16:44:20 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
 1.09  [IN PROGRESS]
+	- Add new function Net::Z3950::ZOOM::query_ccl2rpn(), for
+	  client-side CCL compilation.
+	- Add new ZOOM::Query::CCL2RPN class, encapsulating CCL
+	  compiler functionality as a Query subclass.  This allows
+	  client-side CCL to be used for both search and scan.
+	- Add two new error-codes, CCL_CONFIG and CCL_PARSE,
+	  returned by the client-side CCL facilities.
+	- Supply a sample CCL profile file: samples/ccl/default.bib,
+	  copied from the same-named file distributed with YAZ.
+	- The test-scripts t/12-query.t and t/22-query.t are extended
+	  to also test client-side CCL searching.
+	- The test-scripts t/15-scan.t and t/25-scan.t are extended
+	  to also test client-side CCL scanning.
+	- Documentation updated to describe use of CCL.
 	- Add a nice, simple update client: samples/zoom/update.pl
 
 1.08  Thu May 11 22:40:41 BST 2006

@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.22 2006-06-05 16:36:24 mike Exp $
+# $Id: ZOOM.pm,v 1.23 2006-06-13 16:44:21 mike Exp $
 
 package Net::Z3950::ZOOM; 
 
@@ -13,10 +13,10 @@ XSLoader::load('Net::Z3950::ZOOM', $VERSION);
 
 my($vs, $ss) = ("x" x 100, "x" x 100); # allocate space for these strings
 my $version = Net::Z3950::ZOOM::yaz_version($vs, $ss);
-if ($version < 0x02010B && ! -f "/tmp/ignore-ZOOM-YAZ-version-mismatch") {
+if ($version < 0x020115 && ! -f "/tmp/ignore-ZOOM-YAZ-version-mismatch") {
     warn <<__EOT__;
 *** WARNING!
-ZOOM-Perl requires at least version 2.1.11 of YAZ, but is currently
+ZOOM-Perl requires at least version 2.1.21 of YAZ, but is currently
 running against only version $vs (sys-string '$ss').
 Some things may not work.
 __EOT__
@@ -40,6 +40,8 @@ sub ERROR_UNSUPPORTED_QUERY { 10009 }
 sub ERROR_INVALID_QUERY { 10010 }
 sub ERROR_CQL_PARSE { 10011 }
 sub ERROR_CQL_TRANSFORM { 10012 }
+sub ERROR_CCL_CONFIG { 10013 }
+sub ERROR_CCL_PARSE { 10014 }
 
 # Event types, as returned from connection_last_event()
 sub EVENT_NONE { 0 }

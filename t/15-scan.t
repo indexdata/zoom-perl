@@ -1,11 +1,11 @@
-# $Id: 15-scan.t,v 1.9 2005-12-21 00:43:54 mike Exp $
+# $Id: 15-scan.t,v 1.10 2006-06-13 16:44:21 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 15-scan.t'
 
 use strict;
 use warnings;
-use Test::More tests => 81;
+use Test::More tests => 87;
 
 BEGIN { use_ok('Net::Z3950::ZOOM') };
 
@@ -77,6 +77,22 @@ ok(defined $term && $len eq length($term),
 Net::Z3950::ZOOM::scanset_destroy($ss);
 ok(1, "destroyed third scanset");
 
+# Now using CCL
+Net::Z3950::ZOOM::connection_option_set($conn, cclfile =>
+					"samples/ccl/default.bib");
+$q = Net::Z3950::ZOOM::query_create();
+Net::Z3950::ZOOM::query_ccl2rpn($q, 'ti=w', $conn);
+($ss, $n) = scan($conn, 1, $q, 4);
+# Get last term and use it as seed for next scan
+$term = Net::Z3950::ZOOM::scanset_term($ss, $n-1, $occ, $len);
+ok(Net::Z3950::ZOOM::scanset_option_get($ss, "position") == 1,
+   "seed-term is start of returned list");
+ok(defined $term && $len eq length($term),
+   "got last title term '$term' to use as seed");
+
+Net::Z3950::ZOOM::scanset_destroy($ss);
+ok(1, "destroyed fourth scanset");
+
 # We want the seed-term to be in "position zero", i.e. just before the start
 Net::Z3950::ZOOM::connection_option_set($conn, position => 0);
 ($ss, $n) = scan($conn, 0, "\@attr 1=4 $term", 2);
@@ -89,7 +105,7 @@ ok(Net::Z3950::ZOOM::scanset_option_get($ss, "position") eq "fruit",
    "option setting/getting works");
 
 Net::Z3950::ZOOM::scanset_destroy($ss);
-ok(1, "destroyed fourth scanset");
+ok(1, "destroyed fifth scanset");
 
 # There is no obvious use for scanset_option_set(), and little to be
 # done with scanset_option_get(); and I can't find a server that

@@ -1,4 +1,4 @@
-# $Id: ZOOM.pod,v 1.35 2006-04-12 12:03:10 mike Exp $
+# $Id: ZOOM.pod,v 1.36 2006-06-13 16:44:21 mike Exp $
 
 use strict;
 use warnings;
@@ -50,12 +50,13 @@ C<ZOOM::Record>,
 C<ZOOM::ScanSet>
 and
 C<ZOOM::Package>.
-Of these, the Query class is abstract, and has three concrete
+Of these, the Query class is abstract, and has four concrete
 subclasses:
 C<ZOOM::Query::CQL>,
-C<ZOOM::Query::PQF>
+C<ZOOM::Query::PQF>,
+C<ZOOM::Query::CQL2RPN>
 and
-C<ZOOM::Query::CQL2RPN>.
+C<ZOOM::Query::CCL2RPN>.
 Finally, it also provides a
 C<ZOOM::Query::Log>
 module which supplies a useful general-purpose logging facility.
@@ -1020,6 +1021,21 @@ relations and modifiers into Type-1 query attributes.  An example CQL
 configuration file is included in the ZOOM-Perl distribution, in the
 file C<samples/cql/pqf.properties>
 
+=item ZOOM::Query::CCL2RPN
+
+Implements CCL by compiling it on the client-side into a Z39.50 Type-1
+(RPN) query, and sending that.  Because the compilation is done on the
+client side, a configuration file is required to direct the mapping of
+CCL constructs such as index names and boolean operators into Type-1
+query attributes.  An example CCL configuration file is included in
+the ZOOM-Perl distribution, in the file C<samples/ccl/default.bib>
+
+CCL is syntactically very similar to CQL, but much looser.  While CQL
+is an entirely precise language in which each possible query has
+rigorously defined semantics, and is thus suitable for transfer as
+part of a protocol, CCL is best deployed as a human-facing UI
+language.
+
 =back
 
 See the description of the C<Query> class in the ZOOM Abstract
@@ -1049,6 +1065,13 @@ configuration file that directs the translations into RPN; and second,
 if compilation fails, then diagnostic information is cached in the
 Connection and be retrieved using C<$conn-E<gt>errcode()> and related
 methods.
+
+ $conn->option(cclfile => "samples/ccl/default.bib");
+ $q = new ZOOM::Query::CCL2RPN('ti=dinosaur', $conn);
+
+For the C<ZOOM::Query::CQL2RPN> subclass, too, the Connection must be
+passed into the constructor, for the same reasons as when client-side
+CQL compilation is used.
 
 =head4 sortby()
 
@@ -1226,6 +1249,10 @@ C<TIMEOUT>,
 C<UNSUPPORTED_PROTOCOL>,
 C<UNSUPPORTED_QUERY>,
 C<INVALID_QUERY>,
+C<CQL_PARSE>,
+C<CQL_TRANSFORM>,
+C<CCL_CONFIG>,
+C<CCL_PARSE>,
 C<CREATE_QUERY>,
 C<QUERY_CQL>,
 C<QUERY_PQF>,

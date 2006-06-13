@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.33 2006-04-12 12:00:48 mike Exp $
+# $Id: ZOOM.pm,v 1.34 2006-06-13 16:44:21 mike Exp $
 
 use strict;
 use warnings;
@@ -41,6 +41,8 @@ sub UNSUPPORTED_QUERY { Net::Z3950::ZOOM::ERROR_UNSUPPORTED_QUERY }
 sub INVALID_QUERY { Net::Z3950::ZOOM::ERROR_INVALID_QUERY }
 sub CQL_PARSE { Net::Z3950::ZOOM::ERROR_CQL_PARSE }
 sub CQL_TRANSFORM { Net::Z3950::ZOOM::ERROR_CQL_TRANSFORM }
+sub CCL_CONFIG { Net::Z3950::ZOOM::ERROR_CCL_CONFIG }
+sub CCL_PARSE { Net::Z3950::ZOOM::ERROR_CCL_PARSE }
 # The following are added specifically for this OO interface
 sub CREATE_QUERY { 20001 }
 sub QUERY_CQL { 20002 }
@@ -536,6 +538,26 @@ sub new {
 	or ZOOM::_oops(ZOOM::Error::CREATE_QUERY);
     # check() throws the exception we want; but we only want it on failure!
     Net::Z3950::ZOOM::query_cql2rpn($q, $string, $conn->_conn()) == 0
+	or $conn->_check();
+
+    return bless {
+	_query => $q,
+    }, $class;
+}
+
+
+# It's distressing how very similar this is to CQL2RPN
+package ZOOM::Query::CCL2RPN;
+our @ISA = qw(ZOOM::Query);
+
+sub new {
+    my $class = shift();
+    my($string, $conn) = @_;
+
+    my $q = Net::Z3950::ZOOM::query_create()
+	or ZOOM::_oops(ZOOM::Error::CREATE_QUERY);
+    # check() throws the exception we want; but we only want it on failure!
+    Net::Z3950::ZOOM::query_ccl2rpn($q, $string, $conn->_conn()) == 0
 	or $conn->_check();
 
     return bless {
