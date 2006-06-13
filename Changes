@@ -1,8 +1,8 @@
-$Id: Changes,v 1.35 2006-06-13 16:44:20 mike Exp $
+$Id: Changes,v 1.36 2006-06-13 16:44:51 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
-1.09  [IN PROGRESS]
+1.09  Tue Jun 13 17:44:43 2006
 	- Add new function Net::Z3950::ZOOM::query_ccl2rpn(), for
 	  client-side CCL compilation.
 	- Add new ZOOM::Query::CCL2RPN class, encapsulating CCL
