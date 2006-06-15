@@ -1,4 +1,4 @@
-# $Id: 22-query.t,v 1.7 2006-06-13 16:14:58 mike Exp $
+# $Id: 22-query.t,v 1.8 2006-06-15 15:43:19 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 22-query.t'
@@ -87,7 +87,7 @@ ok(1, "[no need to create empty query]");
 $conn->option(cqlfile => "samples/cql/pqf.properties");
 eval { $q = new ZOOM::Query::CQL2RPN('title=utah and description=epicenter',
 				     $conn) };
-ok(!$@, "created CQL2RPN query: \@=$@");
+ok(!$@, "created CQL2RPN query");
 check_record($conn, $q);
 $q->destroy();
 
@@ -102,7 +102,7 @@ ok($@ && $@->isa("ZOOM::Exception") &&
 ok(1, "[no need to create empty query]");
 $conn->option(cclfile => "samples/ccl/default.bib");
 eval { $q = new ZOOM::Query::CCL2RPN('ti=utah and ab=epicenter', $conn) };
-ok(!$@, "created CCL2RPN query: \@=$@");
+ok(!$@, "created CCL2RPN query");
 check_record($conn, $q);
 $q->destroy();
 

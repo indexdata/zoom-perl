@@ -1,4 +1,4 @@
-# $Id: 15-scan.t,v 1.10 2006-06-13 16:44:21 mike Exp $
+# $Id: 15-scan.t,v 1.11 2006-06-15 15:45:48 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 15-scan.t'
@@ -78,10 +78,10 @@ Net::Z3950::ZOOM::scanset_destroy($ss);
 ok(1, "destroyed third scanset");
 
 # Now using CCL
-Net::Z3950::ZOOM::connection_option_set($conn, cclfile =>
-					"samples/ccl/default.bib");
 $q = Net::Z3950::ZOOM::query_create();
-Net::Z3950::ZOOM::query_ccl2rpn($q, 'ti=w', $conn);
+my($ccl_errcode, $ccl_errstr, $ccl_errpos) = (0, "", 0);
+Net::Z3950::ZOOM::query_ccl2rpn($q, 'ti=w', "ti u=4 s=pw",
+				$ccl_errcode, $ccl_errstr, $ccl_errpos);
 ($ss, $n) = scan($conn, 1, $q, 4);
 # Get last term and use it as seed for next scan
 $term = Net::Z3950::ZOOM::scanset_term($ss, $n-1, $occ, $len);

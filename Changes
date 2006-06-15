@@ -1,6 +1,11 @@
-$Id: Changes,v 1.36 2006-06-13 16:44:51 mike Exp $
+$Id: Changes,v 1.37 2006-06-15 15:43:13 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
+
+1.10  Thu Jun 15 16:42:47 BST 2006
+	- No functional changes, but use Adam's modified API to
+	  ZOOM_query_ccl2rpn().  This incompatible change means that
+	  RELEASE 1.09 WILL NOT BUILD against any recent YAZ.
 
 1.09  Tue Jun 13 17:44:43 2006
 	- Add new function Net::Z3950::ZOOM::query_ccl2rpn(), for

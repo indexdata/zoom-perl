@@ -1,7 +1,8 @@
-# $Id: ZOOM.pm,v 1.34 2006-06-13 16:44:21 mike Exp $
+# $Id: ZOOM.pm,v 1.35 2006-06-15 15:43:14 mike Exp $
 
 use strict;
 use warnings;
+use IO::File;
 use Net::Z3950::ZOOM;
 
 
@@ -52,6 +53,22 @@ sub CLONE { 20005 }
 sub PACKAGE { 20006 }
 sub SCANTERM { 20007 }
 sub LOGLEVEL { 20008 }
+
+# Separate space for CCL errors.  Great.
+package ZOOM::CCL::Error;
+sub OK { Net::Z3950::ZOOM::CCL_ERR_OK }
+sub TERM_EXPECTED { Net::Z3950::ZOOM::CCL_ERR_TERM_EXPECTED }
+sub RP_EXPECTED { Net::Z3950::ZOOM::CCL_ERR_RP_EXPECTED }
+sub SETNAME_EXPECTED { Net::Z3950::ZOOM::CCL_ERR_SETNAME_EXPECTED }
+sub OP_EXPECTED { Net::Z3950::ZOOM::CCL_ERR_OP_EXPECTED }
+sub BAD_RP { Net::Z3950::ZOOM::CCL_ERR_BAD_RP }
+sub UNKNOWN_QUAL { Net::Z3950::ZOOM::CCL_ERR_UNKNOWN_QUAL }
+sub DOUBLE_QUAL { Net::Z3950::ZOOM::CCL_ERR_DOUBLE_QUAL }
+sub EQ_EXPECTED { Net::Z3950::ZOOM::CCL_ERR_EQ_EXPECTED }
+sub BAD_RELATION { Net::Z3950::ZOOM::CCL_ERR_BAD_RELATION }
+sub TRUNC_NOT_LEFT { Net::Z3950::ZOOM::CCL_ERR_TRUNC_NOT_LEFT }
+sub TRUNC_NOT_BOTH { Net::Z3950::ZOOM::CCL_ERR_TRUNC_NOT_BOTH }
+sub TRUNC_NOT_RIGHT { Net::Z3950::ZOOM::CCL_ERR_TRUNC_NOT_RIGHT }
 
 # The "Event" package contains constants returned by last_event()
 package ZOOM::Event;
@@ -110,7 +127,7 @@ sub event {
 sub _oops {
     my($code, $addinfo, $diagset) = @_;
 
-    die new ZOOM::Exception($code, diag_str($code), $addinfo, $diagset);
+    die new ZOOM::Exception($code, undef, $addinfo, $diagset);
 }
 
 # ----------------------------------------------------------------------------
@@ -121,11 +138,18 @@ sub new {
     my $class = shift();
     my($code, $message, $addinfo, $diagset) = @_;
 
+    $diagset ||= "ZOOM";
+    if ($diagset eq "ZOOM") {
+	$message ||= ZOOM::diag_str($code);
+    } else {
+	# Should fill in messages for other diagsets, too.
+    }
+
     return bless {
 	code => $code,
 	message => $message,
 	addinfo => $addinfo,
-	diagset => $diagset || "ZOOM",
+	diagset => $diagset,
     }, $class;
 }
 
@@ -546,7 +570,7 @@ sub new {
 }
 
 
-# It's distressing how very similar this is to CQL2RPN
+# We have to work around the retarded ZOOM_query_ccl2rpn() API
 package ZOOM::Query::CCL2RPN;
 our @ISA = qw(ZOOM::Query);
 
@@ -556,9 +580,26 @@ sub new {
 
     my $q = Net::Z3950::ZOOM::query_create()
 	or ZOOM::_oops(ZOOM::Error::CREATE_QUERY);
-    # check() throws the exception we want; but we only want it on failure!
-    Net::Z3950::ZOOM::query_ccl2rpn($q, $string, $conn->_conn()) == 0
-	or $conn->_check();
+
+    my $config = $conn->option("cclqual");
+    if (!defined $config) {
+	my $cclfile = $conn->option("cclfile")
+	    or ZOOM::_oops(ZOOM::Error::CCL_CONFIG,
+			   "no 'cclqual' or 'cclfile' specified");
+	my $fh = new IO::File("<$cclfile")
+	    or ZOOM::_oops(ZOOM::Error::CCL_CONFIG,
+			   "can't open cclfile '$cclfile': $!");
+	$config = join("", <$fh>);
+	$fh->close();
+    }
+
+    my($ccl_errcode, $ccl_errstr, $ccl_errpos) = (0, "", 0);
+    if (Net::Z3950::ZOOM::query_ccl2rpn($q, $string, $config,
+					$ccl_errcode, $ccl_errstr,
+					$ccl_errpos) < 0) {
+	# We have no use for $ccl_errcode or $ccl_errpos
+	ZOOM::_oops(ZOOM::Error::CCL_PARSE, $ccl_errstr);
+    }
 
     return bless {
 	_query => $q,

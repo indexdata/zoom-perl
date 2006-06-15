@@ -1,4 +1,4 @@
-# $Id: 12-query.t,v 1.6 2006-06-13 16:15:12 mike Exp $
+# $Id: 12-query.t,v 1.7 2006-06-15 15:43:19 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 12-query.t'
@@ -102,18 +102,19 @@ ok($res == 0, "created CQL2RPN query");
 check_record($conn, $q);
 Net::Z3950::ZOOM::query_destroy($q);
 
-# Client-side compiled CCL: this will fail due to lack of qualifier-file
+# Client-side compiled CCL: this will fail due to incorrect syntax
 $q = Net::Z3950::ZOOM::query_create();
 ok(defined $q, "create empty query");
+my($ccl_errcode, $ccl_errstr, $ccl_errpos) = (0, "", 0);
+
+### change documentation
 $res = Net::Z3950::ZOOM::query_ccl2rpn($q,
-				       'ti=utah and ab=epicenter',
-				       $conn);
-$errcode = Net::Z3950::ZOOM::connection_error_x($conn, $errmsg, $addinfo,
-						$diagset);
+				       'ti=utah and',
+				       "ti u=4 s=pw\nab u=62 s=pw",
+				       $ccl_errcode, $ccl_errstr, $ccl_errpos);
 ok($res < 0 &&
-   $errcode == Net::Z3950::ZOOM::ERROR_CCL_CONFIG &&
-   $diagset eq "ZOOM",
-   "can't make CCL2RPN query: error " . $errcode);
+   $ccl_errcode == Net::Z3950::ZOOM::CCL_ERR_TERM_EXPECTED,
+   "can't make CCL2RPN query: error $ccl_errcode ($ccl_errstr)");
 Net::Z3950::ZOOM::query_destroy($q);
 
 # Do a successful client-compiled CCL search
@@ -123,7 +124,10 @@ Net::Z3950::ZOOM::connection_option_set($conn, cclfile =>
 					"samples/ccl/default.bib");
 $res = Net::Z3950::ZOOM::query_ccl2rpn($q,
 				       'ti=utah and ab=epicenter',
-				       $conn);
+				       "ti u=4 s=pw\nab u=62 s=pw",
+				       $ccl_errcode,
+				       $ccl_errstr,
+				       $ccl_errpos);
 ok($res == 0, "created CCL2RPN query");
 check_record($conn, $q);
 Net::Z3950::ZOOM::query_destroy($q);

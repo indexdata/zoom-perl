@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.41 2006-06-13 16:44:21 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.42 2006-06-15 15:43:13 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -327,10 +327,18 @@ ZOOM_query_cql2rpn(s, str, conn)
 	ZOOM_connection conn
 
 int
-ZOOM_query_ccl2rpn(s, str, conn)
+ZOOM_query_ccl2rpn(s, query_str, config, errcode, errstr, errpos)
 	ZOOM_query s
-	const char* str
-	ZOOM_connection conn
+	const char* query_str
+	const char* config
+	int &errcode
+	const char* &errstr
+	int &errpos
+	OUTPUT:
+		RETVAL
+		errcode
+		errstr
+		errpos
 
 int
 ZOOM_query_prefix(s, str)
