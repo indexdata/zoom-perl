@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.24 2006-06-15 13:21:30 mike Exp $
+# $Id: ZOOM.pm,v 1.25 2006-06-15 14:14:10 mike Exp $
 
 package Net::Z3950::ZOOM; 
 
@@ -55,6 +55,21 @@ sub EVENT_RECV_APDU { 7 }
 sub EVENT_RECV_RECORD { 8 }
 sub EVENT_RECV_SEARCH { 9 }
 sub EVENT_END { 10 }		# In YAZ 2.1.17 and later
+
+# CCL error-codes, which are in a different space from the ZOOM errors
+sub CCL_ERR_OK                { 0 }
+sub CCL_ERR_TERM_EXPECTED     { 1 }
+sub CCL_ERR_RP_EXPECTED       { 2 }
+sub CCL_ERR_SETNAME_EXPECTED  { 3 }
+sub CCL_ERR_OP_EXPECTED       { 4 }
+sub CCL_ERR_BAD_RP            { 5 }
+sub CCL_ERR_UNKNOWN_QUAL      { 6 }
+sub CCL_ERR_DOUBLE_QUAL       { 7 }
+sub CCL_ERR_EQ_EXPECTED       { 8 }
+sub CCL_ERR_BAD_RELATION      { 9 }
+sub CCL_ERR_TRUNC_NOT_LEFT   { 10 }
+sub CCL_ERR_TRUNC_NOT_BOTH   { 11 }
+sub CCL_ERR_TRUNC_NOT_RIGHT  { 12 }
 
 
 =head1 NAME
