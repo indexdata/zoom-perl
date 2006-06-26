@@ -1,10 +1,11 @@
-$Id: Changes,v 1.38 2006-06-19 08:14:16 mike Exp $
+$Id: Changes,v 1.39 2006-06-26 12:32:44 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
 1.11  [IN PROGRESS]
 	- Do not use "-Wdeclaration-after-statement" compiler option,
 	  since this supported only by GCC (and only recent versions).
+	- ### Better support/documentation for building on Windows.
 
 1.10  Thu Jun 15 16:42:47 BST 2006
 	- No functional changes, but use Adam's modified API to
