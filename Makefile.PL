@@ -1,4 +1,4 @@
-# $Id: Makefile.PL,v 1.13 2006-08-31 15:47:45 mike Exp $
+# $Id: Makefile.PL,v 1.14 2006-09-25 11:31:43 mike Exp $
 
 use 5.008;
 use ExtUtils::MakeMaker;
@@ -39,6 +39,7 @@ WriteMakefile(
     # OBJECT            => '$(O_FILES)', # link all the C files too
 # Use this to test for illegal code that GCC stupidly permits by default:
 #   OPTIMIZE          => "-Wdeclaration-after-statement -g -O0",
+    EXE_FILES    => [ 'samples/zoom/zselect' ],
 );
 
 
