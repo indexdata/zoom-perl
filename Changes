@@ -1,6 +1,10 @@
-$Id: Changes,v 1.40 2006-08-31 15:48:14 mike Exp $
+$Id: Changes,v 1.41 2006-09-25 11:32:05 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
+
+1.12  (IN PROGRESS)
+	- Include the useful example program samples/zoom/zselect,
+	  which is installed as part of "make install".
 
 1.11  Thu Aug 31 16:47:53 BST 2006
 	- Require YAZ version 2.1.17, which has important ZOOM-C
