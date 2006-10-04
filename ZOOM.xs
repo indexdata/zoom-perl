@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.42 2006-06-15 15:43:13 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.43 2006-10-04 17:14:12 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -520,8 +520,6 @@ ZOOM_package_option_set(p, key, val)
 	const char *	key
 	const char *	val
 
-# UNTESTED
-#
 # This has to be called with a single argument which is a _reference_
 # to an array -- rather than directly with an array, which is of
 # course identical to passing arbitrarily many arguments.  This is
@@ -587,10 +585,14 @@ ZOOM_event(conns)
 	OUTPUT:
 		RETVAL
 
-# UNTESTED
 int
 ZOOM_connection_last_event(cs)
 	ZOOM_connection	cs
+
+int
+ZOOM_connection_is_idle(cs)
+	ZOOM_connection	cs
+
 
 # ----------------------------------------------------------------------------
 # What follows is the YAZ logging API.  This is not strictly part of
