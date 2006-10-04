@@ -1,10 +1,13 @@
-$Id: Changes,v 1.41 2006-09-25 11:32:05 mike Exp $
+$Id: Changes,v 1.42 2006-10-04 17:12:00 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
 1.12  (IN PROGRESS)
 	- Include the useful example program samples/zoom/zselect,
 	  which is installed as part of "make install".
+	- Add ZOOM_connection_is_idle() and $conn->is_idle().
+	- Require YAZ version 2.1.35, which is the first to provide
+	  ZOOM_connection_is_idle().
 
 1.11  Thu Aug 31 16:47:53 BST 2006
 	- Require YAZ version 2.1.17, which has important ZOOM-C
