@@ -1,4 +1,4 @@
-# $Id: 2-ZOOM.t,v 1.9 2005-11-16 16:25:02 mike Exp $
+# $Id: 2-ZOOM.t,v 1.10 2006-10-10 16:50:38 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 2-ZOOM.t'
@@ -25,8 +25,7 @@ ok(!$@, "connection to '$host'");
 $conn->destroy();
 ok(1, "destroyed connection");
 
-my $options = new ZOOM::Options();
-eval { $conn = create ZOOM::Connection($options) };
+eval { $conn = create ZOOM::Connection() };
 ok(!$@, "unconnected connection object created");
 eval { $conn->connect($host, 0) };
 ok(!$@, "delayed connection to '$host'");
