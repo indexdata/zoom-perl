@@ -1,4 +1,4 @@
-$Id: Changes,v 1.42 2006-10-04 17:12:00 mike Exp $
+$Id: Changes,v 1.43 2006-10-10 16:52:30 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
@@ -8,6 +8,14 @@ Revision history for Perl extension Net::Z3950::ZOOM.
 	- Add ZOOM_connection_is_idle() and $conn->is_idle().
 	- Require YAZ version 2.1.35, which is the first to provide
 	  ZOOM_connection_is_idle().
+	- Fix bug in ZOOM::Connection class code that made the
+	  difficult to subclass -- when called as
+	  $class->SUPER::new(@_), the constructor blessed the new
+	  object into ZOOM::Connection rather than info the subclass.
+	- ZOOM::Connection::create() may now take either a single
+	  argument, which is a ZOOM::Options object, or any even
+	  number of argument (including zero), which are key => value
+	  pairs of options to set.
 
 1.11  Thu Aug 31 16:47:53 BST 2006
 	- Require YAZ version 2.1.17, which has important ZOOM-C
