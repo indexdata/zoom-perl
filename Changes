@@ -1,4 +1,4 @@
-$Id: Changes,v 1.43 2006-10-10 16:52:30 mike Exp $
+$Id: Changes,v 1.44 2006-10-10 17:03:31 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
@@ -16,6 +16,9 @@ Revision history for Perl extension Net::Z3950::ZOOM.
 	  argument, which is a ZOOM::Options object, or any even
 	  number of argument (including zero), which are key => value
 	  pairs of options to set.
+	- ZOOM::Connection::new(), having been refactored to use
+	  create(), can now also take a ZOOM::Options argument.
+		### These API changes need documenting.
 
 1.11  Thu Aug 31 16:47:53 BST 2006
 	- Require YAZ version 2.1.17, which has important ZOOM-C
