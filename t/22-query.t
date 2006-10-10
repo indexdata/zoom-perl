@@ -1,4 +1,4 @@
-# $Id: 22-query.t,v 1.8 2006-06-15 15:43:19 mike Exp $
+# $Id: 22-query.t,v 1.9 2006-10-10 16:58:14 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 22-query.t'
@@ -53,9 +53,10 @@ ok(1, "destroyed complex query");
 
 my $host = "indexdata.com/gils";
 my $conn;
-eval { $conn = new ZOOM::Connection($host, 0) };
+eval { $conn = new ZOOM::Connection($host, 0,
+				    preferredRecordSyntax => "usmarc") };
 ok(!$@, "connection to '$host'");
-$conn->option(preferredRecordSyntax => "usmarc");
+
 
 ok(1, "[no need to create empty query]");
 eval { $q = new ZOOM::Query::PQF('@and @attr 1=4 utah @attr 1=62 epicenter') };
