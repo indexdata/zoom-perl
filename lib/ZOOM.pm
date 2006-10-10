@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.37 2006-10-10 16:51:59 mike Exp $
+# $Id: ZOOM.pm,v 1.38 2006-10-10 17:02:27 mike Exp $
 
 use strict;
 use warnings;
@@ -314,25 +314,13 @@ sub new {
     my $class = shift();
     my($host, $port, @options) = @_;
 
-    my $_opts = Net::Z3950::ZOOM::options_create();
-    while (@options >= 2) {
-	my $key = shift(@options);
-	my $val = shift(@options);
-	Net::Z3950::ZOOM::options_set($_opts, $key, $val);
-    }
+    my $conn = $class->create(@options);
+    $conn->{host} = $host;
+    $conn->{port} = $port;
 
-    die "Odd number of options specified"
-	if @options;
-
-    my $_conn = Net::Z3950::ZOOM::connection_create($_opts);
-    Net::Z3950::ZOOM::connection_connect($_conn, $host, $port || 0);
-    my $conn = bless {
-	host => $host,
-	port => $port,
-	_conn => $_conn,
-    }, $class;
-
+    Net::Z3950::ZOOM::connection_connect($conn->_conn(), $host, $port || 0);
     $conn->_check();
+
     return $conn;
 }
 
@@ -377,11 +365,12 @@ sub create {
     }
 
     my $_conn = Net::Z3950::ZOOM::connection_create($_opts);
-    return bless {
+    my $conn = bless {
 	host => undef,
 	port => undef,
 	_conn => $_conn,
     }, $class;
+    return $conn;
 }
 
 sub error_x {
