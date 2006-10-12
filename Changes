@@ -1,8 +1,17 @@
-$Id: Changes,v 1.44 2006-10-10 17:03:31 mike Exp $
+$Id: Changes,v 1.45 2006-10-12 11:03:44 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
-1.12  (IN PROGRESS)
+1.13  (IN PROGRESS)
+	- ZOOM::Connection::create() may now take either a single
+	  argument, which is a ZOOM::Options object, or any even
+	  number of argument (including zero), which are key => value
+	  pairs of options to set.
+	- ZOOM::Connection::new(), having been refactored to use
+	  create(), can now also take a ZOOM::Options argument.
+		### These API changes need documenting.
+
+1.12  (NEVER PUBLICLY RELEASED; these changes are included in 1.13)
 	- Include the useful example program samples/zoom/zselect,
 	  which is installed as part of "make install".
 	- Add ZOOM_connection_is_idle() and $conn->is_idle().
@@ -12,13 +21,6 @@ Revision history for Perl extension Net::Z3950::ZOOM.
 	  difficult to subclass -- when called as
 	  $class->SUPER::new(@_), the constructor blessed the new
 	  object into ZOOM::Connection rather than info the subclass.
-	- ZOOM::Connection::create() may now take either a single
-	  argument, which is a ZOOM::Options object, or any even
-	  number of argument (including zero), which are key => value
-	  pairs of options to set.
-	- ZOOM::Connection::new(), having been refactored to use
-	  create(), can now also take a ZOOM::Options argument.
-		### These API changes need documenting.
 
 1.11  Thu Aug 31 16:47:53 BST 2006
 	- Require YAZ version 2.1.17, which has important ZOOM-C
