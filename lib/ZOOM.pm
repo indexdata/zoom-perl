@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.38 2006-10-10 17:02:27 mike Exp $
+# $Id: ZOOM.pm,v 1.39 2006-11-02 17:07:50 mike Exp $
 
 use strict;
 use warnings;
@@ -730,6 +730,16 @@ sub cache_reset {
 sub records {
     my $this = shift();
     my($start, $count, $return_records) = @_;
+
+    # If the request is out of range, ZOOM-C will currently (as of YAZ
+    # 2.1.38) no-op: it understandably refuses to build and send a
+    # known-bad APDU, but it doesn't set a diagnostic as it ought.  So
+    # for now, we do it here.
+    my $size = $this->size();
+    if ($start + $count-1 >= $size) {
+	# BIB-1 diagnostic 13 is "Present request out-of-range"
+	ZOOM::_oops(13, undef, "bib-1");
+    }
 
     my $raw = Net::Z3950::ZOOM::resultset_records($this->_rs(), $start, $count,
 						  $return_records);
