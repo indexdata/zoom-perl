@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.39 2006-11-02 17:07:50 mike Exp $
+# $Id: ZOOM.pm,v 1.40 2006-11-02 17:56:33 mike Exp $
 
 use strict;
 use warnings;
@@ -139,7 +139,7 @@ sub new {
     my($code, $message, $addinfo, $diagset) = @_;
 
     $diagset ||= "ZOOM";
-    if ($diagset eq "ZOOM") {
+    if (uc($diagset) eq "ZOOM" || uc($diagset) eq "BIB-1") {
 	$message ||= ZOOM::diag_str($code);
     } else {
 	# Should fill in messages for other diagsets, too.
@@ -738,7 +738,7 @@ sub records {
     my $size = $this->size();
     if ($start + $count-1 >= $size) {
 	# BIB-1 diagnostic 13 is "Present request out-of-range"
-	ZOOM::_oops(13, undef, "bib-1");
+	ZOOM::_oops(13, undef, "BIB-1");
     }
 
     my $raw = Net::Z3950::ZOOM::resultset_records($this->_rs(), $start, $count,
