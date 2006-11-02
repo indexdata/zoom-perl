@@ -1,4 +1,4 @@
-# $Id: 2-ZOOM.t,v 1.10 2006-10-10 16:50:38 mike Exp $
+# $Id: 2-ZOOM.t,v 1.11 2006-11-02 17:04:36 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 2-ZOOM.t'
@@ -18,7 +18,7 @@ ok($@ && $@->isa("ZOOM::Exception") &&
    $@->code() == ZOOM::Error::CONNECT && $@->addinfo() eq $host,
    "connection to non-existent host '$host' fails");
 
-$host = "indexdata.com/gils";
+$host = "bagel.indexdata.com/gils";
 eval { $conn = new ZOOM::Connection($host, 0) };
 ok(!$@, "connection to '$host'");
 

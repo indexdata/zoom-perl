@@ -1,4 +1,4 @@
-# $Id: 24-sorting.t,v 1.5 2005-11-18 17:53:16 mike Exp $
+# $Id: 24-sorting.t,v 1.6 2006-11-02 17:04:36 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 24-sorting.t'
@@ -10,7 +10,7 @@ use MARC::Record;
 
 BEGIN { use_ok('ZOOM') };
 
-my $host = "indexdata.com/gils";
+my $host = "bagel.indexdata.com/gils";
 my $conn;
 eval { $conn = new ZOOM::Connection($host, 0) };
 ok(!$@, "connection to '$host'");

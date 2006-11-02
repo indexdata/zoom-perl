@@ -1,4 +1,4 @@
-# $Id: 19-events.t,v 1.5 2006-04-12 12:07:32 mike Exp $
+# $Id: 19-events.t,v 1.6 2006-11-02 17:04:36 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 19-events.t'
@@ -17,7 +17,7 @@ my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
 my $options = Net::Z3950::ZOOM::options_create();
 Net::Z3950::ZOOM::options_set($options, async => 1);
 
-my $host = "indexdata.com/gils";
+my $host = "bagel.indexdata.com/gils";
 my $conn = Net::Z3950::ZOOM::connection_create($options);
 Net::Z3950::ZOOM::connection_connect($conn, $host, 0);
 $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);

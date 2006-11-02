@@ -1,4 +1,4 @@
-# $Id: 23-resultset.t,v 1.3 2005-11-07 15:48:25 mike Exp $
+# $Id: 23-resultset.t,v 1.4 2006-11-02 17:04:36 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 23-resultset.t'
@@ -8,7 +8,7 @@ use warnings;
 use Test::More tests => 23;
 BEGIN { use_ok('ZOOM') };
 
-my $host = "indexdata.com/gils";
+my $host = "bagel.indexdata.com/gils";
 my $conn;
 eval { $conn = new ZOOM::Connection($host, 0) };
 ok(!$@, "connection to '$host'");

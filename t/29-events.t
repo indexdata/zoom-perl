@@ -1,4 +1,4 @@
-# $Id: 29-events.t,v 1.2 2006-10-10 16:51:02 mike Exp $
+# $Id: 29-events.t,v 1.3 2006-11-02 17:04:36 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 19-events.t'
@@ -14,7 +14,7 @@ ok(ZOOM::event_str(ZOOM::Event::CONNECT) eq "connect",
 
 my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
 
-my $host = "indexdata.com/gils";
+my $host = "bagel.indexdata.com/gils";
 my $conn = create ZOOM::Connection(async => 1);
 eval { $conn->connect($host) };
 ok(!$@, "connection to '$host'");
