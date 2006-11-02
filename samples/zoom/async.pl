@@ -1,9 +1,9 @@
-# $Id: async.pl,v 1.1 2006-04-07 12:58:37 mike Exp $
+# $Id: async.pl,v 1.2 2006-11-02 17:48:26 mike Exp $
 #
 # See ../README for a description of this program.
 # perl -I../../blib/lib -I../../blib/arch async.pl <t1> [...] <tN> <query>
 # for example:
-# perl -I../../blib/lib -I../../blib/arch async.pl z3950.loc.gov:7090/Voyager bagel.indexdata.com:210/gils endeavor.flo.org:7090/Voyager mineral
+# perl -I../../blib/lib -I../../blib/arch async.pl z3950.loc.gov:7090/Voyager z3950.indexdata.com:210/gils endeavor.flo.org:7090/Voyager mineral
 
 use strict;
 use warnings;
@@ -11,7 +11,7 @@ use ZOOM;
 
 if (@ARGV < 2) {
     print STDERR "Usage: $0 target1 target2 ... targetN query\n";
-    print STDERR "	eg. $0 bagel.indexdata.dk/gils localhost:9999 fish\n";
+    print STDERR "	eg. $0 z3950.indexdata.dk/gils localhost:9999 fish\n";
     exit 1;
 }
 

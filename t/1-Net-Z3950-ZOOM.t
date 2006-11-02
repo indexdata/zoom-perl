@@ -1,4 +1,4 @@
-# $Id: 1-Net-Z3950-ZOOM.t,v 1.14 2006-11-02 17:04:36 mike Exp $
+# $Id: 1-Net-Z3950-ZOOM.t,v 1.15 2006-11-02 17:48:26 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 1-Net-Z3950-ZOOM.t'
@@ -19,7 +19,7 @@ $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
 ok($errcode == Net::Z3950::ZOOM::ERROR_CONNECT && $addinfo eq $host,
    "connection to non-existent host '$host' fails");
 
-$host = "bagel.indexdata.com/gils";
+$host = "z3950.indexdata.com/gils";
 $conn = Net::Z3950::ZOOM::connection_new($host, 0);
 $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
 ok($errcode == 0, "connection to '$host'");
@@ -84,7 +84,7 @@ my $data = Net::Z3950::ZOOM::record_get($rec, "render", $len);
 ok($data =~ /^245 +\$a ISOTOPIC DATES OF ROCKS AND MINERALS$/m,
    "rendered record has expected title");
 my $raw = Net::Z3950::ZOOM::record_get($rec, "raw", $len);
-ok($raw =~ /^00981n/, "raw record contains expected header");
+ok($raw =~ /^00966n/, "raw record contains expected header");
 
 Net::Z3950::ZOOM::resultset_destroy($rs);
 ok(1, "destroyed result-set");

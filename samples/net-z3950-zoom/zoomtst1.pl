@@ -1,4 +1,4 @@
-# $Id: zoomtst1.pl,v 1.2 2005-10-12 14:35:58 mike Exp $
+# $Id: zoomtst1.pl,v 1.3 2006-11-02 17:48:25 mike Exp $
 #
 # See ../README for a description of this program.
 # perl -I../../blib/lib -I../../blib/arch zoomtst1.pl <target> <query>
@@ -9,7 +9,7 @@ use Net::Z3950::ZOOM;
 
 if (@ARGV != 2) {
     print STDERR "Usage: $0 target query\n";
-    print STDERR "	eg. $0 bagel.indexdata.dk/gils computer\n";
+    print STDERR "	eg. $0 z3950.indexdata.dk/gils computer\n";
     exit 1;
 }
 

@@ -1,4 +1,4 @@
-# $Id: 12-query.t,v 1.8 2006-11-02 17:04:36 mike Exp $
+# $Id: 12-query.t,v 1.9 2006-11-02 17:48:26 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 12-query.t'
@@ -46,7 +46,7 @@ ok(1, "destroyed complex query");
 # no other uses of query objects -- but we need to establish a
 # connection for it to work on first.
 
-my $host = "bagel.indexdata.com/gils";
+my $host = "z3950.indexdata.com/gils";
 my $conn = Net::Z3950::ZOOM::connection_new($host, 0);
 my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
 $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);

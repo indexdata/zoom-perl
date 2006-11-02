@@ -1,4 +1,4 @@
-# $Id: 13-resultset.t,v 1.7 2006-11-02 17:04:36 mike Exp $
+# $Id: 13-resultset.t,v 1.8 2006-11-02 17:48:26 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 13-resultset.t'
@@ -10,7 +10,7 @@ BEGIN { use_ok('Net::Z3950::ZOOM') };
 
 my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
 
-my $host = "bagel.indexdata.com/gils";
+my $host = "z3950.indexdata.com/gils";
 my $conn = Net::Z3950::ZOOM::connection_new($host, 0);
 $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
 ok($errcode == 0, "connection to '$host'");

@@ -1,4 +1,4 @@
-$Id: Changes,v 1.46 2006-11-02 17:05:01 mike Exp $
+$Id: Changes,v 1.47 2006-11-02 17:48:25 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
@@ -13,7 +13,7 @@ Revision history for Perl extension Net::Z3950::ZOOM.
 	- ZOOM::ResultSet::record() throws a diagnostic if asked to
 	  retrieve records out of range for the result-set.
 	- All tests against indexdata.com are now explicitly against
-	  bagel.indexdata.com, as the identity of the former name has
+	  z3950.indexdata.com, as the identity of the former name has
 	  recently changed.
 
 1.12  (NEVER PUBLICLY RELEASED; these changes are included in 1.13)
