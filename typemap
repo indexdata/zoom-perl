@@ -1,4 +1,4 @@
-# $Id: typemap,v 1.6 2005-12-06 23:15:56 mike Exp $
+# $Id: typemap,v 1.7 2006-11-03 09:37:57 mike Exp $
 
 ZOOM_connection					T_PTROBJ
 ZOOM_connection *				T_PTROBJ
@@ -52,7 +52,7 @@ void ( * __func ) ( int __status, void * __arg )	T_PTROBJ
 void ( * __func ) ( void )			T_PTROBJ
 void **						T_PTROBJ
 struct datachunk				T_DATACHUNK
-#############################################################################
+# ---------------------------------------------------------------------------
 INPUT
 T_OPAQUE_STRUCT
 	if (sv_derived_from($arg, \"${ntype}\")) {
@@ -70,7 +70,7 @@ T_OPAQUECHAR
 	{ unsigned _unused_len;
 	$var = ($type) SvPV($arg, _unused_len); }
 
-#############################################################################
+# ---------------------------------------------------------------------------
 OUTPUT
 T_OPAQUE_STRUCT
 	sv_setref_pvn($arg, \"${ntype}\", (char *)&$var, sizeof($var));
