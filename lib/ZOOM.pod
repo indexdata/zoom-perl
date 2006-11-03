@@ -1,4 +1,4 @@
-# $Id: ZOOM.pod,v 1.38 2006-11-02 17:48:25 mike Exp $
+# $Id: ZOOM.pod,v 1.39 2006-11-03 09:36:28 mike Exp $
 
 use strict;
 use warnings;
@@ -190,6 +190,8 @@ connected to the server.  This is a convenient way to set options,
 including those that must be set before connecting such as
 authentication tokens.
 
+The server-name string is of the form:
+
 =over 4
 
 =item
@@ -223,11 +225,30 @@ local filesystem.
 
 =item http
 
-SRW connection using SOAP over HTTP.
+SRU connection over HTTP.
 
 =back
 
-Support for SRU will follow in the fullness of time.
+If the C<http> scheme is used, the particular SRU flavour to be used
+may be specified by the C<sru> option, which takes the following
+values:
+
+=over 4
+
+=item soap
+
+SRU over SOAP (i.e. what used to be called SRW).
+This is the default.
+
+=item get
+
+"SRU Classic" (i.e. SRU over HTTP GET).
+
+=item post
+
+SRU over HTTP POST.
+
+=back
 
 If an error occurs, an exception is thrown.  This may indicate a
 networking problem (e.g. the host is not found or unreachable), or a
@@ -238,21 +259,28 @@ request).
 
  $options = new ZOOM::Options();
  $options->option(implementationName => "my client");
+ $options->option(implementationId => 12345);
  $conn = create ZOOM::Connection($options)
+ # or
+ $conn = create ZOOM::Connection(implementationName => "my client",
+                                 implementationId => 12345);
+
  $conn->connect($host, 0);
 
 The usual Connection constructor, C<new()> brings a new object into
 existence and forges the connection to the server all in one
 operation, which is often what you want.  For applications that need
-more control, however, these two method separate the two steps,
+more control, however, these two methods separate the two steps,
 allowing additional steps in between such as the setting of options.
 
 C<create()> creates and returns a new Connection object, which is
 I<not> connected to any server.  It may be passed an options block, of
 type C<ZOOM::Options> (see below), into which options may be set
-before or after the creation of the Connection.  The connection to the
-server may then be forged by the C<connect()> method, the arguments of
-which are the same as those of the C<new()> constructor.
+before or after the creation of the Connection.  Alternatively and
+equivalently, C<create()> may be passed a list of key-value option
+pairs directly.  The connection to the server may then be forged by
+the C<connect()> method, the arguments of which are the same as those
+of the C<new()> constructor.
 
 =head4 error_x() / errcode() / errmsg() / addinfo() / diagset()
 
