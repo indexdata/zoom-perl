@@ -1,4 +1,4 @@
-# $Id: ZOOM.pod,v 1.39 2006-11-03 09:36:28 mike Exp $
+# $Id: ZOOM.pod,v 1.40 2006-11-03 09:49:38 mike Exp $
 
 use strict;
 use warnings;
@@ -1099,7 +1099,7 @@ methods.
  $conn->option(cclqual => "ti u=4 s=pw\nab u=62 s=pw");
  $q = new ZOOM::Query::CCL2RPN('ti=dinosaur', $conn);
 
-For the C<ZOOM::Query::CQL2RPN> subclass, too, the Connection must be
+For the C<ZOOM::Query::CCL2RPN> subclass, too, the Connection must be
 passed into the constructor, for the same reasons as when client-side
 CQL compilation is used.  The C<cclqual> option, if defined, gives a
 CCL qualification specification inline; otherwise, the contents of the
