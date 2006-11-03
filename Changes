@@ -1,4 +1,4 @@
-$Id: Changes,v 1.47 2006-11-02 17:48:25 mike Exp $
+$Id: Changes,v 1.48 2006-11-03 09:53:50 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
@@ -9,7 +9,8 @@ Revision history for Perl extension Net::Z3950::ZOOM.
 	  pairs of options to set.
 	- ZOOM::Connection::new(), having been refactored to use
 	  create(), can now also take a ZOOM::Options argument.
-		### These API changes need documenting.
+	- Documentation now includes information on specifying SRW,
+	  SRU-over-GET and SRU-over-POST connections.
 	- ZOOM::ResultSet::record() throws a diagnostic if asked to
 	  retrieve records out of range for the result-set.
 	- All tests against indexdata.com are now explicitly against
