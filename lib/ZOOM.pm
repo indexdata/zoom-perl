@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.40 2006-11-02 17:56:33 mike Exp $
+# $Id: ZOOM.pm,v 1.41 2006-11-03 09:23:06 mike Exp $
 
 use strict;
 use warnings;
@@ -734,7 +734,13 @@ sub records {
     # If the request is out of range, ZOOM-C will currently (as of YAZ
     # 2.1.38) no-op: it understandably refuses to build and send a
     # known-bad APDU, but it doesn't set a diagnostic as it ought.  So
-    # for now, we do it here.
+    # for now, we do it here.  It would be more polite to stash the
+    # error-code in the ZOOM-C connection object for subsequent
+    # discovery (which is what ZOOM-C will presumably do itself when
+    # it's fixed) but since there is no API that allows us to do that,
+    # we just have to throw the exception right now.  That's probably
+    # OK for synchronous applications, but not really for
+    # multiplexers.
     my $size = $this->size();
     if ($start + $count-1 >= $size) {
 	# BIB-1 diagnostic 13 is "Present request out-of-range"
