@@ -1,4 +1,4 @@
-# $Id: 12-query.t,v 1.9 2006-11-02 17:48:26 mike Exp $
+# $Id: 12-query.t,v 1.10 2006-11-03 09:50:58 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 12-query.t'
@@ -107,7 +107,6 @@ $q = Net::Z3950::ZOOM::query_create();
 ok(defined $q, "create empty query");
 my($ccl_errcode, $ccl_errstr, $ccl_errpos) = (0, "", 0);
 
-### change documentation
 $res = Net::Z3950::ZOOM::query_ccl2rpn($q,
 				       'ti=utah and',
 				       "ti u=4 s=pw\nab u=62 s=pw",
@@ -120,8 +119,6 @@ Net::Z3950::ZOOM::query_destroy($q);
 # Do a successful client-compiled CCL search
 $q = Net::Z3950::ZOOM::query_create();
 ok(defined $q, "create empty query");
-Net::Z3950::ZOOM::connection_option_set($conn, cclfile =>
-					"samples/ccl/default.bib");
 $res = Net::Z3950::ZOOM::query_ccl2rpn($q,
 				       'ti=utah and ab=epicenter',
 				       "ti u=4 s=pw\nab u=62 s=pw",
