@@ -1,8 +1,8 @@
-$Id: Changes,v 1.48 2006-11-03 09:53:50 mike Exp $
+$Id: Changes,v 1.49 2006-11-04 11:48:15 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
-1.13  (IN PROGRESS)
+1.13  READY TO GO
 	- ZOOM::Connection::create() may now take either a single
 	  argument, which is a ZOOM::Options object, or any even
 	  number of argument (including zero), which are key => value
