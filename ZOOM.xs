@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.44 2006-11-28 16:47:19 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.45 2006-11-28 17:32:54 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -297,7 +297,7 @@ ZOOM_record_error(rec, cp, addinfo, diagset)
 	const char* &diagset
 	CODE:
 		{
-		const char *ccp, *caddinfo, *cdset;
+		const char *ccp = "", *caddinfo = "", *cdset = "";
 		RETVAL = ZOOM_record_error(rec, &ccp, &caddinfo, &cdset);
 		cp = (char*) ccp;
 		addinfo = (char*) caddinfo;
