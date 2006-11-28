@@ -1,11 +1,11 @@
-# $Id: 13-resultset.t,v 1.8 2006-11-02 17:48:26 mike Exp $
+# $Id: 13-resultset.t,v 1.9 2006-11-28 16:47:19 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 13-resultset.t'
 
 use strict;
 use warnings;
-use Test::More tests => 23;
+use Test::More tests => 24;
 BEGIN { use_ok('Net::Z3950::ZOOM') };
 
 my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
@@ -21,12 +21,18 @@ $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
 ok($errcode == 0, "search for '$query'");
 ok(Net::Z3950::ZOOM::resultset_size($rs) == 2, "found 2 records");
 
-my $syntax = "usmarc";
+my $syntax = "canmarc";
 Net::Z3950::ZOOM::resultset_option_set($rs, preferredRecordSyntax => $syntax);
 my $val = Net::Z3950::ZOOM::resultset_option_get($rs, "preferredRecordSyntax");
 ok($val eq $syntax, "preferred record syntax set to '$val'");
 
 my $rec = Net::Z3950::ZOOM::resultset_record($rs, 0);
+my $diagset = "";
+$errcode = Net::Z3950::ZOOM::record_error($rec, $errmsg, $addinfo, $diagset);
+ok($errcode == 238, "can't fetch CANMARC ($errmsg)");
+
+Net::Z3950::ZOOM::resultset_option_set($rs, preferredRecordSyntax => "usmarc");
+$rec = Net::Z3950::ZOOM::resultset_record($rs, 0);
 my $len = 0;
 my $data1 = Net::Z3950::ZOOM::record_get($rec, "render", $len);
 Net::Z3950::ZOOM::resultset_option_set($rs, elementSetName => "b");

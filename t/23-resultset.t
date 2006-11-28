@@ -1,11 +1,11 @@
-# $Id: 23-resultset.t,v 1.5 2006-11-02 17:48:26 mike Exp $
+# $Id: 23-resultset.t,v 1.6 2006-11-28 16:47:19 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 23-resultset.t'
 
 use strict;
 use warnings;
-use Test::More tests => 23;
+use Test::More tests => 24;
 BEGIN { use_ok('ZOOM') };
 
 my $host = "z3950.indexdata.com/gils";
@@ -19,12 +19,17 @@ eval { $rs = $conn->search_pqf($query) };
 ok(!$@, "search for '$query'");
 ok($rs->size() == 2, "found 2 records");
 
-my $syntax = "usmarc";
+my $syntax = "canmarc";		# not supported
 $rs->option(preferredRecordSyntax => $syntax);
 my $val = $rs->option("preferredRecordSyntax");
 ok($val eq $syntax, "preferred record syntax set to '$val'");
 
 my $rec = $rs->record(0);
+my($errcode, $errmsg) = $rec->error();
+ok($errcode == 238, "can't fetch CANMARC ($errmsg)");
+
+$rs->option(preferredRecordSyntax => "usmarc");
+$rec = $rs->record(0);
 my $data1 = $rec->render();
 $rs->option(elementSetName => "b");
 my $data2 = $rec->render();

@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.43 2006-10-04 17:14:12 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.44 2006-11-28 16:47:19 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -287,6 +287,27 @@ ZOOM_resultset_sort1(r, sort_type, sort_spec)
 	ZOOM_resultset r
 	const char* sort_type
 	const char* sort_spec
+
+# See comments for ZOOM_connection_error() above
+int
+ZOOM_record_error(rec, cp, addinfo, diagset)
+	ZOOM_record rec
+	const char* &cp
+	const char* &addinfo
+	const char* &diagset
+	CODE:
+		{
+		const char *ccp, *caddinfo, *cdset;
+		RETVAL = ZOOM_record_error(rec, &ccp, &caddinfo, &cdset);
+		cp = (char*) ccp;
+		addinfo = (char*) caddinfo;
+		diagset = (char*) cdset;
+		}
+	OUTPUT:
+		RETVAL
+		cp
+		addinfo
+		diagset
 
 # See "typemap" for discussion of the "const char *" return-type.
 #

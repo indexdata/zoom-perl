@@ -1,8 +1,16 @@
-$Id: Changes,v 1.49 2006-11-04 11:48:15 mike Exp $
+$Id: Changes,v 1.50 2006-11-28 16:47:19 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
-1.13  READY TO GO
+1.14  (IN PROGRESS)
+	- Add $record->error() to return non-surrogate diagnostics,
+	  and $record->exception() to return the same information
+	  wrapped in a ZOOM::Exception object.
+	- Requires YAZ 2.1.40, which provides ZOOM_record_error().
+	- $conn->error_x() now returns the error-code when called in
+	  scalar context, rather than the diagnostic set name.
+
+1.13  Sat Nov  4 16:47:00 GMT 2006
 	- ZOOM::Connection::create() may now take either a single
 	  argument, which is a ZOOM::Options object, or any even
 	  number of argument (including zero), which are key => value

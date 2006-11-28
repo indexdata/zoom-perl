@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.41 2006-11-03 09:23:06 mike Exp $
+# $Id: ZOOM.pm,v 1.42 2006-11-28 16:47:19 mike Exp $
 
 use strict;
 use warnings;
@@ -379,7 +379,7 @@ sub error_x {
     my($errcode, $errmsg, $addinfo, $diagset) = (undef, "dummy", "dummy", "d");
     $errcode = Net::Z3950::ZOOM::connection_error_x($this->_conn(), $errmsg,
 						    $addinfo, $diagset);
-    return ($errcode, $errmsg, $addinfo, $diagset);
+    return wantarray() ? ($errcode, $errmsg, $addinfo, $diagset) : $errcode;
 }
 
 sub errcode {
@@ -816,6 +816,24 @@ sub _rec {
 
     return $_rec;
 }
+
+sub error {
+    my $this = shift();
+
+    my($errcode, $errmsg, $addinfo, $diagset) = (undef, "dummy", "dummy", "d");
+    $errcode = Net::Z3950::ZOOM::record_error($this->_rec(), $errmsg,
+					      $addinfo, $diagset);
+
+    return wantarray() ? ($errcode, $errmsg, $addinfo, $diagset) : $errcode;
+}
+
+sub exception {
+    my $this = shift();
+
+    my($errcode, $errmsg, $addinfo, $diagset) = $this->error();
+    return new ZOOM::Exception($errcode, $errmsg, $addinfo, $diagset);
+}
+
 
 sub render {
     my $this = shift();
