@@ -1,8 +1,8 @@
-$Id: Changes,v 1.50 2006-11-28 16:47:19 mike Exp $
+$Id: Changes,v 1.51 2006-11-28 17:33:15 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
-1.14  (IN PROGRESS)
+1.14  Tue Nov 28 17:33:07 GMT 2006
 	- Add $record->error() to return non-surrogate diagnostics,
 	  and $record->exception() to return the same information
 	  wrapped in a ZOOM::Exception object.
