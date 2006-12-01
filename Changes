@@ -1,6 +1,16 @@
-$Id: Changes,v 1.51 2006-11-28 17:33:15 mike Exp $
+$Id: Changes,v 1.52 2006-12-01 14:17:59 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
+
+1.15  Fri Dec  1 14:17:49 GMT 2006
+	- ZOOM::Error::INIT is renamed to ZOOM::Error::ZINIT, since
+	  INIT is a reserved word in Perl.  In version 1.14 and
+	  earlier, "require ZOOM" would fail, saying "Too late to run
+	  INIT block", and "use ZOOM" would result in
+	  ZOOM::Error::INIT having a value equal to its name (why?!)
+	  rather than, as intended, Net::Z3950::ZOOM::ERROR_INIT.
+	- Belatedly added documentation for $rec->error() and
+	  $rec->exception().
 
 1.14  Tue Nov 28 17:33:07 GMT 2006
 	- Add $record->error() to return non-surrogate diagnostics,
