@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.43 2006-12-01 14:13:41 mike Exp $
+# $Id: ZOOM.pm,v 1.44 2007-01-16 11:17:28 mike Exp $
 
 use strict;
 use warnings;
@@ -497,6 +497,12 @@ sub is_idle {
     my $this = shift();
 
     return Net::Z3950::ZOOM::connection_is_idle($this->_conn());
+}
+
+sub peek_event {
+    my $this = shift();
+
+    return Net::Z3950::ZOOM::connection_peek_event($this->_conn());
 }
 
 sub destroy {
