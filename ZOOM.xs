@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.45 2006-11-28 17:32:54 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.46 2007-01-16 11:17:15 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -612,6 +612,10 @@ ZOOM_connection_last_event(cs)
 
 int
 ZOOM_connection_is_idle(cs)
+	ZOOM_connection	cs
+
+int
+ZOOM_connection_peek_event(cs)
 	ZOOM_connection	cs
 
 
