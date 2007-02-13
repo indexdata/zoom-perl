@@ -1,6 +1,13 @@
-$Id: Changes,v 1.54 2007-01-16 11:17:48 mike Exp $
+$Id: Changes,v 1.55 2007-02-13 15:31:10 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
+
+1.17  [IN PROGRESS]
+	- New connection-level option "_check_debug" emits messages on
+	  standard error when checking a connection find an error that
+	  is about to result in throwing an exception.  There is no
+	  reason for you ever to use this, though -- pretend you don't
+	  know about it.
 
 1.16  Tue Jan 16 11:18:34 GMT 2007
 	- Require version 2.1.41 or better of YAZ, so that Init
