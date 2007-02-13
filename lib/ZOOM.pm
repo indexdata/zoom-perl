@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.44 2007-01-16 11:17:28 mike Exp $
+# $Id: ZOOM.pm,v 1.45 2007-02-13 15:31:26 mike Exp $
 
 use strict;
 use warnings;
@@ -341,8 +341,14 @@ sub _check {
     my($errcode, $errmsg, $addinfo, $diagset) = (undef, "x", "x", "x");
     $errcode = Net::Z3950::ZOOM::connection_error_x($this->_conn(), $errmsg,
 						    $addinfo, $diagset);
-    die new ZOOM::Exception($errcode, $errmsg, $addinfo, $diagset)
-	if $errcode;
+    if ($errcode) {
+	if ($this->option("_check_debug")) {
+	    print STDERR "ZOOM WARNING!  $this->check() failed with error $diagset:$errcode ($errmsg) $addinfo\n";
+	    print STDERR "SIG{SEGV} ", (defined $SIG{SEGV} ? ("= '" . $SIG{SEGV} . "'") : "undefined"), "'\n";
+	    print STDERR "SIG{__DIE__} ", (defined $SIG{__DIE__} ? ("= '" . $SIG{__DIE__} , "'") : "undefined"), "'\n";
+	}
+	die new ZOOM::Exception($errcode, $errmsg, $addinfo, $diagset);
+    }
 }
 
 sub create {
