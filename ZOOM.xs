@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.46 2007-01-16 11:17:15 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.47 2007-02-22 20:37:47 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -554,7 +554,7 @@ ZOOM_event(conns)
 		SV *realconns;
 		I32 n, i;
 		int res;
-		ZOOM_connection cs[100];
+		ZOOM_connection *cs;
 	CODE:
 		/*printf("* in ZOOM_event(%p)\n", conns);*/
 		if (!SvROK(conns)) {
@@ -572,12 +572,14 @@ ZOOM_event(conns)
 		if (n == 0) {
 			/*printf("* No connections in referenced array\n");*/
 			XSRETURN_IV(-3);
-		} else if (n >= sizeof(cs)/sizeof(cs[0])) {
+		}
+
+		/*printf("* n = %d\n", n);*/
+		if ((cs = (ZOOM_connection*) malloc(n * sizeof *cs)) == 0) {
 			/*printf("* Too many connections (%d)\n", (int) n);*/
 			XSRETURN_IV(-4);
 		}
 
-		/*printf("* n = %d\n", n);*/
 		for (i = 0; i < n; i++) {
 		    SV **connp = av_fetch((AV*) realconns, i, (I32) 0);
 		    SV *conn, *sv;
@@ -603,6 +605,7 @@ ZOOM_event(conns)
 		    /*printf("got cs[%d] of %d = %p\n", (int) i, (int) n, cs[i]);*/
 		}
 		RETVAL = ZOOM_event((int) n, cs);
+		free(cs);
 	OUTPUT:
 		RETVAL
 
