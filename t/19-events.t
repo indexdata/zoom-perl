@@ -1,4 +1,4 @@
-# $Id: 19-events.t,v 1.7 2006-11-02 17:48:26 mike Exp $
+# $Id: 19-events.t,v 1.8 2007-02-22 20:38:11 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 19-events.t'
@@ -32,8 +32,10 @@ ok($val == -2, "non-array reference argument rejected");
 $val = Net::Z3950::ZOOM::event([]);
 ok($val == -3, "empty array reference argument rejected");
 
-$val = Net::Z3950::ZOOM::event([1..32767]);
-ok($val == -4, "huge array reference argument rejected");
+# The old test for giant array reference can't be done now that the
+# corresponding array internal to the glue-code is allocated
+# dynamically.
+ok(1, "huge array reference argument rejected");
 
 # Test the sequence of events that come from just creating the
 # connection: there's the physical connect; the sending the Init
