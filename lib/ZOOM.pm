@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.45 2007-02-13 15:31:26 mike Exp $
+# $Id: ZOOM.pm,v 1.46 2007-02-26 14:36:55 mike Exp $
 
 use strict;
 use warnings;
@@ -337,18 +337,32 @@ sub _conn {
 
 sub _check {
     my $this = shift();
+    my($always_die_on_error) = @_;
 
     my($errcode, $errmsg, $addinfo, $diagset) = (undef, "x", "x", "x");
     $errcode = Net::Z3950::ZOOM::connection_error_x($this->_conn(), $errmsg,
 						    $addinfo, $diagset);
     if ($errcode) {
-	if ($this->option("_check_debug")) {
-	    print STDERR "ZOOM WARNING!  $this->check() failed with error $diagset:$errcode ($errmsg) $addinfo\n";
-	    print STDERR "SIG{SEGV} ", (defined $SIG{SEGV} ? ("= '" . $SIG{SEGV} . "'") : "undefined"), "'\n";
-	    print STDERR "SIG{__DIE__} ", (defined $SIG{__DIE__} ? ("= '" . $SIG{__DIE__} , "'") : "undefined"), "'\n";
+	my $exception = new ZOOM::Exception($errcode, $errmsg, $addinfo,
+					    $diagset);
+	if (!$this->option("async") || $always_die_on_error) {
+	    ZOOM::Log::log("zoom_check", "throwing error $exception");
+	    die $exception;
+	} else {
+	    ZOOM::Log::log("zoom_check", "not reporting error $exception");
 	}
-	die new ZOOM::Exception($errcode, $errmsg, $addinfo, $diagset);
     }
+}
+
+# This wrapper for _check() is called only from outside the ZOOM
+# module, and therefore only in situations where an asynchronous
+# application is actively asking for an exception to be thrown if an
+# error has been detected.  So it passed always_die_on_error=1 to the
+# underlying _check() method.
+#
+sub check {
+    my $this = shift();
+    return $this->_check(1);
 }
 
 sub create {
