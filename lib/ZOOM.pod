@@ -1,4 +1,4 @@
-# $Id: ZOOM.pod,v 1.41 2006-12-01 14:11:21 mike Exp $
+# $Id: ZOOM.pod,v 1.42 2007-02-26 14:40:01 mike Exp $
 
 use strict;
 use warnings;
@@ -304,6 +304,15 @@ C<error_x()>
 returns all four at once.
 
 See the C<ZOOM::Exception> for the interpretation of these elements.
+
+=head4 check()
+
+ $conn->check();
+
+Checks whether an error is pending on the connection, and throw a
+C<ZOOM::Exception> object if so.  Since errors are thrown as they
+occur for synchronous connections, there is no need ever to call this
+except in asynchronous applications.
 
 =head4 option() / option_binary()
 
