@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.46 2007-02-26 14:36:55 mike Exp $
+# $Id: ZOOM.pm,v 1.47 2007-02-26 14:52:21 mike Exp $
 
 use strict;
 use warnings;
@@ -1094,5 +1094,6 @@ sub log {
     Net::Z3950::ZOOM::yaz_log($level, join("", @message));
 }
 
+BEGIN { ZOOM::Log::mask_str("zoom_check"); }
 
 1;
