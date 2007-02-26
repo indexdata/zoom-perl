@@ -1,8 +1,10 @@
-# $Id: Z3950.pm,v 1.1 2005-10-13 13:11:17 mike Exp $
+# $Id: Z3950.pm,v 1.2 2007-02-26 15:58:33 mike Exp $
 
 use strict;
 use warnings;
 use Net::Z3950::ZOOM;
+
+our $VERSION = '0.99';	# Supersedes "proper" Net::Z3950 v0.51
 
 
 # Member naming convention is the same as in ../ZOOM.pm
