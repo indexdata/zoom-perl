@@ -1,4 +1,4 @@
-# $Id: Makefile.PL,v 1.19 2007-02-26 14:37:20 mike Exp $
+# $Id: Makefile.PL,v 1.20 2007-02-26 14:41:24 mike Exp $
 
 use 5.008;
 use ExtUtils::MakeMaker;
@@ -52,7 +52,7 @@ sub check_version {
 	($gmajor == $wmajor && $gminor < $wminor) ||
 	($gmajor == $wmajor && $gminor == $wminor && $gtrivial < $wtrivial)) {
 	print <<__EOT__;
-*** WARNING!
+*** ERROR!
 ZOOM-Perl requires at least version $want of YAZ,
 but is currently you only have version $got.
 __EOT__
