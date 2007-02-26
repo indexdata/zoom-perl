@@ -1,6 +1,12 @@
-$Id: Changes,v 1.57 2007-02-26 14:57:17 mike Exp $
+$Id: Changes,v 1.58 2007-02-26 16:00:07 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
+
+1.19  (IN PROGRESS)
+	- Set version number for Net::Z3950 to 0.99 -- less than the
+	  1.0 version number that will be used when it successfully
+	  emulates the old Net::Z3950 module, but superseding the last
+	  release, 0.51, of that module.
 
 1.18  Mon Feb 26 14:57:48 GMT 2007
 	- When a connection is in asynchronous mode, failing
