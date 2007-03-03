@@ -1,0 +1,7 @@
+#!/usr/bin/perl -w
+use ZOOM;
+my $target = $ARGV[0];
+my $conn = new ZOOM::Connection($target);
+my $rs = $conn->search_pqf('@attr 1=_ALLRECORDS @attr 2=103 ""');
+my $n = $rs->size();
+print STDERR "$0: found $n records in '$target'\n";
