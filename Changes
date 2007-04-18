@@ -1,4 +1,4 @@
-$Id: Changes,v 1.59 2007-03-07 16:17:49 mike Exp $
+$Id: Changes,v 1.60 2007-04-18 11:19:10 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
@@ -8,6 +8,7 @@ Revision history for Perl extension Net::Z3950::ZOOM.
 	  emulates the old Net::Z3950 module, but superseding the last
 	  release, 0.51, of that module.
 	- Include samples/zoom/zdump.pl in distribution.
+	- Add "irspy" namespace to samples/zoom/zselect
 
 1.18  Mon Feb 26 14:57:48 GMT 2007
 	- When a connection is in asynchronous mode, failing
