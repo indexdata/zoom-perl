@@ -1,8 +1,9 @@
-$Id: Changes,v 1.60 2007-04-18 11:19:10 mike Exp $
+$Id: Changes,v 1.61 2007-05-09 12:03:52 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
 1.19  (IN PROGRESS)
+	- Add $conn->exception() method.
 	- Set version number for Net::Z3950 to 0.99 -- less than the
 	  1.0 version number that will be used when it successfully
 	  emulates the old Net::Z3950 module, but superseding the last
