@@ -1,0 +1,26 @@
+Source: libnet-z3950-zoom-perl
+Section: perl
+Priority: optional
+Build-Depends: debhelper (>= 5.0.0), perl (>= 5.8.8-7), libyaz3-dev
+Maintainer: Mike Taylor <mike@indexdata.com>
+Standards-Version: 3.7.2
+
+Package: libnet-z3950-zoom-perl
+Architecture: any
+Depends: ${perl:Depends}, ${shlibs:Depends}, ${misc:Depends}, 
+Description:  Perl extension implementing the ZOOM API for Information Retrieval
+ This module provides a nice, Perlish implementation of the ZOOM
+ Abstract API described and documented at http://zoom.z3950.org/api/
+ .
+ the ZOOM module is implemented as a set of thin classes on top of the
+ non-OO functions provided by this distribution's Net::Z3950::ZOOM
+ module, which in 
+ turn is a thin layer on top of the ZOOM-C code supplied as part of
+ Index Data's YAZ Toolkit.  Because ZOOM-C is also the underlying code
+ that implements ZOOM bindings in C++, Visual Basic, Scheme, Ruby, .NET
+ (including C#) and other languages, this Perl module works compatibly
+ with those other implementations.  (Of course, the point of a public
+ API such as ZOOM is that all implementations should be compatible
+ anyway; but knowing that the same code is running is reassuring.)
+ .
+ This description was automagically extracted from the module by dh-make-perl.

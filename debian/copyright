@@ -1,0 +1,10 @@
+This is the debian package for the Net-Z3950-ZOOM module.
+It was created by Anders Mortensen <sondberg@flurry.index> using dh-make-perl.
+
+This copyright info was automatically extracted from the perl module.
+It may not be accurate, so you better check the module sources
+if don't want to get into legal troubles.
+
+The upstream author is: 
+
+Mike Taylor, <mike@indexdata.com>.
