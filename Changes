@@ -1,8 +1,8 @@
-$Id: Changes,v 1.62 2007-07-09 13:09:19 mike Exp $
+$Id: Changes,v 1.63 2007-07-09 13:09:46 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
-1.19  Mon Jul  9 14:08:59 BST 2007
+1.19  Mon Jul  9 14:09:31 BST 2007
 	- Add $conn->exception() method.
 	- Set version number for Net::Z3950 to 0.99 -- less than the
 	  1.0 version number that will be used when it successfully
@@ -44,7 +44,6 @@ Revision history for Perl extension Net::Z3950::ZOOM.
 	- Add ZOOM_connection_peek_event() and $conn->peek_event().
 	- Require YAZ version 2.1.45, which is the first to provide
 	  ZOOM_connection_peek_event().
-
 
 1.15  Fri Dec  1 14:17:49 GMT 2006
 	- ZOOM::Error::INIT is renamed to ZOOM::Error::ZINIT, since
