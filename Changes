@@ -1,6 +1,9 @@
-$Id: Changes,v 1.63 2007-07-09 13:09:46 mike Exp $
+$Id: Changes,v 1.64 2007-08-15 18:37:01 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
+
+1.20  (IN PROGRESS)
+	- Add new sample program, samples/zoom/zoomscan.pl
 
 1.19  Mon Jul  9 14:09:31 BST 2007
 	- Add $conn->exception() method.
