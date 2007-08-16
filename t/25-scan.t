@@ -1,4 +1,4 @@
-# $Id: 25-scan.t,v 1.10 2006-11-02 17:48:26 mike Exp $
+# $Id: 25-scan.t,v 1.11 2007-08-16 17:19:35 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 25-scan.t'
@@ -60,7 +60,7 @@ ok(1, "destroyed second scanset");
 $conn->option(number => 4);
 $conn->option(cqlfile => "samples/cql/pqf.properties");
 
-($ss, $n) = scan($conn, 1, new ZOOM::Query::CQL('title=w'), 4);
+($ss, $n) = scan($conn, 1, new ZOOM::Query::CQL2RPN('title=w', $conn), 4);
 # Get last term and use it as seed for next scan
 my($term, $occ) = $ss->term($n-1);
 ok($ss->option("position") == 1,

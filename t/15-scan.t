@@ -1,4 +1,4 @@
-# $Id: 15-scan.t,v 1.13 2006-11-02 17:48:26 mike Exp $
+# $Id: 15-scan.t,v 1.14 2007-08-16 17:19:35 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 15-scan.t'
@@ -65,7 +65,7 @@ Net::Z3950::ZOOM::connection_option_set($conn, cqlfile =>
 					"samples/cql/pqf.properties");
 
 $q = Net::Z3950::ZOOM::query_create();
-Net::Z3950::ZOOM::query_cql($q, 'title=w');
+Net::Z3950::ZOOM::query_cql2rpn($q, 'title=w', $conn);
 ($ss, $n) = scan($conn, 1, $q, 4);
 # Get last term and use it as seed for next scan
 my $term = Net::Z3950::ZOOM::scanset_term($ss, $n-1, $occ, $len);
