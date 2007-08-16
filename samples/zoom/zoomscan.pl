@@ -1,4 +1,4 @@
-# $Id: zoomscan.pl,v 1.1 2007-08-15 18:36:36 mike Exp $
+# $Id: zoomscan.pl,v 1.2 2007-08-16 16:21:08 mike Exp $
 #
 # This is the scanning counterpart to zoomscan.pl's searching
 # perl -I../../blib/lib -I../../blib/arch zoomscan.pl <target> <scanQuery>
@@ -17,7 +17,8 @@ my($host, $scanQuery) = @ARGV;
 eval {
     my $conn = new ZOOM::Connection($host, 0);
     $conn->option(preferredRecordSyntax => "usmarc");
-    my $ss = $conn->scan_pqf($scanQuery);
+    ### Could use ZOOM::Query::CQL below, but that only work in SRU/W.
+    my $ss = $conn->scan(new ZOOM::Query::PQF($scanQuery));
     my $n = $ss->size();
     for my $i (0..$n-1) {
 	my($term, $occ) = $ss->term($i);
