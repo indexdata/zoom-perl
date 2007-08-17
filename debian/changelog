@@ -1,3 +1,14 @@
+libnet-z3950-zoom-perl (1.19-1) unstable; urgency=low
+
+  * Add $conn->exception() method.
+  * Set version number for Net::Z3950 to 0.99 -- less than the 1.0 version
+    number that will be used when it successfully emulates the old
+    Net::Z3950 module, but superseding the last release, 0.51, of that module.
+  * Include samples/zoom/zdump.pl in distribution.
+  * Add "irspy" namespace to samples/zoom/zselect
+
+ -- Anders Mortensen <sondberg@flurry.index>  Fri, 17 Aug 2007 11:57:41 +0200 
+
 libnet-z3950-zoom-perl (1.18-1) unstable; urgency=low
 
   * Initial Release.
