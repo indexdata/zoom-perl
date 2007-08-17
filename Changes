@@ -1,9 +1,12 @@
-$Id: Changes,v 1.64 2007-08-15 18:37:01 mike Exp $
+$Id: Changes,v 1.65 2007-08-17 11:09:36 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
 1.20  (IN PROGRESS)
 	- Add new sample program, samples/zoom/zoomscan.pl
+	- samples/zoom/zoomtst1.pl now accepts arbitrary options at
+	  the end of the command-line, so that (for example) you can
+	  specify a non-USMARC record syntax.
 
 1.19  Mon Jul  9 14:09:31 BST 2007
 	- Add $conn->exception() method.
