@@ -1,4 +1,4 @@
-libnet-z3950-zoom-perl (1.19-1) unstable; urgency=low
+libnet-z3950-zoom-perl (1.20-1) unstable; urgency=low
 
   * Add $conn->exception() method.
   * Set version number for Net::Z3950 to 0.99 -- less than the 1.0 version
