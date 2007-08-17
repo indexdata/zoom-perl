@@ -1,4 +1,6 @@
-# $Id: zoomscan.pl,v 1.3 2007-08-17 09:38:13 mike Exp $
+#!/usr/bin/perl -w
+
+# $Id: zoomscan.pl,v 1.4 2007-08-17 18:35:17 mike Exp $
 #
 # This is the scanning counterpart to zoomscan.pl's searching
 # perl -I../../blib/lib -I../../blib/arch zoomscan.pl <target> <scanQuery>
