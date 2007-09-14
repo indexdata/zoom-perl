@@ -1,15 +1,18 @@
-# $Id: 2-ZOOM.t,v 1.12 2006-11-02 17:48:26 mike Exp $
+# $Id: 2-ZOOM.t,v 1.13 2007-09-14 10:36:13 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 2-ZOOM.t'
 
 use strict;
 use warnings;
-use Test::More tests => 22;
+use Test::More tests => 23;
 BEGIN { use_ok('ZOOM') };
 
 my $msg = ZOOM::diag_str(ZOOM::Error::INVALID_QUERY);
 ok($msg eq "Invalid query", "diagnostic string lookup works");
+
+$msg = ZOOM::diag_srw_str(27);
+ok($msg eq "Empty term unsupported", "SRW diagnostic string lookup works");
 
 my $host = "no.such.host";
 my $conn;

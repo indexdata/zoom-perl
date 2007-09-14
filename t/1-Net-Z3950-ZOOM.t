@@ -1,15 +1,18 @@
-# $Id: 1-Net-Z3950-ZOOM.t,v 1.15 2006-11-02 17:48:26 mike Exp $
+# $Id: 1-Net-Z3950-ZOOM.t,v 1.16 2007-09-14 10:36:13 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 1-Net-Z3950-ZOOM.t'
 
 use strict;
 use warnings;
-use Test::More tests => 22;
+use Test::More tests => 23;
 BEGIN { use_ok('Net::Z3950::ZOOM') };
 
 my $msg = Net::Z3950::ZOOM::diag_str(Net::Z3950::ZOOM::ERROR_INVALID_QUERY);
 ok($msg eq "Invalid query", "diagnostic string lookup works");
+
+$msg = Net::Z3950::ZOOM::diag_srw_str(27);
+ok($msg eq "Empty term unsupported", "SRW diagnostic string lookup works");
 
 my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
 
