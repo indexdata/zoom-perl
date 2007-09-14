@@ -1,10 +1,11 @@
-/* $Id: ZOOM.xs,v 1.47 2007-02-22 20:37:47 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.48 2007-09-14 10:33:16 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
 
 #include <yaz/zoom.h>
+#include <yaz/diagsrw.h>
 #include <yaz/xmalloc.h>
 
 /* Used by the *_setl() functions */
@@ -203,6 +204,14 @@ ZOOM_connection_diagset(c)
 const char *
 ZOOM_diag_str(error)
 	int error
+
+const char *
+ZOOM_diag_srw_str(error)
+	int error
+	CODE:
+		RETVAL = yaz_diag_srw_str(error);
+	OUTPUT:
+		RETVAL
 
 ZOOM_resultset
 ZOOM_connection_search(arg0, q)
