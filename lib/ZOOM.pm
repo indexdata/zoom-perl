@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.48 2007-05-09 12:03:52 mike Exp $
+# $Id: ZOOM.pm,v 1.49 2007-09-14 10:34:35 mike Exp $
 
 use strict;
 use warnings;
@@ -113,6 +113,12 @@ sub diag_str {
     return Net::Z3950::ZOOM::diag_str($code);
 }
 
+sub diag_srw_str {
+    my($code) = @_;
+
+    return Net::Z3950::ZOOM::diag_srw_str($code);
+}
+
 sub event_str {
     return Net::Z3950::ZOOM::event_str(@_);
 }
@@ -141,8 +147,11 @@ sub new {
     $diagset ||= "ZOOM";
     if (uc($diagset) eq "ZOOM" || uc($diagset) eq "BIB-1") {
 	$message ||= ZOOM::diag_str($code);
+    } elsif (lc($diagset) eq "info:srw/diagnostic/1") {
+	$message ||= ZOOM::diag_srw_str($code);
     } else {
-	# Should fill in messages for other diagsets, too.
+	# Should fill in messages for any other known diagsets.
+	$message ||= "(unknown error)";
     }
 
     return bless {
@@ -175,7 +184,9 @@ sub diagset {
 
 sub render {
     my $this = shift();
-    my $res = "ZOOM error " . $this->code() . ' "' . $this->message() . '"';
+
+    my $res = "ZOOM error " . $this->code();
+    $res .= ' "' . $this->message() . '"' if $this->message();
     $res .= ' (addinfo: "' . $this->addinfo() . '")' if $this->addinfo();
     $res .= " from diag-set '" . $this->diagset() . "'" if $this->diagset();
     return $res;
