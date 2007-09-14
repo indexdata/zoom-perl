@@ -1,4 +1,4 @@
-$Id: Changes,v 1.67 2007-09-14 10:33:00 mike Exp $
+$Id: Changes,v 1.68 2007-09-14 10:34:40 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
@@ -10,8 +10,8 @@ Revision history for Perl extension Net::Z3950::ZOOM.
 	- Add new functions Net::Z3950::ZOOM::diag_srw_str() and
 	  ZOOM::diag_srw_str() to map SRW diagnostic codes into
 	  human-readable messages.
-	- ZOOM::Exception() uses diag_srw_str() to fill in the error
-	  message, if it is undefined, for SRW errors.
+	- ZOOM::Exception() constructor uses diag_srw_str() to fill in
+	  the error message, if it is undefined, for SRW errors.
 	- The render() method of ZOOM::Exception(), and therefore the
 	  overloaded stringifying operator, deals with exceptions that
 	  have no message().
