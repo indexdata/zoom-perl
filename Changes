@@ -1,8 +1,8 @@
-$Id: Changes,v 1.68 2007-09-14 10:34:40 mike Exp $
+$Id: Changes,v 1.69 2007-09-21 16:52:26 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
-1.20  (IN PROGRESS)
+1.20  Fri Sep 21 17:51:55 BST 2007
 	- Add new sample program, samples/zoom/zoomscan.pl
 	- samples/zoom/zoomtst1.pl now accepts arbitrary options at
 	  the end of the command-line, so that (for example) you can
@@ -15,6 +15,12 @@ Revision history for Perl extension Net::Z3950::ZOOM.
 	- The render() method of ZOOM::Exception(), and therefore the
 	  overloaded stringifying operator, deals with exceptions that
 	  have no message().
+	- Corrected the scan parts of the test-suite that use CQL so
+	  that they explicitly perform client-side CQL compilation and
+	  send the resulting Type-1 query.  Previously, these tests
+	  were (accidentally) requesting that CQL be sent as-is to the
+	  server, but this mistake was being masked by an error in
+	  older versions of ZOOM-C that compiled client-side anyway!
 
 1.19  Mon Jul  9 14:09:31 BST 2007
 	- Add $conn->exception() method.
