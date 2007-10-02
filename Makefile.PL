@@ -1,6 +1,7 @@
-# $Id: Makefile.PL,v 1.22 2007-09-14 10:36:43 mike Exp $
+# $Id: Makefile.PL,v 1.23 2007-10-02 16:49:32 mike Exp $
 
 # Use: perl Makefile.PL OPTIMIZE="-O0 -g -Wdeclaration-after-statement"
+#  or: perl Makefile.PL INSTALL_BASE=/home/mike/universe
 
 use 5.008;
 use ExtUtils::MakeMaker;
