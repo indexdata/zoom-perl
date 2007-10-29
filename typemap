@@ -1,4 +1,4 @@
-# $Id: typemap,v 1.7 2006-11-03 09:37:57 mike Exp $
+# $Id: typemap,v 1.8 2007-10-29 11:50:49 mike Exp $
 
 ZOOM_connection					T_PTROBJ
 ZOOM_connection *				T_PTROBJ
@@ -67,7 +67,7 @@ T_OPAQUE_STRUCT
 	else
 	    croak(\"$var is not of type ${ntype}\")
 T_OPAQUECHAR
-	{ unsigned _unused_len;
+	{ STRLEN _unused_len;
 	$var = ($type) SvPV($arg, _unused_len); }
 
 # ---------------------------------------------------------------------------
