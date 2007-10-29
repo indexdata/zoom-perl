@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.48 2007-09-14 10:33:16 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.49 2007-10-29 12:06:57 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -7,6 +7,7 @@
 #include <yaz/zoom.h>
 #include <yaz/diagsrw.h>
 #include <yaz/xmalloc.h>
+#include <yaz/log.h>
 
 /* Used by the *_setl() functions */
 typedef char opaquechar;
