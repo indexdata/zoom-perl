@@ -1,13 +1,16 @@
-$Id: Changes,v 1.70 2007-10-29 11:53:02 mike Exp $
+$Id: Changes,v 1.71 2007-10-29 12:07:23 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
-1.21  Mon Oct 29 11:52:54 GMT 2007
+1.21  Mon Oct 29 12:07:25 GMT 2007
 	- In the "typemap" file's handling of opaquechar*, use STRLEN
 	  type for _unused_len in instead of unsigned: this prevents a
 	  (possibly serious) warning on some 64-bit architectures,
 	  although applications that do not use the option_binary()
 	  methods will be safe with the previous release.
+	- Add explicit "#include <yaz/log.h>" to ZOOM.xs in the hope
+	  of preventing undeclared-function warnings that some users
+	  have reported but which I have been unable to reproduce.
 
 1.20  Fri Sep 21 17:51:55 BST 2007
 	- Add new sample program, samples/zoom/zoomscan.pl
