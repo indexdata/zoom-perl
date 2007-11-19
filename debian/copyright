@@ -1,10 +1,5 @@
-This is the debian package for the Net-Z3950-ZOOM module.
-It was created by Anders Mortensen <sondberg@flurry.index> using dh-make-perl.
+Copyright (C) 2005-2007 by Index Data.
 
-This copyright info was automatically extracted from the perl module.
-It may not be accurate, so you better check the module sources
-if don't want to get into legal troubles.
-
-The upstream author is: 
-
-Mike Taylor, <mike@indexdata.com>.
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.4 or,
+at your option, any later version of Perl 5 you may have available.
