@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.49 2007-10-29 12:06:57 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.50 2007-11-19 12:57:16 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -8,6 +8,7 @@
 #include <yaz/diagsrw.h>
 #include <yaz/xmalloc.h>
 #include <yaz/log.h>
+#include <yaz/yaz-version.h>
 
 /* Used by the *_setl() functions */
 typedef char opaquechar;
@@ -563,7 +564,6 @@ ZOOM_event(conns)
 	INIT:
 		SV *realconns;
 		I32 n, i;
-		int res;
 		ZOOM_connection *cs;
 	CODE:
 		/*printf("* in ZOOM_event(%p)\n", conns);*/
