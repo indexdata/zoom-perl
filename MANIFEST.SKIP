@@ -1,4 +1,4 @@
-# $Id: MANIFEST.SKIP,v 1.4 2007-07-09 13:03:00 mike Exp $
+# $Id: MANIFEST.SKIP,v 1.5 2007-11-19 12:58:55 mike Exp $
 
 .cvsignore
 CVS
@@ -6,3 +6,5 @@ debian
 lib/CVS
 t/CVS
 archive
+build-stamp
+install-stamp
