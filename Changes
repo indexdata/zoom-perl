@@ -1,4 +1,4 @@
-$Id: Changes,v 1.72 2007-11-19 12:58:12 mike Exp $
+$Id: Changes,v 1.73 2007-11-23 12:04:15 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
@@ -7,6 +7,7 @@ Revision history for Perl extension Net::Z3950::ZOOM.
 	  "debian-output" directory containing .deb package file,
 	  changes file, etc.
 	- Clear up a few warnings in ZOOM.xs
+	- Minor documentation improvements.
 
 1.21  Mon Oct 29 12:07:25 GMT 2007
 	- In the "typemap" file's handling of opaquechar*, use STRLEN
