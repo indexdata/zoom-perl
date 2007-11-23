@@ -1,4 +1,4 @@
-# $Id: ZOOM.pod,v 1.44 2007-09-14 10:35:02 mike Exp $
+# $Id: ZOOM.pod,v 1.45 2007-11-23 12:03:56 mike Exp $
 
 use strict;
 use warnings;
@@ -571,7 +571,7 @@ wants to display a whole list of results.  Conversely, the software's
 strategy might be always to ask for blocks of a twenty records:
 that's great for assembling long lists of things, but wasteful when
 only one record is wanted.  The problem is that the ZOOM module can't
-tell, when you call C<$rs->record()>, what your intention is.
+tell, when you call C<$rs-E<gt>record()>, what your intention is.
 
 But you can tell it.  The C<records()> method fetches a sequence of
 records, all in one go.  It takes three arguments: the first is the
