@@ -1,4 +1,4 @@
-# $Id: Makefile.PL,v 1.25 2007-11-19 12:58:28 mike Exp $
+# $Id: Makefile.PL,v 1.26 2007-11-29 16:43:52 mike Exp $
 
 # Use: perl Makefile.PL OPTIMIZE="-O0 -g -Wdeclaration-after-statement"
 #  or: perl Makefile.PL PREFIX=/home/mike/universe
@@ -63,11 +63,12 @@ __EOT__
     }
 }
 
-sub MY::postamble { "debian: makemakerdflt
+sub MY::postamble { "debian: debian/output
+
+debian/output:
 	dpkg-buildpackage -rfakeroot -d
-	rm -rf debian-output
-	mkdir debian-output
-	mv ../libnet-z3950-zoom-perl* debian-output
+	rm -rf debian/output
+	mkdir debian/output
+	mv ../libnet-z3950-zoom-perl* debian/output
 ";
 }
-                                              

@@ -1,10 +1,10 @@
-$Id: Changes,v 1.73 2007-11-23 12:04:15 mike Exp $
+$Id: Changes,v 1.74 2007-11-29 16:43:52 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
 1.22  (IN PROGRESS)
 	- Better Debian packaging: use "make debian" to create new
-	  "debian-output" directory containing .deb package file,
+	  "debian/output" directory containing .deb package file,
 	  changes file, etc.
 	- Clear up a few warnings in ZOOM.xs
 	- Minor documentation improvements.
