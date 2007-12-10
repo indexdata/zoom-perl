@@ -1,4 +1,4 @@
-# $Id: ZOOM.pod,v 1.45 2007-11-23 12:03:56 mike Exp $
+# $Id: ZOOM.pod,v 1.46 2007-12-10 21:51:40 mike Exp $
 
 use strict;
 use warnings;
@@ -545,7 +545,7 @@ Returns the number of records in the result set.
 The C<record()> method returns a C<ZOOM::Record> object representing
 a record from result-set, whose position is indicated by the argument
 passed in.  This is a zero-based index, so that legitimate values
-range from zero to C<$rs->size()-1>.
+range from zero to C<$rs-E<gt>size()-1>.
 
 The C<record_immediate()> API is identical, but it never invokes a
 network operation, merely returning the record from the ResultSet's
