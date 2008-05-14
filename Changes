@@ -1,8 +1,15 @@
-$Id: Changes,v 1.75 2008-05-05 09:57:25 mike Exp $
+$Id: Changes,v 1.76 2008-05-14 13:28:17 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
 1.22  (IN PROGRESS)
+	- Fix Net::Z3950::ZOOM::record_get() to use a struct datachunk
+	  _when_ appropriate, e.g. for "render" not for "database" and
+	  "syntax".
+	- Remove the unused $len reference parameter from record_get()
+	  and $record->get(): this is now used in the underlying C
+	  layer to make Perl strings of the right length, and is of no
+	  value higher up the stack.
 	- Fix a bug in ZOOM::ResultSet::records(): requests including
 	  the last record in the set were incorrectly declined.
 	- Better Debian packaging: use "make debian" to create new
@@ -267,9 +274,6 @@ Revision history for Perl extension Net::Z3950::ZOOM.
 
 To be done in future releases:
 	- Complete, test and document "update.pl"
-	- Fix Net::Z3950::ZOOM::record_get() to use a struct datachunk
-	  _when_ appropriate, e.g. for "render" but probably not for
-	  "database" and "syntax".
 	- Create old-style Net::Z3950 compatibility layer.
 	- Fix memory leaks in callback functions for option sets.
 	- Fix limitation that option-set callback functions must be
