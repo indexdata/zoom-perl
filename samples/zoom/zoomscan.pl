@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# $Id: zoomscan.pl,v 1.4 2007-08-17 18:35:17 mike Exp $
+# $Id: zoomscan.pl,v 1.5 2008-05-14 13:27:32 mike Exp $
 #
 # This is the scanning counterpart to zoomscan.pl's searching
 # perl -I../../blib/lib -I../../blib/arch zoomscan.pl <target> <scanQuery>
@@ -28,7 +28,7 @@ my($host, $scanQuery) = @ARGV;
 eval {
     my $conn = new ZOOM::Connection($host, 0);
     $conn->option(preferredRecordSyntax => "usmarc");
-    ### Could use ZOOM::Query::CQL below, but that only work in SRU/W.
+    ### Could use ZOOM::Query::CQL below, but that only works in SRU/W.
     my $q = $opts{q} ? new ZOOM::Query::CQL($scanQuery) :
 		       new ZOOM::Query::PQF($scanQuery);
     my $ss = $conn->scan($q);
