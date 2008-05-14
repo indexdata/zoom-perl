@@ -1,4 +1,4 @@
-# $Id: zoomtst1.pl,v 1.3 2006-11-02 17:48:25 mike Exp $
+# $Id: zoomtst1.pl,v 1.4 2008-05-14 13:34:00 mike Exp $
 #
 # See ../README for a description of this program.
 # perl -I../../blib/lib -I../../blib/arch zoomtst1.pl <target> <query>
@@ -37,8 +37,7 @@ print "Query '$query' found $n records\n";
 for my $i (0..$n-1) {
     my $rec = Net::Z3950::ZOOM::resultset_record($rs, $i);
     print "=== Record ", $i+1, " of $n ===\n";
-    my $dummy = 0;
-    print Net::Z3950::ZOOM::record_get($rec, "render", $dummy);
+    print Net::Z3950::ZOOM::record_get($rec, "render");
 }
 
 Net::Z3950::ZOOM::resultset_destroy($rs);

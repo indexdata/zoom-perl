@@ -1,4 +1,4 @@
-# $Id: 12-query.t,v 1.10 2006-11-03 09:50:58 mike Exp $
+# $Id: 12-query.t,v 1.11 2008-05-14 13:32:55 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 12-query.t'
@@ -147,8 +147,7 @@ sub check_record {
     my $rec = Net::Z3950::ZOOM::resultset_record($rs, 0);
     ok(1, "got record idenfified by query");
 
-    my $len = 0;
-    my $data = Net::Z3950::ZOOM::record_get($rec, "render", $len);
+    my $data = Net::Z3950::ZOOM::record_get($rec, "render");
     ok(1, "rendered record");
     ok($data =~ /^035    \$a ESDD0006$/m, "record is the expected one");
 

@@ -1,4 +1,4 @@
-# $Id: async.pl,v 1.3 2006-11-02 17:48:25 mike Exp $
+# $Id: async.pl,v 1.4 2008-05-14 13:34:00 mike Exp $
 #
 # See ../README for a description of this program.
 # perl -I../../blib/lib -I../../blib/arch zoomtst3.pl <t1> [...] <tN> <query>
@@ -69,14 +69,13 @@ if ($i != 0) {
     # Go through all records at target
     $size = 10 if $size > 10;
     for (my $pos = 0; $pos < $size; $pos++) {
-	my $len = 0; # length of buffer rec
 	print "$tname: fetching ", $pos+1, " of $size\n";
 	my $tmp = Net::Z3950::ZOOM::resultset_record($r[$i], $pos);
 	if (!defined $tmp) {
 	    print "$tname: can't get record ", $pos+1, "\n";
 	    next;
 	}
-	my $rec = Net::Z3950::ZOOM::record_get($tmp, "render", $len);
+	my $rec = Net::Z3950::ZOOM::record_get($tmp, "render");
 	if (!defined $rec) {
 	    print "$tname: can't render record ", $pos+1, "\n";
 	    next;

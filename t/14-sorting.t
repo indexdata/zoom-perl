@@ -1,4 +1,4 @@
-# $Id: 14-sorting.t,v 1.8 2006-11-02 17:48:26 mike Exp $
+# $Id: 14-sorting.t,v 1.9 2008-05-14 13:32:55 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 14-sorting.t'
@@ -33,8 +33,7 @@ my $previous = "";		# Sorts before all legitimate titles
 foreach my $i (1 .. $n) {
     my $rec = Net::Z3950::ZOOM::resultset_record($rs, $i-1);
     ok(defined $rec, "got record $i of $n");
-    my $len = 0;
-    my $raw = Net::Z3950::ZOOM::record_get($rec, "raw", $len);
+    my $raw = Net::Z3950::ZOOM::record_get($rec, "raw");
     my $marc = new_from_usmarc MARC::Record($raw);
     my $title = $marc->title();
     ok($title ge $previous, "title '$title' ge previous '$previous'");
@@ -52,8 +51,7 @@ $previous = "z";		# Sorts after all legitimate titles
 foreach my $i (1 .. $n) {
     my $rec = Net::Z3950::ZOOM::resultset_record($rs, $i-1);
     ok(defined $rec, "got record $i of $n");
-    my $len = 0;
-    my $raw = Net::Z3950::ZOOM::record_get($rec, "raw", $len);
+    my $raw = Net::Z3950::ZOOM::record_get($rec, "raw");
     my $marc = new_from_usmarc MARC::Record($raw);
     my $title = $marc->title();
     ok($title le $previous, "title '$title' le previous '$previous'");
