@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.36 2007-10-29 11:52:39 mike Exp $
+# $Id: ZOOM.pm,v 1.37 2008-05-14 13:29:57 mike Exp $
 
 package Net::Z3950::ZOOM; 
 
@@ -6,7 +6,7 @@ use 5.008;
 use strict;
 use warnings;
 
-our $VERSION = '1.21';
+our $VERSION = '1.22';
 
 require XSLoader;
 XSLoader::load('Net::Z3950::ZOOM', $VERSION);
@@ -133,6 +133,37 @@ sub event_str {
     }
     return "impossible event " . $code;
 }
+
+
+# Switch API variant depending on $type.  This works because the
+# get_string() and get_binary() functions have different returns
+# types, one of which is implemented as a NUL-terminated string and
+# the other as a pointer-and-length structure.
+#
+# Some Z39.50 servers, when asked for an OPAC-format record in the
+# case where no circulation information is available, will return a
+# USMARC record rather than an OPAC record containing only a
+# bibliographic part.  This non-OPAC records is not recognised by the
+# underlying record_get() code in ZOOM-C, which ends up returning a
+# null pointer.  To make life a little less painful when dealing with
+# such servers until ZOOM-C is fixed, this code recognises the
+# wrong-record-syntax case and returns the XML for the bibliographic
+# part anyway.
+#
+sub record_get {
+    my($rec, $type) = @_;
+
+    if (grep { $type eq $_ } qw(database syntax schema)) {
+	return record_get_string($rec, $type);
+    } else {
+	my $val = record_get_binary($rec, $type);
+	if ($type eq "opac" && !defined $val) {
+	    $val = record_get_binary($rec, "xml");
+	}
+	return $val;
+    }
+}
+
 
 =head1 SEE ALSO
 
