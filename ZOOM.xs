@@ -1,4 +1,4 @@
-/* $Id: ZOOM.xs,v 1.50 2007-11-19 12:57:16 mike Exp $ */
+/* $Id: ZOOM.xs,v 1.51 2008-05-14 13:31:39 mike Exp $ */
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -321,16 +321,25 @@ ZOOM_record_error(rec, cp, addinfo, diagset)
 		diagset
 
 # See "typemap" for discussion of the "const char *" return-type.
-#
-### but should use datachunk for in some (not all!) cases.
 const char *
-ZOOM_record_get(rec, type, len)
+ZOOM_record_get_string(rec, type)
 	ZOOM_record rec
 	const char* type
-	int &len
+	INIT:
+		int len;
+	CODE:
+		RETVAL = ZOOM_record_get(rec, type, &len);
 	OUTPUT:
 		RETVAL
-		len
+
+struct datachunk
+ZOOM_record_get_binary(rec, type)
+	ZOOM_record rec
+	const char* type
+	CODE:
+		RETVAL.data = (char*) ZOOM_record_get(rec, type, &RETVAL.len);
+	OUTPUT:
+		RETVAL
 
 void
 ZOOM_record_destroy(rec)
