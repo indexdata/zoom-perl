@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.49 2007-09-14 10:34:35 mike Exp $
+# $Id: ZOOM.pm,v 1.50 2008-05-14 13:33:31 mike Exp $
 
 use strict;
 use warnings;
@@ -898,14 +898,7 @@ sub get {
     my($type, $args) = @_;
 
     $type = "$type;$args" if defined $args;
-    my $len = 0;
-    my $string = Net::Z3950::ZOOM::record_get($this->_rec(), $type, $len);
-    # I don't think we need '$len' at all.  ### Probably the Perl-to-C
-    # glue code should use the value of `len' as well as the opaque
-    # data-pointer returned, to ensure that the SV contains all of the
-    # returned data and does not stop at the first NUL character in
-    # binary data.  Carefully check the ZOOM_record_get() documentation.
-    return $string;
+    return Net::Z3950::ZOOM::record_get($this->_rec(), $type);
 }
 
 sub clone {
