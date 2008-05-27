@@ -1,8 +1,8 @@
-$Id: Changes,v 1.76 2008-05-14 13:28:17 mike Exp $
+$Id: Changes,v 1.77 2008-05-27 13:00:23 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
-1.22  (IN PROGRESS)
+1.22  Tue May 27 14:00:12 BST 2008
 	- Fix Net::Z3950::ZOOM::record_get() to use a struct datachunk
 	  _when_ appropriate, e.g. for "render" not for "database" and
 	  "syntax".
