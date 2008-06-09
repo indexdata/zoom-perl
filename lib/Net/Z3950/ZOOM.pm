@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.37 2008-05-14 13:29:57 mike Exp $
+# $Id: ZOOM.pm,v 1.38 2008-06-09 13:49:32 mike Exp $
 
 package Net::Z3950::ZOOM; 
 
@@ -153,12 +153,20 @@ sub event_str {
 sub record_get {
     my($rec, $type) = @_;
 
+    my $simpletype = $type;
+    $simpletype =~ s/;.*//;
+    warn "record_get('$rec', '$simpletype' -> '$type')\n";
     if (grep { $type eq $_ } qw(database syntax schema)) {
 	return record_get_string($rec, $type);
     } else {
 	my $val = record_get_binary($rec, $type);
-	if ($type eq "opac" && !defined $val) {
-	    $val = record_get_binary($rec, "xml");
+	if ($simpletype eq "opac" && !defined $val) {
+	    my $newtype = $type;
+	    if ($newtype !~ s/.*?;/xml;/) {
+		$newtype = "xml";
+	    }
+	    warn "fallback('$rec', '$newtype')\n";
+	    $val = record_get_binary($rec, $newtype);
 	}
 	return $val;
     }
