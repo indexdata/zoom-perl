@@ -1,6 +1,12 @@
-$Id: Changes,v 1.77 2008-05-27 13:00:23 mike Exp $
+$Id: Changes,v 1.78 2008-06-09 13:50:13 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
+
+1.23  Mon Jun  9 14:50:09 BST 2008
+	- Net::Z3950::ZOOM::record_get() now patches around the
+	  problem of naughty servers that refuse to return anything
+	  for an OPAC record when there is no non-bibliographic part,
+	  by falling back on requesting an XML record in such cases.
 
 1.22  Tue May 27 14:00:12 BST 2008
 	- Fix Net::Z3950::ZOOM::record_get() to use a struct datachunk
