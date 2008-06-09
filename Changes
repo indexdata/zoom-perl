@@ -1,8 +1,8 @@
-$Id: Changes,v 1.78 2008-06-09 13:50:13 mike Exp $
+$Id: Changes,v 1.79 2008-06-09 13:53:22 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
-1.23  Mon Jun  9 14:50:09 BST 2008
+1.23  Mon Jun  9 14:53:15 BST 2008
 	- Net::Z3950::ZOOM::record_get() now patches around the
 	  problem of naughty servers that refuse to return anything
 	  for an OPAC record when there is no non-bibliographic part,
