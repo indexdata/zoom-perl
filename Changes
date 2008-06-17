@@ -1,6 +1,12 @@
-$Id: Changes,v 1.79 2008-06-09 13:53:22 mike Exp $
+$Id: Changes,v 1.80 2008-06-17 10:32:03 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
+
+1.24  Tue Jun 17 11:31:08 BST 2008
+	- When Net::Z3950::ZOOM::record_get() fetches an XML record
+	  because the requested OPAC record is empty,  it now wraps it
+	  in an OPAC wrapper, making the difference invisible to
+	  application code.
 
 1.23  Mon Jun  9 14:53:15 BST 2008
 	- Net::Z3950::ZOOM::record_get() now patches around the
