@@ -1,4 +1,4 @@
-# $Id: ZOOM.pm,v 1.40 2008-06-09 13:53:00 mike Exp $
+# $Id: ZOOM.pm,v 1.41 2008-06-17 10:30:52 mike Exp $
 
 package Net::Z3950::ZOOM; 
 
@@ -6,7 +6,7 @@ use 5.008;
 use strict;
 use warnings;
 
-our $VERSION = '1.23';
+our $VERSION = '1.24';
 
 require XSLoader;
 XSLoader::load('Net::Z3950::ZOOM', $VERSION);
@@ -165,6 +165,9 @@ sub record_get {
 		$newtype = "xml";
 	    }
 	    $val = record_get_binary($rec, $newtype);
+	    $val = ("<opacRecord>\n  <bibliographicRecord>\n" . $val .
+		    "  </bibliographicRecord>\n</opacRecord>");
+
 	}
 	return $val;
     }
