@@ -1,4 +1,4 @@
-# $Id: Makefile.PL,v 1.26 2007-11-29 16:43:52 mike Exp $
+# $Id: Makefile.PL,v 1.27 2008-09-16 12:44:28 mike Exp $
 
 # Use: perl Makefile.PL OPTIMIZE="-O0 -g -Wdeclaration-after-statement"
 #  or: perl Makefile.PL PREFIX=/home/mike/universe
@@ -42,7 +42,7 @@ WriteMakefile(
     # OBJECT            => '$(O_FILES)', # link all the C files too
 # Use this to test for illegal code that GCC stupidly permits by default:
 #   OPTIMIZE          => "-Wdeclaration-after-statement -g -O0",
-    EXE_FILES    => [ 'samples/zoom/zselect' ],
+    EXE_FILES    => [ 'samples/zoom/zselect', 'samples/zoom/zoomdump' ],
 );
 
 
