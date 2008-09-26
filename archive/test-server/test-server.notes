@@ -1,14 +1,15 @@
-$Id: test-server.notes,v 1.4 2005-12-14 10:27:47 mike Exp $
+$Id: test-server.notes,v 1.5 2008-09-26 13:38:35 mike Exp $
 
 To run the test-suite, this module needs an up-to-date Zebra server
-(as of Tue Dec 13 17:41:05 GMT 2005) running on test.indexdata.com
-port 2118, using isam:b and recognising a normal user "user" with
+(as of Tue Dec 13 17:41:05 GMT 2005) running on z3950.indexdata.com
+port 2100, using isam:b and recognising a normal user "user" with
 password "frog" and an administrator "admin" with password "fish".
 
-To provide this, I needed to build an up-to-date Zebra in a custom
-universe, so as not to interfere with the Debian packages used
-elsewhere on test, and to start the server with appropriate
-configuration.  Here's how I did it:
+Long ago, when I first started to provide this, I needed to build an
+up-to-date Zebra in a custom universe, so as not to interfere with the
+Debian packages used elsewhere on test, and to start the server with
+appropriate configuration.  Below are notes on how I did it, BUT NONE
+OF THIS SHOULD BE NECESSARY ANY MORE.
 
 	ssh test
 	mkdir -p universe/src
