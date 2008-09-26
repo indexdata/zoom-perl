@@ -1,4 +1,4 @@
-# $Id: MANIFEST,v 1.34 2007-08-16 15:40:30 mike Exp $
+# $Id: MANIFEST,v 1.35 2008-09-26 12:02:19 mike Exp $
 
 Changes
 Makefile.PL
@@ -45,7 +45,7 @@ samples/net-z3950/zoomtst1.pl
 samples/zoom/async.pl
 samples/zoom/trivial-async.pl
 samples/zoom/update.pl
-samples/zoom/zdump.pl
+samples/zoom/zoomdump
 samples/zoom/zhello.pl
 samples/zoom/zoomscan.pl
 samples/zoom/zoomtst1.pl
