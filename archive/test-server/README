@@ -1,0 +1,12 @@
+$Id: README,v 1.2 2008-09-26 12:23:26 mike Exp $
+
+These files are used to run the server that the ZOOM-Perl test-suite's
+"packages" scripts run against.
+
+README -- this file
+update-client -- notes on using update facilities in YAZ.
+test-server.notes -- notes on running the test server.
+test-server.init -- script to run the test server from /etc/init.d
+test-server.cfg -- Zebra configuration file for the test server.
+test-server.pw -- password file for test server's Zebra configuration.
+
