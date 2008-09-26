@@ -1,11 +1,11 @@
 #! /bin/sh
 
-# $Id: test-server.init,v 1.3 2005-12-14 10:22:08 mike Exp $
+# $Id: test-server.init,v 1.4 2008-09-26 13:45:09 mike Exp $
 #
 # This is a startup/shutdown script for the ZOOM-Perl test-server,
 # suitable for use in a SysV-style init directory such as /etc/init.d
 # (on Debian systems) and /etc/rc.d/init.d (on Red Hat systems).  This
-# is configured to run on test.indexdata.com -- if you want to run it
+# is configured to run on z3950.indexdata.com -- if you want to run it
 # somewhere else, you'll probably need to tweak it to suit your
 # system's paths.
 
@@ -21,9 +21,8 @@ case "$1" in
 	fi
 	echo "Starting ZOOM-Perl test server"
 	test -f $logfile && mv $logfile $logfile.old
-	( cd /home/mike/universe/src/ZOOM-Perl/archive
-	  ../../../bin/zebrasrv -c test-server.cfg @:2118 \
-		> $logfile 2>&1 < /dev/null &
+	( cd /home/mike/ZOOM-Perl/archive
+	  zebrasrv -c test-server.cfg @:2118 > $logfile 2>&1 < /dev/null &
 	  echo $! > $pidfile
 	)
 	;;
