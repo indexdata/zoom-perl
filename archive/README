@@ -1,0 +1,11 @@
+$Id: README,v 1.1 2008-09-26 12:22:30 mike Exp $
+
+This directory contains material that is not to be included in the
+ZOOM-Perl distribution, but which is useful to the project.
+
+README -- this file
+agreement.doc -- contract with LibLime
+releases -- Archived tarballs of releases made on CPAN
+test-server -- files necessary for running the server that the
+	ZOOM-Perl test-suite's "packages" scripts run against.
+
