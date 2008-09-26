@@ -1,4 +1,4 @@
-# $Id: 16-packages.t,v 1.12 2006-04-12 12:30:09 mike Exp $
+# $Id: 16-packages.t,v 1.13 2008-09-26 14:41:34 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 16-packages.t'
@@ -20,7 +20,7 @@ BEGIN { use_ok('Net::Z3950::ZOOM') };
 
 
 # We will create, and destroy, a new database with a random name
-my $host = "test.indexdata.com:2118";
+my $host = "z3950.indexdata.com:2100";
 my $dbname = join("", map { chr(ord("a") + int(rand(26))) } 1..10);
 
 # Connect anonymously, and expect this to fail
@@ -134,7 +134,8 @@ sub dropdb {
     my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
     $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
     ok($errcode == $expected_error,
-       "database drop '$dbname'"  . ($errcode ? " refused $errcode" : ""));
+       ("database drop '$dbname'" . ($errcode ? " refused $errcode" : "") .
+	($expected_error ? " expected $expected_error but succeeded" : "")));
 
     Net::Z3950::ZOOM::package_destroy($p);
     ok(1, "destroyed dropdb package");
