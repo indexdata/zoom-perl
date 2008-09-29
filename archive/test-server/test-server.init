@@ -1,6 +1,6 @@
 #! /bin/sh
 
-# $Id: test-server.init,v 1.5 2008-09-26 13:56:03 mike Exp $
+# $Id: test-server.init,v 1.6 2008-09-29 15:50:01 mike Exp $
 #
 # This is a startup/shutdown script for the ZOOM-Perl test-server,
 # suitable for use in a SysV-style init directory such as /etc/init.d
@@ -22,7 +22,7 @@ case "$1" in
 	echo "Starting ZOOM-Perl test server"
 	test -f $logfile && mv $logfile $logfile.old
 	( cd /home/mike/ZOOM-Perl/archive/test-server
-	  zebrasrv -c test-server.cfg @:2100 > $logfile 2>&1 < /dev/null &
+	  zebrasrv-2.0 -c test-server.cfg @:2100 > $logfile 2>&1 < /dev/null &
 	  echo $! > $pidfile
 	)
 	;;
