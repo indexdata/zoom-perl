@@ -1,12 +1,13 @@
-$Id: Changes,v 1.81 2008-09-16 12:39:45 mike Exp $
+$Id: Changes,v 1.82 2008-09-29 16:23:18 mike Exp $
 
 Revision history for Perl extension Net::Z3950::ZOOM.
 
 1.25  [IN PROGRESS]
 	- Fix test-suite not to run the "packages" tests against
 	  test.indexdata.com, which has gone away, but against
-	  z3950.indexdata.com, like the other tests ### NYI
-	- Add Rename zdump.pl to zoomdump, and add it to the set of
+	  z3950.indexdata.com, like the other tests.  A new server
+	  runs on a different port for these tests.
+	- Rename zdump.pl to zoomdump, and add it to the set of
 	  programs installed.
 
 1.24  Tue Jun 17 11:31:08 BST 2008
