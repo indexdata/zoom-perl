@@ -1,0 +1,116 @@
+diff -ur Net-Z3950-ZOOM-1.24/t/16-packages.t Net-Z3950-ZOOM-1.24-networkcheck/t/16-packages.t
+--- Net-Z3950-ZOOM-1.24/t/16-packages.t	2006-04-12 07:30:09.000000000 -0500
++++ Net-Z3950-ZOOM-1.24-networkcheck/t/16-packages.t	2008-09-12 09:29:21.000000000 -0500
+@@ -14,15 +14,23 @@
+ 
+ use strict;
+ use warnings;
+-use Test::More tests => 40;
++use Test::More;
+ 
+-BEGIN { use_ok('Net::Z3950::ZOOM') };
++use Net::Z3950::ZOOM;
+ 
++my $number_of_tests = 39;
+ 
+ # We will create, and destroy, a new database with a random name
+ my $host = "test.indexdata.com:2118";
+ my $dbname = join("", map { chr(ord("a") + int(rand(26))) } 1..10);
+ 
++# check to see if the server is unreachable. If so, we skip these tests
++if ( server_reachable( $host ) ) {
++    plan tests => $number_of_tests;
++} else {
++    plan skip_all => "host '$host' is unreachable. Network problem?";
++}
++
+ # Connect anonymously, and expect this to fail
+ my $conn = makeconn($host, undef, undef, 1011);
+ 
+@@ -191,3 +199,32 @@
+ 
+     return $text;
+ }
++
++=head2 server_reachable
++
++returns true if the server is reachable.
++
++pass in the hostname or hostname:port string.
++
++returns 1 if reachable
++returns undef if not.
++
++=cut
++
++sub server_reachable {
++    my($host) = @_;
++    
++    # connection_timeout errorcode
++    my $connection_timeout = 10007;
++
++    my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
++
++    my $conn = Net::Z3950::ZOOM::connection_create( Net::Z3950::ZOOM::options_create() );
++    $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
++    return if $errcode;
++    
++    Net::Z3950::ZOOM::connection_connect($conn, $host, 0);
++    $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
++    return if ( $errcode == $connection_timeout );
++    return 1;
++}
+diff -ur Net-Z3950-ZOOM-1.24/t/26-packages.t Net-Z3950-ZOOM-1.24-networkcheck/t/26-packages.t
+--- Net-Z3950-ZOOM-1.24/t/26-packages.t	2006-06-07 04:58:56.000000000 -0500
++++ Net-Z3950-ZOOM-1.24-networkcheck/t/26-packages.t	2008-09-12 09:11:45.000000000 -0500
+@@ -5,15 +5,23 @@
+ 
+ use strict;
+ use warnings;
+-use Test::More tests => 40;
++use Test::More;
+ 
+-BEGIN { use_ok('ZOOM') };
++use ZOOM;
+ 
++my $number_of_tests = 39;
+ 
+ # We will create, and destroy, a new database with a random name
+ my $host = "test.indexdata.com:2118";
+ my $dbname = join("", map { chr(ord("a") + int(rand(26))) } 1..10);
+ 
++# check to see if the server is unreachable. If so, we skip these tests
++if ( server_reachable( $host ) ) {
++    plan tests => $number_of_tests;
++} else {
++    plan skip_all => "host '$host' is unreachable. Network problem?";
++}
++
+ # Connect anonymously, and expect this to fail
+ my $conn = makeconn($host, undef, undef, 1011);
+ 
+@@ -192,6 +200,24 @@
+     }
+ }
+ 
++sub server_reachable {
++    my($host) = @_;
++
++    # connection_timeout errorcode
++    my $connection_timeout = 10007;
++
++    my $options = new ZOOM::Options();
++
++    my $conn;
++    eval { $conn = create ZOOM::Connection($options) };
++    return unless !$@ eq "unconnected connection object created";
++
++    eval { $conn->connect($host, 0) };
++    my($errcode, $errmsg, $addinfo) = maybe_error($@);
++    return if ( $errcode == $connection_timeout );
++    return 1;
++}
++
+ 
+ # To investigate the set of databases created, use Explain Classic:
+ #
