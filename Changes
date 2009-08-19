@@ -11,6 +11,8 @@ Revision history for Perl extension Net::Z3950::ZOOM.
 	  programs installed.
 	- Switch to git for version control.  Not that it should make
 	  any difference to the Perl distribution.
+	- Add semicolons to the commented-out sample configuration
+	  lines for Windows in Makefile.PL
 
 1.24  Tue Jun 17 11:31:08 BST 2008
 	- When Net::Z3950::ZOOM::record_get() fetches an XML record
