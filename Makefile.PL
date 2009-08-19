@@ -22,8 +22,8 @@ chomp($yazver);
 check_version($yazver, "2.1.50");
 
 # For Windows use
-# $yazinc = '-Ic:\yaz\include'
-# $yazlibs = 'c:\yaz\lib\yaz.lib'
+# $yazinc = '-Ic:\yaz\include';
+# $yazlibs = 'c:\yaz\lib\yaz.lib';
 
 # See lib/ExtUtils/MakeMaker.pm for details of how to influence
 # the contents of the Makefile that is written.
