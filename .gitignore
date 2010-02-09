@@ -1,6 +1,7 @@
 Makefile
 ZOOM.bs
 ZOOM.c
+ZOOM.o
 blib
 build-stamp
 install-stamp
