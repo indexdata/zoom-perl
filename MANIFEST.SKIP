@@ -1,7 +1,7 @@
 # $Id: MANIFEST.SKIP,v 1.5 2007-11-19 12:58:55 mike Exp $
 
 .cvsignore
-CVS
+.git
 debian
 lib/CVS
 t/CVS
