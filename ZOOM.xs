@@ -405,8 +405,8 @@ const char *
 ZOOM_scanset_term(scan, pos, occ, len)
 	ZOOM_scanset scan
 	size_t pos
-	int& occ
-	int& len
+	size_t& occ
+	size_t& len
 	OUTPUT:
 		RETVAL
 		occ
@@ -416,8 +416,8 @@ const char *
 ZOOM_scanset_display_term(scan, pos, occ, len)
 	ZOOM_scanset scan
 	size_t pos
-	int& occ
-	int& len
+	size_t& occ
+	size_t& len
 	OUTPUT:
 		RETVAL
 		occ
