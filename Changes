@@ -8,6 +8,7 @@ Revision history for Perl extension Net::Z3950::ZOOM.
 	  the hostname as addinfo; and the number of terms to request
 	  in a scan needs to be explicitly specified in an option.
 	- Add "debclean" target to generated Makefile.
+	- Remove extraneous and misleading old CVS IDs.
 
 1.25  Fri Feb 19 15:04:26 GMT 2010
 	- Fix test-suite not to run the "packages" tests against
