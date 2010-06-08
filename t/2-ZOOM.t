@@ -17,9 +17,11 @@ ok($msg eq "Empty term unsupported", "SRW diagnostic string lookup works");
 my $host = "no.such.host";
 my $conn;
 eval { $conn = new ZOOM::Connection($host, 0) };
+# For some reason, Red Hat signals this as a TIMEOUT rather than a CONNECT
 ok($@ && $@->isa("ZOOM::Exception") &&
-   $@->code() == ZOOM::Error::CONNECT && $@->addinfo() eq $host,
-   "connection to non-existent host '$host' fails: \$conn=$conn, \$\@=$@");
+   ($@->code() == ZOOM::Error::CONNECT ||
+    $@->code() == ZOOM::Error::TIMEOUT) && $@->addinfo() eq $host,
+   "connection to non-existent host '$host' fails: \$\@=$@");
 
 $host = "z3950.indexdata.com/gils";
 eval { $conn = new ZOOM::Connection($host, 0) };
