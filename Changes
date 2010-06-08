@@ -1,6 +1,13 @@
-$Id: Changes,v 1.82 2008-09-29 16:23:18 mike Exp $
-
 Revision history for Perl extension Net::Z3950::ZOOM.
+
+1.26  [IN PROGRESS]
+	- Tweak the test-suite so that it works correctly on Fedora
+	  Core 12 (2.6.31.5-127.fc12.x86_64).  For some reason,
+	  attempts to connect to a non-existent host can fail with
+	  ERROR_TIMEOUT and no addinfo, rather than ERROR_CONNECT and
+	  the hostname as addinfo; and the number of terms to request
+	  in a scan needs to be explicitly specified in an option.
+	- Add "debclean" target to generated Makefile.
 
 1.25  Fri Feb 19 15:04:26 GMT 2010
 	- Fix test-suite not to run the "packages" tests against
