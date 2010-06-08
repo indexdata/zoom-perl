@@ -16,6 +16,7 @@ my $conn = Net::Z3950::ZOOM::connection_new($host, 0);
 $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
 ok($errcode == 0, "connection to '$host'");
 
+Net::Z3950::ZOOM::connection_option_set($conn, number => 10);
 my($ss, $n) = scan($conn, 0, "w", 10);
 
 my @terms = ();

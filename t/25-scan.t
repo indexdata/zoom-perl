@@ -14,6 +14,7 @@ my $conn;
 eval { $conn = new ZOOM::Connection($host, 0) };
 ok(!$@, "connection to '$host'");
 
+$conn->option(number => 10);
 my($ss, $n) = scan($conn, 0, "w", 10);
 
 my @terms = ();
