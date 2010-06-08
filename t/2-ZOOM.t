@@ -19,8 +19,8 @@ my $conn;
 eval { $conn = new ZOOM::Connection($host, 0) };
 # For some reason, Red Hat signals this as a TIMEOUT rather than a CONNECT
 ok($@ && $@->isa("ZOOM::Exception") &&
-   ($@->code() == ZOOM::Error::CONNECT ||
-    $@->code() == ZOOM::Error::TIMEOUT) && $@->addinfo() eq $host,
+   (($@->code() == ZOOM::Error::CONNECT && $@->addinfo() eq $host) ||
+    ($@->code() == ZOOM::Error::TIMEOUT && $@->addinfo() eq "")),
    "connection to non-existent host '$host' fails: \$\@=$@");
 
 $host = "z3950.indexdata.com/gils";

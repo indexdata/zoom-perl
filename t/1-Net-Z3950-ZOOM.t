@@ -20,8 +20,8 @@ my $host = "no.such.host";
 my $conn = Net::Z3950::ZOOM::connection_new($host, 0);
 $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
 # For some reason, Red Hat signals this as a TIMEOUT rather than a CONNECT
-ok(($errcode == Net::Z3950::ZOOM::ERROR_CONNECT ||
-    $errcode == Net::Z3950::ZOOM::ERROR_TIMEOUT) && $addinfo eq $host,
+ok(($errcode == Net::Z3950::ZOOM::ERROR_CONNECT && $addinfo eq $host) ||
+   ($errcode == Net::Z3950::ZOOM::ERROR_TIMEOUT && $addinfo eq ""),
    "connection to non-existent host '$host' fails: errcode=$errcode, addinfo=$addinfo");
 
 $host = "z3950.indexdata.com/gils";
