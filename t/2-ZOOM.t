@@ -19,7 +19,7 @@ my $conn;
 eval { $conn = new ZOOM::Connection($host, 0) };
 ok($@ && $@->isa("ZOOM::Exception") &&
    $@->code() == ZOOM::Error::CONNECT && $@->addinfo() eq $host,
-   "connection to non-existent host '$host' fails");
+   "connection to non-existent host '$host' fails : \$\@=$@");
 
 $host = "z3950.indexdata.com/gils";
 eval { $conn = new ZOOM::Connection($host, 0) };
