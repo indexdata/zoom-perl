@@ -1,7 +1,5 @@
 #!/usr/bin/perl -w
 
-# $Id: zselect,v 1.3 2007-04-18 11:18:08 mike Exp $
-
 # Example command-line:
 #	./zselect -t q localhost:3313/IR-Explain---1 "net.port=3950" "concat(zeerex:serverInfo/zeerex:host, ':', zeerex:serverInfo/zeerex:port, '/', zeerex:serverInfo/zeerex:database)"
 

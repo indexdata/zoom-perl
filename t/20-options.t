@@ -1,5 +1,3 @@
-# $Id: 20-options.t,v 1.1 2005-10-19 13:53:47 mike Exp $
-
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 20-options.t'
 

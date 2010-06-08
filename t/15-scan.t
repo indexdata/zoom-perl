@@ -1,5 +1,3 @@
-# $Id: 15-scan.t,v 1.14 2007-08-16 17:19:35 mike Exp $
-
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 15-scan.t'
 

@@ -1,5 +1,3 @@
-/* $Id: ZOOM.xs,v 1.51 2008-05-14 13:31:39 mike Exp $ */
-
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"

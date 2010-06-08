@@ -1,5 +1,3 @@
-# $Id: 26-packages.t,v 1.9 2008-09-29 15:49:18 mike Exp $
-
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 26-packages.t'
 

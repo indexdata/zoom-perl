@@ -1,7 +1,5 @@
 #!/usr/bin/perl -w
 
-# $Id: zhello.pl,v 1.1 2006-12-06 11:16:26 mike Exp $
-
 use strict;
 use warnings;
 use ZOOM;

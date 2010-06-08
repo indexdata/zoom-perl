@@ -1,5 +1,3 @@
-# $Id: zoomtst3.pl,v 1.9 2008-05-14 13:34:00 mike Exp $
-#
 # See ../README for a description of this program.
 # perl -I../../blib/lib -I../../blib/arch zoomtst3.pl <t1> [...] <tN> <query>
 # for example:

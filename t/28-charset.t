@@ -1,5 +1,3 @@
-# $Id: 28-charset.t,v 1.2 2006-04-06 08:15:43 mike Exp $
-
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 28-charset.t'
 

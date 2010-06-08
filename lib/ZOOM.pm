@@ -1,5 +1,3 @@
-# $Id: ZOOM.pm,v 1.50 2008-05-14 13:33:31 mike Exp $
-
 use strict;
 use warnings;
 use IO::File;

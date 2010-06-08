@@ -1,5 +1,3 @@
-# $Id: 10-options.t,v 1.1 2005-10-18 17:01:55 mike Exp $
-
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 10-options.t'
 

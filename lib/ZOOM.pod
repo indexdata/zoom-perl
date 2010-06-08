@@ -1,5 +1,3 @@
-# $Id: ZOOM.pod,v 1.46 2007-12-10 21:51:40 mike Exp $
-
 use strict;
 use warnings;
 

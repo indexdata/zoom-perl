@@ -1,5 +1,3 @@
-# $Id: 22-query.t,v 1.11 2006-11-02 17:48:26 mike Exp $
-
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 22-query.t'
 

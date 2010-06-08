@@ -1,5 +1,3 @@
-# $Id: 19-events.t,v 1.8 2007-02-22 20:38:11 mike Exp $
-
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 19-events.t'
 

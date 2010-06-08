@@ -1,5 +1,3 @@
-# $Id: Makefile.PL,v 1.27 2008-09-16 12:44:28 mike Exp $
-
 # Use: perl Makefile.PL OPTIMIZE="-O0 -g -Wdeclaration-after-statement"
 #  or: perl Makefile.PL PREFIX=/home/mike/universe
 
