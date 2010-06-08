@@ -20,7 +20,7 @@ my $host = "no.such.host";
 my $conn = Net::Z3950::ZOOM::connection_new($host, 0);
 $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
 ok($errcode == Net::Z3950::ZOOM::ERROR_CONNECT && $addinfo eq $host,
-   "connection to non-existent host '$host' fails: \$conn=$conn, \$\@=$@");
+   "connection to non-existent host '$host' fails: \$conn=$conn, errcode=$errcode, addinfo=$addinfo");
 
 $host = "z3950.indexdata.com/gils";
 $conn = Net::Z3950::ZOOM::connection_new($host, 0);
