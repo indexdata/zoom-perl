@@ -1,6 +1,6 @@
 Revision history for Perl extension Net::Z3950::ZOOM.
 
-1.26  [IN PROGRESS]
+1.26  Tue Jun  8 16:43:29 BST 2010
 	- Tweak the test-suite so that it works correctly on Fedora
 	  Core 12 (2.6.31.5-127.fc12.x86_64).  For some reason,
 	  attempts to connect to a non-existent host can fail with
