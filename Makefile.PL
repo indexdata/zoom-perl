@@ -70,5 +70,8 @@ debian/output:
 	rm -rf debian/output
 	mkdir debian/output
 	mv ../libnet-z3950-zoom-perl* debian/output
+
+debclean:
+	rm -rf debian/libnet-z3950-zoom-perl debian/output
 ";
 }
