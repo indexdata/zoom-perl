@@ -127,6 +127,6 @@ sub scan {
 
     my $n = Net::Z3950::ZOOM::scanset_size($ss);
     ok(defined $n, "got size");
-    ok($n == $nexpected, "got $n terms (expected $nexpected)");
+    ok($n == $nexpected, "got $n terms '$startterm' (expected $nexpected)");
     return ($ss, $n);
 }

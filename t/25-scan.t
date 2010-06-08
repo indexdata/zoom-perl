@@ -115,6 +115,6 @@ sub scan {
 
     my $n = $ss->size();
     ok(defined $n, "got size");
-    ok($n == $nexpected, "got $n terms (expected $nexpected)");
+    ok($n == $nexpected, "got $n terms for '$startterm' (expected $nexpected)");
     return ($ss, $n);
 }
