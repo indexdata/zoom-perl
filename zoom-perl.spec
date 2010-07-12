@@ -41,7 +41,7 @@ make install
 rm $RPM_BUILD_ROOT/usr/lib64/perl5/5.8.8/x86_64-linux-thread-multi/perllocal.pod
 # Perl's make install seems to create both uncompressed AND compressed
 # versions of the manual pages, which confuses /usr/lib/rpm/brp-compress
-#find $RPM_BUILD_ROOT/usr/share/man -name '*.gz' -exec rm -f '{}' \;
+find $RPM_BUILD_ROOT/usr/share/man -name '*.gz' -exec rm -f '{}' \;
 
 # Install documentation
 DOCDIR=$RPM_BUILD_ROOT%{_datadir}/doc/perl-zoom
