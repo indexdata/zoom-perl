@@ -1,5 +1,5 @@
 Summary: Perl implementation of the ZOOM abstract API
-Name: perl-zoom
+Name: libnet-z3950-zoom-perl
 Version: 1.26
 Release: 1.indexdata
 License: Perl
