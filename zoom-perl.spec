@@ -38,7 +38,7 @@ make
 
 %install
 make install
-#rm $RPM_BUILD_ROOT/usr/lib64/perl5/5.8.8/x86_64-linux-thread-multi/perllocal.pod
+rm $RPM_BUILD_ROOT/usr/lib64/perl5/5.8.8/x86_64-linux-thread-multi/perllocal.pod
 # Perl's make install seems to create both uncompressed AND compressed
 # versions of the manual pages, which confuses /usr/lib/rpm/brp-compress
 #find $RPM_BUILD_ROOT/usr/share/man -name '*.gz' -exec rm -f '{}' \;
@@ -56,6 +56,9 @@ rm -fr ${RPM_BUILD_ROOT}
 %doc %{_datadir}/doc/perl-zoom
 %{_bindir}/zselect
 %{_bindir}/zoomdump
+/usr/lib64/perl5/site_perl/5.8.8
+%doc %{_datadir}/man/man3/Net::Z3950::ZOOM.3pm.gz
+%doc %{_datadir}/man/man3/ZOOM.3pm.gz
 
 # Why is this file in such a silly location?  This is fragile.
 #/usr/lib64/perl5/site_perl/5.8.8/x86_64-linux-thread-multi/auto/Masterkey/Admin/.packlist
