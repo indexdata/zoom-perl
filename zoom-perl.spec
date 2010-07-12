@@ -6,7 +6,7 @@ License: Perl
 Group: Applications/Internet
 Vendor: Index Data ApS <info@indexdata.com>
 Source: libnet-z3950-zoom-perl-%{version}.tar.gz
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
+BuildRoot: %{_tmppath}/libnet-z3950-zoom-perl-%{version}-root
 BuildRequires: perl
 Packager: Mike Taylor <mike@indexdata.com>
 URL: http://www.indexdata.com/masterkey/
