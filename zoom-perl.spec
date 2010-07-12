@@ -5,7 +5,7 @@ Release: 1.indexdata
 License: Perl
 Group: Applications/Internet
 Vendor: Index Data ApS <info@indexdata.com>
-Source: perl-zoom-%{version}.tar.gz
+Source: libnet-z3950-zoom-perl-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 BuildRequires: perl
 Packager: Mike Taylor <mike@indexdata.com>
@@ -46,7 +46,7 @@ make install
 # Install documentation
 DOCDIR=$RPM_BUILD_ROOT%{_datadir}/doc/perl-zoom
 mkdir -p $DOCDIR
-cp -p README $DOCDIR/
+cp -p README Changes $DOCDIR/
 
 %clean
 rm -fr ${RPM_BUILD_ROOT}
