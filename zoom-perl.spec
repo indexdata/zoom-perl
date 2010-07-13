@@ -13,6 +13,7 @@ URL: http://www.indexdata.com/masterkey/
 
 Requires: libyaz4-devel
 Requires: perl-marc-record
+Requires: perl-XML-LibXML
 
 %description
 This module provides a nice, Perlish implementation of the ZOOM
