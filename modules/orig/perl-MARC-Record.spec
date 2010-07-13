@@ -37,6 +37,8 @@ rm -rf $RPM_BUILD_ROOT
 %makeinstall
 #chmod 644  $RPM_BUILD_ROOT/%{perl_vendorlib}/MARC/Record.pm
 #chmod 644  $RPM_BUILD_ROOT/%{perl_vendorlib}/MARC/Field.pm
+rm $RPM_BUILD_ROOT/usr/lib64/perl5/5.8.8/x86_64-linux-thread-multi/perllocal.pod
+rm RPM_BUILD_ROOT/usr/lib64/perl5/vendor_perl/5.8.8/x86_64-linux-thread-multi/auto/MARC/Record/.packlist
 
 %files
 %defattr(-,root,root)
