@@ -41,3 +41,6 @@ error: unpacking of archive failed on file /usr/src/redhat/SOURCES/HTML-TagCloud
 error: perl-HTML-TagCloud-0.34-4.fc14.src.rpm cannot be installed
 
 So the modified version are in the "centos" directory.
+I unpacked each source RPM using
+$ rpm2cpio perl-MARC-Record-2.0.2-1mdv2010.1.src.rpm | cpio -i
+And modified the extracted .spec file as necessary.
