@@ -8,6 +8,6 @@ distribution.  At present, this includes:
 --
 
 The source RPMs were downloaded from:
-http://rpm.pbone.net/index.php3/stat/3/srodzaj/2/search/perl-XML-LibXML-XPathContext-0.07-1.src.rpm
-http://rpm.pbone.net/index.php3/stat/3/srodzaj/2/search/perl-MARC-Record-2.0.2-1mdv2010.1.src.rpm
-http://rpm.pbone.net/index.php3/stat/3/srodzaj/2/search/perl-HTML-TagCloud-0.34-4.fc14.src.rpm
+ftp://ftp.pbone.net/mirror/olea.org/paquetes-rpm/perl-XML-LibXML-XPathContext-0.07-1.src.rpm
+ftp://ftp.sunet.se/pub/Linux/distributions/Mandriva/devel/cooker/SRPMS/contrib/release/perl-MARC-Record-2.0.2-1mdv2010.1.src.rpm
+ftp://mirror.switch.ch/pool/2/mirror/fedora/linux/development/rawhide/source/SRPMS/perl-HTML-TagCloud-0.34-4.fc14.src.rpm
