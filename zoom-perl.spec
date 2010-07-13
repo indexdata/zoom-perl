@@ -12,7 +12,7 @@ Packager: Mike Taylor <mike@indexdata.com>
 URL: http://www.indexdata.com/masterkey/
 
 Requires: libyaz4-devel
-Requires: perl-marc-record
+Requires: perl-MARC-Record
 Requires: perl-XML-LibXML
 
 %description
