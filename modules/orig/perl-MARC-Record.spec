@@ -23,7 +23,7 @@ The file-handling stuff is in MARC::File::*.
 %setup -q -n %{module}-%{version}
 
 %build
-%{__perl} Makefile.PL INSTALLDIRS=vendor
+%{__perl} Makefile.PL INSTALLDIRS=vendor PREFIX=$RPM_BUILD_ROOT/usr
 %{__make}
 
 %check
