@@ -23,7 +23,7 @@ url:       http://www.cpan.org
 buildroot: %{_tmppath}/%{name}-%{version}-%(id -u -n)
 #buildarch: i686
 prefix:    %(echo %{_prefix})
-source:    http://search.cpan.org//CPAN/authors/id/P/PA/PAJAS/XML-LibXML-XPathContext-0.07.tar.gz
+source:    XML-LibXML-XPathContext-0.07.tar.gz
 
 %description
 This module augments XML::LibXML by providing Perl
