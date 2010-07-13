@@ -53,4 +53,6 @@ And modified the extracted .spec file as necessary.  The modified
 .spec files are part of this git archive; the tarballs are not.
 
 The final binary packages, build for centos5, are in the "centos5"
-directory.
+directory.  The build command is:
+	sudo rpmbuild -ba perl-MARC-Record.spec
+
