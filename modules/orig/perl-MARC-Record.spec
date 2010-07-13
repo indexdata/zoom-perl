@@ -1,7 +1,7 @@
 %define module	MARC-Record
 %define name	perl-%{module}
 %define version 2.0.2
-%define release %mkrel 1
+%define release 1.indexdata
 
 Name:		%{name}
 Version:	%{version}
@@ -9,7 +9,7 @@ Release:	%{release}
 Summary:	%{module} module for perl
 License:	GPLv2+ or Artistic
 Group:		Development/Perl
-Source:		ftp.perl.org/pub/CPAN/modules/by-module/MARC/%{module}-%{version}.tar.gz
+Source:		%{module}-%{version}.tar.gz
 Url:		http://search.cpan.org/dist/%{module}/
 
 BuildArch:	noarch
@@ -34,7 +34,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %install
 rm -rf $RPM_BUILD_ROOT
-%makeinstall_std
+%makeinstall
 #chmod 644  $RPM_BUILD_ROOT/%{perl_vendorlib}/MARC/Record.pm
 #chmod 644  $RPM_BUILD_ROOT/%{perl_vendorlib}/MARC/Field.pm
 
