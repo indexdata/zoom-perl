@@ -7,7 +7,37 @@ distribution.  At present, this includes:
 
 --
 
-The source RPMs were downloaded from:
+The base source RPMs were downloaded from:
 ftp://ftp.pbone.net/mirror/olea.org/paquetes-rpm/perl-XML-LibXML-XPathContext-0.07-1.src.rpm
 ftp://ftp.sunet.se/pub/Linux/distributions/Mandriva/devel/cooker/SRPMS/contrib/release/perl-MARC-Record-2.0.2-1mdv2010.1.src.rpm
 ftp://mirror.switch.ch/pool/2/mirror/fedora/linux/development/rawhide/source/SRPMS/perl-HTML-TagCloud-0.34-4.fc14.src.rpm
+and are saved in the "orig" subdirectory.
+
+But they all needed tweaking for CentOS as shown in the log below:
+
+$ sudo rpmbuild --rebuild perl-MARC-Record-2.0.2-1mdv2010.1.src.rpm 
+Installing perl-MARC-Record-2.0.2-1mdv2010.1.src.rpm
+warning: InstallSourcePackage: Header V3 DSA signature: NOKEY, key ID 26752624
+warning: user mandrake does not exist - using root
+warning: group mandrake does not exist - using root
+warning: user mandrake does not exist - using root
+warning: group mandrake does not exist - using root
+error: line 8: Tag takes single token only: Release:	%mkrel 1
+
+$ sudo rpmbuild --rebuild perl-XML-LibXML-XPathContext-0.07-1.src.rpm 
+Installing perl-XML-LibXML-XPathContext-0.07-1.src.rpm
+warning: InstallSourcePackage: Header V3 DSA signature: NOKEY, key ID 41d6b379
+warning: user olea does not exist - using root
+warning: group olea does not exist - using root
+warning: user olea does not exist - using root
+warning: group olea does not exist - using root
+error: No compatible architectures found for build
+
+$ sudo rpmbuild --rebuild perl-HTML-TagCloud-0.34-4.fc14.src.rpm 
+Installing perl-HTML-TagCloud-0.34-4.fc14.src.rpm
+warning: user mockbuild does not exist - using root
+warning: group mockbuild does not exist - using root
+error: unpacking of archive failed on file /usr/src/redhat/SOURCES/HTML-TagCloud-0.34.tar.gz;4c3c5fa4: cpio: MD5 sum mismatch
+error: perl-HTML-TagCloud-0.34-4.fc14.src.rpm cannot be installed
+
+So the modified version are in the "centos" directory.
