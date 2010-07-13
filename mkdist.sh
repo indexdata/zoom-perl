@@ -9,8 +9,7 @@ VERSION=`echo $FULLVERSION|sed 's/-.*//g'`
 
 git archive --format=tar --prefix=$NAME-$VERSION/ HEAD > $NAME-$VERSION.tar
 tar xf $NAME-$VERSION.tar
-rm -r $NAME-$VERSION/debian
-rm -r $NAME-$VERSION/archive
+rm -r $NAME-$VERSION/{debian,archive,modules}
 tar cfz $NAME-$VERSION.tar.gz $NAME-$VERSION
 rm $NAME-$VERSION.tar
 rm -r $NAME-$VERSION
