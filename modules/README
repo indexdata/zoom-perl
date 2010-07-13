@@ -3,13 +3,11 @@ but which are not included in the standard operating-system
 distribution.  At present, this includes:
 	XML::LibXML::XPathContext
 	Marc::Record
+	HTML::TagCloud (needed for MKAdmin, not ZOOM-Perl)
 
 --
 
-The source tarballs were downloaded from:
-http://search.cpan.org/CPAN/authors/id/P/PA/PAJAS/XML-LibXML-XPathContext-0.07.tar.gz
-http://search.cpan.org/CPAN/authors/id/G/GM/GMCHARLT/MARC-Record-2.0.2.tar.gz
-
-I made the corresponding .spec files by hand.
-
-$ sudo rpm -i *.rpm
+The source RPMs were downloaded from:
+http://rpm.pbone.net/index.php3/stat/3/srodzaj/2/search/perl-XML-LibXML-XPathContext-0.07-1.src.rpm
+http://rpm.pbone.net/index.php3/stat/3/srodzaj/2/search/perl-MARC-Record-2.0.2-1mdv2010.1.src.rpm
+http://rpm.pbone.net/index.php3/stat/3/srodzaj/2/search/perl-HTML-TagCloud-0.34-4.fc14.src.rpm
