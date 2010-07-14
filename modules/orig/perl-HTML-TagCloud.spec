@@ -5,7 +5,7 @@ Release:    4%{?dist}
 License:    GPL+ or Artistic 
 Group:      Development/Libraries
 Summary:    Generate An HTML Tag Cloud 
-Source:     http://search.cpan.org/CPAN/authors/id/L/LB/LBROCARD/HTML-TagCloud-%{version}.tar.gz 
+Source:     HTML-TagCloud-%{version}.tar.gz
 Url:        http://search.cpan.org/dist/HTML-TagCloud
 BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n) 
 Requires:   perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
