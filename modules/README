@@ -49,7 +49,9 @@ I couldn't find a source RPM for XML::LibXML::Simple, but I did find a
 get from CPAN, so I downloaded these from:
 http://dist.momonga-linux.org/pub/momonga/6/Everything/SRPMS/perl-XML-LibXML-Simple-0.13-3m.mo6.nosrc.rpm
 http://search.cpan.org/CPAN/authors/id/M/MA/MARKOV/XML-LibXML-Simple-0.13.tar.gz
-
+extracted the .spec file from the nosrc.rpm, edited it, and built the
+module using:
+	sudo rpmbuild -ba perl-XML-LibXML-Simple.spec
 --
 
 It's pretty pathetic that you need a different source RPM for each Red
