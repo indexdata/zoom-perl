@@ -11,9 +11,9 @@ Source0:        http://www.cpan.org/authors/id/M/MA/MARKOV/XML-LibXML-Simple-%{v
 NoSource:       0
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
-BuildRequires:  perl-ExtUtils-MakeMaker
+#BuildRequires:  perl-ExtUtils-MakeMaker
 BuildRequires:  perl-File-Slurp
-BuildRequires:  perl-Test-Simple
+#BuildRequires:  perl-Test-Simple
 BuildRequires:  perl-Test-Pod >= 1.00
 BuildRequires:  perl-XML-LibXML >= 1.58
 Requires:       perl(File::Slurp)
