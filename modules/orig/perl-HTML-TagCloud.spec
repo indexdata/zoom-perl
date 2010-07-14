@@ -12,7 +12,7 @@ Requires:   perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
 BuildArch:  noarch
 
 BuildRequires: perl(ExtUtils::MakeMaker)
-BuildRequires: perl(Module::Build::Compat)
+#BuildRequires: perl(Module::Build::Compat)
 BuildRequires: perl(Test::More)
 # optional tests
 BuildRequires: perl(Test::Pod)
