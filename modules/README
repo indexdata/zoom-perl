@@ -44,6 +44,14 @@ error: perl-HTML-TagCloud-0.34-4.fc14.src.rpm cannot be installed
 
 --
 
+I couldn't find a source RPM for XML::LibXML::Simple, but I did find a
+"nosrc" RPM containing a .spec file, and the actual source is easy to
+get from CPAN, so I downloaded these from:
+http://dist.momonga-linux.org/pub/momonga/6/Everything/SRPMS/perl-XML-LibXML-Simple-0.13-3m.mo6.nosrc.rpm
+http://search.cpan.org/CPAN/authors/id/M/MA/MARKOV/XML-LibXML-Simple-0.13.tar.gz
+
+--
+
 It's pretty pathetic that you need a different source RPM for each Red
 Hat variant, but that seems to be the way of things.  So for each
 modules, I unpacked it to get hold of the .spec file that needs
