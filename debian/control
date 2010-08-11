@@ -7,7 +7,7 @@ Standards-Version: 3.7.2
 
 Package: libnet-z3950-zoom-perl
 Architecture: any
-Depends: ${perl:Depends}, ${shlibs:Depends}, ${misc:Depends}, 
+Depends: ${perl:Depends}, ${shlibs:Depends}, ${misc:Depends}, libmarc-record-perl
 Description:  Perl extension implementing the ZOOM API for Information Retrieval
  This module provides a nice, Perlish implementation of the ZOOM
  Abstract API described and documented at http://zoom.z3950.org/api/
