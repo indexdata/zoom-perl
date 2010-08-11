@@ -1,6 +1,6 @@
 Summary: Perl implementation of the ZOOM abstract API
 Name: libnet-z3950-zoom-perl
-Version: 1.26
+Version: 1.27
 Release: 1.indexdata
 License: Perl
 Group: Applications/Internet
@@ -68,3 +68,6 @@ rm -fr ${RPM_BUILD_ROOT}
 %changelog
 * Mon Jul 12 2010 Mike Taylor <mike@indexdata.com>
 - First Red Hat packaged version.
+
+All versions follow the upstream changelog "Changes".
+
