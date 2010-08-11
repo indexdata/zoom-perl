@@ -21,5 +21,6 @@ squeeze$ ~/proj/git-tools/id-deb-build/id-mk-deb-src.sh
 squeeze$ sudo ~/proj/git-tools/id-deb-build/id-pbuild.sh
 	# DO NOT specify build platforms: IDMETA has this
 squeeze$ ~/proj/git-tools/id-deb-build/id-pbuild.sh --upload
+Update the APT registry as directed.
 
 
