@@ -1,5 +1,9 @@
 Revision history for Perl extension Net::Z3950::ZOOM.
 
+1.27  [IN PROGRESS]
+	- Support for Index Data build procedures, including making
+	  Debian/Ubuntu and Red Hat packages.
+
 1.26  Tue Jun  8 16:43:29 BST 2010
 	- Tweak the test-suite so that it works correctly on Fedora
 	  Core 12 (2.6.31.5-127.fc12.x86_64).  For some reason,
