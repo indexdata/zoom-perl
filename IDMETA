@@ -1,0 +1,4 @@
+NAME=libnet-z3950-zoom-perl
+VERSION=1.26
+DEBIAN_DIST="squeeze lenny"
+UBUNTU_DIST="lucid karmic"
