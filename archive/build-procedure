@@ -19,7 +19,7 @@ squeeze$ ~/proj/git-tools/id-deb-build/mkdist.sh
 squeeze$ sudo rm -rf deb-src
 squeeze$ ~/proj/git-tools/id-deb-build/id-mk-deb-src.sh
 squeeze$ sudo ~/proj/git-tools/id-deb-build/id-pbuild.sh
-	# NO NOT specify build platforms: IDMETA has this
+	# DO NOT specify build platforms: IDMETA has this
 squeeze$ ~/proj/git-tools/id-deb-build/id-pbuild.sh --upload
 
 
