@@ -1,0 +1,11 @@
+ssh squeeze
+cd proj/ZOOM-Perl
+git pull
+~/proj/git-tools/id-deb-build/mkdist.sh
+sudo rm -rf deb-src
+~/proj/git-tools/id-deb-build/id-mk-deb-src.sh
+time sudo ~/proj/git-tools/id-deb-build/id-pbuild.sh
+	# NO NOT specify build platforms: IDMETA has this
+	# Takes 12 minutes to build 1xDeb, 2xUbuntu
+	# squeeze build fails for ZOOM-Perl
+~/proj/git-tools/id-deb-build/id-pbuild.sh --upload
