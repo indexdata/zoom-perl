@@ -1,9 +1,9 @@
 UPSTREAM RELEASE
 
 Make the changes the software
+Edit any language-specific version designation
 Edit IDMETA to set new version number X.Y or X.Y.Z
 Edit upstream changelog (often "Changes" or "NEWS")
-Edit any language-specific version designation
 $ git tag vX.Y
 $ git push origin tag vX.Y
 
