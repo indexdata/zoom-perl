@@ -24,3 +24,17 @@ squeeze$ ~/proj/git-tools/id-deb-build/id-pbuild.sh --upload
 Update the APT registry as directed.
 
 
+RED HAT RELEASE
+
+Edit PROJECT.spec for new version
+local $ git push
+local $ ssh maki
+make$ ssh centos5
+centos5$ cd proj/ZOOM-Perl
+centos5$ git pull
+centos5$ ~/proj/git-tools/id-deb-build/mkdist.sh
+centos5$ sudo cp libnet-z3950-zoom-perl-1.27.tar.gz /usr/src/redhat/SOURCES/
+	# SURELY this can't really be necessary?
+centos5$ sudo rpmbuild -ba zoom-perl.spec
+
+
