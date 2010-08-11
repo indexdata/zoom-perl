@@ -4,20 +4,22 @@ Make the changes the software
 Edit any language-specific version designation
 Edit IDMETA to set new version number X.Y or X.Y.Z
 Edit upstream changelog (often "Changes" or "NEWS")
-$ git tag vX.Y
-$ git push origin tag vX.Y
+local$ git tag vX.Y
+local$ git push origin tag vX.Y
 
 
 DEBIAN RELEASE
 
-$ ssh squeeze
-$ cd proj/ZOOM-Perl
-$ git pull
-$ ~/proj/git-tools/id-deb-build/mkdist.sh
-$ sudo rm -rf deb-src
-$ ~/proj/git-tools/id-deb-build/id-mk-deb-src.sh
-$ time sudo ~/proj/git-tools/id-deb-build/id-pbuild.sh
+Edit debian/changelog for new version, comment "upstream"
+local$ git push
+local$ ssh squeeze
+squeeze$ cd proj/ZOOM-Perl
+squeeze$ git pull
+squeeze$ ~/proj/git-tools/id-deb-build/mkdist.sh
+squeeze$ sudo rm -rf deb-src
+squeeze$ ~/proj/git-tools/id-deb-build/id-mk-deb-src.sh
+squeeze$ sudo ~/proj/git-tools/id-deb-build/id-pbuild.sh
 	# NO NOT specify build platforms: IDMETA has this
-$ ~/proj/git-tools/id-deb-build/id-pbuild.sh --upload
+squeeze$ ~/proj/git-tools/id-deb-build/id-pbuild.sh --upload
 
 
