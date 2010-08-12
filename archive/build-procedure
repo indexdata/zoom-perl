@@ -2,6 +2,8 @@ UPSTREAM RELEASE
 
 Make the changes to the software
 Edit any language-specific version designation
+	e.g. mvn versions:set -DnewVersion=0.10-SNAPSHOT
+	vi lib/Some/Perl/Module.pm
 Edit IDMETA to set new version number X.Y or X.Y.Z
 Edit upstream changelog (often "Changes" or "NEWS")
 local$ git tag vX.Y
