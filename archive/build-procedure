@@ -1,6 +1,6 @@
 UPSTREAM RELEASE
 
-Make the changes the software
+Make the changes to the software
 Edit any language-specific version designation
 Edit IDMETA to set new version number X.Y or X.Y.Z
 Edit upstream changelog (often "Changes" or "NEWS")
