@@ -8,3 +8,23 @@ test-server.init -- script to run the test server from /etc/init.d
 test-server.cfg -- Zebra configuration file for the test server.
 test-server.pw -- password file for test server's Zebra configuration.
 
+--
+
+Over time, the Zebra database where the ZOOM-Perl package read-write
+tests take place becomes bloated and unclean: when I checked on 15
+October 2010, there were over 15000 "sort<NUMBER>-0.mf" files!  As a
+result, the test-suite becomes slower, to the point where
+26-packages.t takes two and half minutes to run.
+
+When this happens, reset the database to a clean state:
+
+$ ssh mike@z3950.indexdata.com
+$ cd ZOOM-Perl/archive/test-server
+$ sudo /etc/init.d/zoom-perl-server stop
+$ sudo zebraidx-2.0 -c test-server.cfg init
+	(This may take a few minutes!)
+$ sudo /etc/init.d/zoom-perl-server start
+$ exit
+
+Once this has been done, the time to run 26-packages.t should drop
+back down to four or five seconds!
