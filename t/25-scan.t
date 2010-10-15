@@ -28,7 +28,8 @@ foreach my $i (1 .. $n) {
     (my $disp, $occ) = $ss->display_term($i-1);
     ok(defined $disp,
        "display term $i of $n: '$disp' ($occ occurences)");
-    ok($disp eq $term, "display term $i ($disp) identical to term ($term)");
+    ok(lc($disp) eq lc($term),
+       "display term $i ($disp) equivalent to term ($term)");
 }
 
 $ss->destroy();
@@ -48,7 +49,8 @@ foreach my $i (1 .. $n) {
        "got title term $i of $n: '$term' ($occ occurences)");
     ok($term ge $previous, "title term '$term' ge previous '$previous'");
     $previous = $term;
-    ok((grep { $term eq $_ } @terms), "title term was in term list");
+    ok((grep { $term eq $_ } @terms),
+       "title term ($term) was in term list (@terms)");
 }
 
 $ss->destroy();
