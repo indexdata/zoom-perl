@@ -31,7 +31,8 @@ foreach my $i (1 .. $n) {
     my $disp = Net::Z3950::ZOOM::scanset_display_term($ss, $i-1, $occ, $len);
     ok(defined $disp && $len eq length($disp),
        "display term $i of $n: '$disp' ($occ occurences)");
-    ok($disp eq $term, "display term $i ($disp) identical to term ($term)");
+    ok(lc($disp) eq lc($term),
+       "display term $i ($disp) equivalent to term ($term)");
 }
 
 Net::Z3950::ZOOM::scanset_destroy($ss);
@@ -51,7 +52,8 @@ foreach my $i (1 .. $n) {
        "got title term $i of $n: '$term' ($occ occurences)");
     ok($term ge $previous, "title term '$term' ge previous '$previous'");
     $previous = $term;
-    ok((grep { $term eq $_ } @terms), "title term was in term list");
+    ok((grep { $term eq $_ } @terms),
+       "title term ($term) was in term list (@terms)");
 }
 
 Net::Z3950::ZOOM::scanset_destroy($ss);
