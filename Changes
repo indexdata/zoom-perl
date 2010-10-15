@@ -1,6 +1,6 @@
 Revision history for Perl extension Net::Z3950::ZOOM.
 
-1.28  [IN PROGRESS]
+1.28  Fri Oct 15 13:34:41 BST 2010
 	- In the test-suite, provide a more explicit report when the
 	  scan identity test (display term == term) fails.
 	- The displayTerm==term assertion is now case-insensitive, as
