@@ -31,7 +31,7 @@ foreach my $i (1 .. $n) {
     my $disp = Net::Z3950::ZOOM::scanset_display_term($ss, $i-1, $occ, $len);
     ok(defined $disp && $len eq length($disp),
        "display term $i of $n: '$disp' ($occ occurences)");
-    ok($disp eq $term, "display term $i identical to term");
+    ok($disp eq $term, "display term $i ($disp) identical to term ($term)");
 }
 
 Net::Z3950::ZOOM::scanset_destroy($ss);

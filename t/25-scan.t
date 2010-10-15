@@ -28,7 +28,7 @@ foreach my $i (1 .. $n) {
     (my $disp, $occ) = $ss->display_term($i-1);
     ok(defined $disp,
        "display term $i of $n: '$disp' ($occ occurences)");
-    ok($disp eq $term, "display term $i identical to term");
+    ok($disp eq $term, "display term $i ($disp) identical to term ($term)");
 }
 
 $ss->destroy();
