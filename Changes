@@ -1,5 +1,17 @@
 Revision history for Perl extension Net::Z3950::ZOOM.
 
+1.28  [IN PROGRESS]
+	- In the test-suite, provide a more explicit report when the
+	  scan identity test (display term == term) fails.
+	- The displayTerm==term assertion is now case-insensitive, as
+	  it ought always to have been: previously, the test-suite
+	  relied on a specific implementaton detail of the
+	  test-server, which has recently changed causing extraneous
+	  test-suite failures.
+	- Also in the test-suite for scan, remove the test that all
+	  title-terms are in the general-term list, an assumption that
+	  should never have been made.
+
 1.27  Wed Aug 11 17:13:07 BST 2010
 	- Support for Index Data build procedures, including making
 	  Debian/Ubuntu and Red Hat packages from clean tarballs.
