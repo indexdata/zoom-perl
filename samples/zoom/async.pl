@@ -1,5 +1,3 @@
-# $Id: async.pl,v 1.2 2006-11-02 17:48:26 mike Exp $
-#
 # See ../README for a description of this program.
 # perl -I../../blib/lib -I../../blib/arch async.pl <t1> [...] <tN> <query>
 # for example:

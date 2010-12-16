@@ -1,5 +1,3 @@
-# $Id: 2-ZOOM.t,v 1.13 2007-09-14 10:36:13 mike Exp $
-
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 2-ZOOM.t'
 
@@ -17,9 +15,11 @@ ok($msg eq "Empty term unsupported", "SRW diagnostic string lookup works");
 my $host = "no.such.host";
 my $conn;
 eval { $conn = new ZOOM::Connection($host, 0) };
+# For some reason, Red Hat signals this as a TIMEOUT rather than a CONNECT
 ok($@ && $@->isa("ZOOM::Exception") &&
-   $@->code() == ZOOM::Error::CONNECT && $@->addinfo() eq $host,
-   "connection to non-existent host '$host' fails");
+   (($@->code() == ZOOM::Error::CONNECT && $@->addinfo() eq $host) ||
+    ($@->code() == ZOOM::Error::TIMEOUT && $@->addinfo() eq "")),
+   "connection to non-existent host '$host' fails: \$\@=$@");
 
 $host = "z3950.indexdata.com/gils";
 eval { $conn = new ZOOM::Connection($host, 0) };

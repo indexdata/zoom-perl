@@ -1,3 +1,23 @@
+libnet-z3950-zoom-perl (1.27-1) unstable; urgency=low
+
+  * Upstream.  Changes to how packaging is done mean that this is the
+    first Debian release that was made from a clean tarball rather than
+    being built from a source checkout.
+
+ -- Mike Taylor <mike@miketaylor.org.uk>  Wed, 11 Aug 2010 17:17:31 +0100
+
+libnet-z3950-zoom-perl (1.26-1) unstable; urgency=low
+
+  * Upstream.
+
+ -- Mike Taylor <mike@miketaylor.org.uk>  Mon, 12 Jul 2010 17:08:37 +0100
+
+libnet-z3950-zoom-perl (1.25-1) unstable; urgency=low
+
+  * Lots of upstream goodness.
+
+ -- Mike Taylor <mike@miketaylor.org.uk>  Fri, 19 Feb 2010 15:07:15 +0000
+
 libnet-z3950-zoom-perl (1.20-1) unstable; urgency=low
 
   * Add $conn->exception() method.

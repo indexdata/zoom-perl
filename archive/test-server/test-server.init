@@ -1,7 +1,5 @@
 #! /bin/sh
 
-# $Id: test-server.init,v 1.6 2008-09-29 15:50:01 mike Exp $
-#
 # This is a startup/shutdown script for the ZOOM-Perl test-server,
 # suitable for use in a SysV-style init directory such as /etc/init.d
 # (on Debian systems) and /etc/rc.d/init.d (on Red Hat systems).  This

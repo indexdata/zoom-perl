@@ -1,7 +1,5 @@
 #!/usr/bin/perl -w
 
-# $Id: update.pl,v 1.1 2006-06-05 16:33:42 mike Exp $
-
 use strict;
 use warnings;
 use ZOOM;

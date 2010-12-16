@@ -1,8 +1,33 @@
-$Id: Changes,v 1.82 2008-09-29 16:23:18 mike Exp $
-
 Revision history for Perl extension Net::Z3950::ZOOM.
 
-1.25  [IN PROGRESS]
+1.28  Fri Oct 15 13:34:41 BST 2010
+	- In the test-suite, provide a more explicit report when the
+	  scan identity test (display term == term) fails.
+	- The displayTerm==term assertion is now case-insensitive, as
+	  it ought always to have been: previously, the test-suite
+	  relied on a specific implementaton detail of the
+	  test-server, which has recently changed causing extraneous
+	  test-suite failures.
+	- Also in the test-suite for scan, remove the test that all
+	  title-terms are in the general-term list, an assumption that
+	  should never have been made.
+
+1.27  Wed Aug 11 17:13:07 BST 2010
+	- Support for Index Data build procedures, including making
+	  Debian/Ubuntu and Red Hat packages from clean tarballs.
+	- No upstream changes -- packaging only.
+
+1.26  Tue Jun  8 16:43:29 BST 2010
+	- Tweak the test-suite so that it works correctly on Fedora
+	  Core 12 (2.6.31.5-127.fc12.x86_64).  For some reason,
+	  attempts to connect to a non-existent host can fail with
+	  ERROR_TIMEOUT and no addinfo, rather than ERROR_CONNECT and
+	  the hostname as addinfo; and the number of terms to request
+	  in a scan needs to be explicitly specified in an option.
+	- Add "debclean" target to generated Makefile.
+	- Remove extraneous and misleading old CVS IDs.
+
+1.25  Fri Feb 19 15:04:26 GMT 2010
 	- Fix test-suite not to run the "packages" tests against
 	  test.indexdata.com, which has gone away, but against
 	  z3950.indexdata.com, like the other tests.  A new server

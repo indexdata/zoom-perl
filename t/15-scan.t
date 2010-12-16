@@ -1,11 +1,9 @@
-# $Id: 15-scan.t,v 1.14 2007-08-16 17:19:35 mike Exp $
-
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 15-scan.t'
 
 use strict;
 use warnings;
-use Test::More tests => 87;
+use Test::More tests => 81;
 
 BEGIN { use_ok('Net::Z3950::ZOOM') };
 
@@ -16,6 +14,7 @@ my $conn = Net::Z3950::ZOOM::connection_new($host, 0);
 $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
 ok($errcode == 0, "connection to '$host'");
 
+Net::Z3950::ZOOM::connection_option_set($conn, number => 10);
 my($ss, $n) = scan($conn, 0, "w", 10);
 
 my @terms = ();
@@ -32,7 +31,8 @@ foreach my $i (1 .. $n) {
     my $disp = Net::Z3950::ZOOM::scanset_display_term($ss, $i-1, $occ, $len);
     ok(defined $disp && $len eq length($disp),
        "display term $i of $n: '$disp' ($occ occurences)");
-    ok($disp eq $term, "display term $i identical to term");
+    ok(lc($disp) eq lc($term),
+       "display term $i ($disp) equivalent to term ($term)");
 }
 
 Net::Z3950::ZOOM::scanset_destroy($ss);
@@ -52,7 +52,8 @@ foreach my $i (1 .. $n) {
        "got title term $i of $n: '$term' ($occ occurences)");
     ok($term ge $previous, "title term '$term' ge previous '$previous'");
     $previous = $term;
-    ok((grep { $term eq $_ } @terms), "title term was in term list");
+    # See comment in 25-scan.t
+    #ok((grep { $term eq $_ } @terms), "title term ($term) was in term list (@terms)");
 }
 
 Net::Z3950::ZOOM::scanset_destroy($ss);
@@ -127,6 +128,6 @@ sub scan {
 
     my $n = Net::Z3950::ZOOM::scanset_size($ss);
     ok(defined $n, "got size");
-    ok($n == $nexpected, "got $n terms (expected $nexpected)");
+    ok($n == $nexpected, "got $n terms '$startterm' (expected $nexpected)");
     return ($ss, $n);
 }

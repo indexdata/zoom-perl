@@ -54,13 +54,13 @@ install-stamp:
 	dh_clean -k
 
 	# Add commands to install the package into debian/$PACKAGE_NAME here
-	$(MAKE) test
+#	$(MAKE) test ### Do not make test for now -- it's too slow
 	$(MAKE) install DESTDIR=$(TMP) PREFIX=/usr
 
 	# As this is a architecture dependent package, we are not
 	# supposed to install stuff to /usr/share. MakeMaker creates
-	# the dirs, we delete them from the deb:
-	rmdir --ignore-fail-on-non-empty --parents $(TMP)/usr/share/perl5
+	# the dirs, we delete them from the deb if they exist
+	rmdir --ignore-fail-on-non-empty --parents $(TMP)/usr/share/perl5 || :
 
 	touch install-stamp
 
@@ -72,7 +72,7 @@ binary-indep: build install
 binary-arch: build install
 	dh_testdir
 	dh_testroot
-	dh_installdocs README archive/README samples/README
+	dh_installdocs README samples/README
 	dh_installexamples 
 #	dh_installmenu
 #	dh_installcron

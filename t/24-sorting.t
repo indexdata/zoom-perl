@@ -1,5 +1,3 @@
-# $Id: 24-sorting.t,v 1.7 2006-11-02 17:48:26 mike Exp $
-
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 24-sorting.t'
 

@@ -1,5 +1,3 @@
-# $Id: Z3950.pm,v 1.2 2007-02-26 15:58:33 mike Exp $
-
 use strict;
 use warnings;
 use Net::Z3950::ZOOM;

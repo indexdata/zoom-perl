@@ -1,5 +1,3 @@
-$Id: README,v 1.6 2006-04-07 13:06:13 mike Exp $
-
 This area contains sample programs that exercise all three of the APIs
 supported by this module.  The programs for each API are contained in
 separate subdirectories:

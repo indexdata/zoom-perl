@@ -1,11 +1,9 @@
-# $Id: 25-scan.t,v 1.11 2007-08-16 17:19:35 mike Exp $
-
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 25-scan.t'
 
 use strict;
 use warnings;
-use Test::More tests => 87;
+use Test::More tests => 81;
 
 BEGIN { use_ok('ZOOM') };
 
@@ -14,6 +12,7 @@ my $conn;
 eval { $conn = new ZOOM::Connection($host, 0) };
 ok(!$@, "connection to '$host'");
 
+$conn->option(number => 10);
 my($ss, $n) = scan($conn, 0, "w", 10);
 
 my @terms = ();
@@ -29,7 +28,8 @@ foreach my $i (1 .. $n) {
     (my $disp, $occ) = $ss->display_term($i-1);
     ok(defined $disp,
        "display term $i of $n: '$disp' ($occ occurences)");
-    ok($disp eq $term, "display term $i identical to term");
+    ok(lc($disp) eq lc($term),
+       "display term $i ($disp) equivalent to term ($term)");
 }
 
 $ss->destroy();
@@ -49,7 +49,14 @@ foreach my $i (1 .. $n) {
        "got title term $i of $n: '$term' ($occ occurences)");
     ok($term ge $previous, "title term '$term' ge previous '$previous'");
     $previous = $term;
-    ok((grep { $term eq $_ } @terms), "title term was in term list");
+
+    # Previously we used to assert that the each title-term was
+    # included in the initial term-list that we got by scanning across
+    # all indexes.  Of course this will not in general be true,
+    # because not all terms are title terms, which means that the $n
+    # title terms will include some that are past the end of $n
+    # general terms.  So remove that test.
+    #ok((grep { $term eq $_ } @terms), "title term ($term) was in term list (@terms)");
 }
 
 $ss->destroy();
@@ -115,6 +122,6 @@ sub scan {
 
     my $n = $ss->size();
     ok(defined $n, "got size");
-    ok($n == $nexpected, "got $n terms (expected $nexpected)");
+    ok($n == $nexpected, "got $n terms for '$startterm' (expected $nexpected)");
     return ($ss, $n);
 }

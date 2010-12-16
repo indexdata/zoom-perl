@@ -1,5 +1,3 @@
-# $Id: 1-Net-Z3950-ZOOM.t,v 1.17 2008-05-14 13:32:55 mike Exp $
-
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 1-Net-Z3950-ZOOM.t'
 
@@ -19,8 +17,10 @@ my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
 my $host = "no.such.host";
 my $conn = Net::Z3950::ZOOM::connection_new($host, 0);
 $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
-ok($errcode == Net::Z3950::ZOOM::ERROR_CONNECT && $addinfo eq $host,
-   "connection to non-existent host '$host' fails");
+# For some reason, Red Hat signals this as a TIMEOUT rather than a CONNECT
+ok(($errcode == Net::Z3950::ZOOM::ERROR_CONNECT && $addinfo eq $host) ||
+   ($errcode == Net::Z3950::ZOOM::ERROR_TIMEOUT && $addinfo eq ""),
+   "connection to non-existent host '$host' fails: errcode=$errcode, addinfo=$addinfo");
 
 $host = "z3950.indexdata.com/gils";
 $conn = Net::Z3950::ZOOM::connection_new($host, 0);

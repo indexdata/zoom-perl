@@ -1,5 +1,3 @@
-# $Id: 11-option-callback.t,v 1.2 2005-10-19 15:14:26 mike Exp $
-
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 11-option-callback.t'
 
