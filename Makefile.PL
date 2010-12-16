@@ -42,7 +42,8 @@ WriteMakefile(
     # OBJECT            => '$(O_FILES)', # link all the C files too
 # Use this to test for illegal code that GCC stupidly permits by default:
 #   OPTIMIZE          => "-Wdeclaration-after-statement -g -O0",
-    EXE_FILES    => [ 'samples/zoom/zselect', 'samples/zoom/zoomdump' ],
+    EXE_FILES    => [ 'samples/zoom/zselect', 'samples/zoom/zoomdump',
+		      'samples/zoom/zoom-delete-records' ],
 );
 
 
