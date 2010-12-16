@@ -43,8 +43,9 @@ samples/net-z3950/zoomtst1.pl
 samples/zoom/async.pl
 samples/zoom/trivial-async.pl
 samples/zoom/update.pl
-samples/zoom/zoomdump
 samples/zoom/zhello.pl
+samples/zoom/zoom-delete-records
+samples/zoom/zoomdump
 samples/zoom/zoomscan.pl
 samples/zoom/zoomtst1.pl
 samples/zoom/zoomtst3.pl
