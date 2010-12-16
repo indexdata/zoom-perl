@@ -13,6 +13,9 @@ Revision history for Perl extension Net::Z3950::ZOOM.
 	  any difference to the Perl distribution.
 	- Add semicolons to the commented-out sample configuration
 	  lines for Windows in Makefile.PL
+	- Include the useful example program
+	  samples/zoom-delete-records which is installed as part of
+	  "make install".
 
 1.24  Tue Jun 17 11:31:08 BST 2008
 	- When Net::Z3950::ZOOM::record_get() fetches an XML record
