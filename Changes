@@ -1,5 +1,10 @@
 Revision history for Perl extension Net::Z3950::ZOOM.
 
+[IN PROGRESS]
+	- Include the useful example program
+	  samples/zoom-delete-records which is installed as part of
+	  "make install".
+
 1.28  Fri Oct 15 13:34:41 BST 2010
 	- In the test-suite, provide a more explicit report when the
 	  scan identity test (display term == term) fails.
@@ -38,9 +43,6 @@ Revision history for Perl extension Net::Z3950::ZOOM.
 	  any difference to the Perl distribution.
 	- Add semicolons to the commented-out sample configuration
 	  lines for Windows in Makefile.PL
-	- Include the useful example program
-	  samples/zoom-delete-records which is installed as part of
-	  "make install".
 
 1.24  Tue Jun 17 11:31:08 BST 2008
 	- When Net::Z3950::ZOOM::record_get() fetches an XML record
