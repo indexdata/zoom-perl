@@ -28,14 +28,18 @@ foreach my $i (1 .. $n) {
     if ($val eq "true") {
 	my $id = ZOOM_record_id($rs, $i);
 	print " DELETE $id";
-	#my $p = $conn->package();
-	#$p->option(action => "deleteRecord");
-	#$p->option(recordIdOpaque => $id);
-	#$p->send("update");
-	#$p->destroy();
+	my $p = $conn->package();
+	$p->option(action => "deleteRecord");
+	$p->option(recordIdOpaque => $id);
+	$p->send("update");
+	$p->destroy();
     }
     print "\n";
 }
+
+my $p = $conn->package();
+$p->send("commit");
+$p->destroy();
 
 sub ZOOM_record_id {
     my($rs, $i) = @_;
