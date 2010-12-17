@@ -1,8 +1,7 @@
 #!/usr/bin/perl
 #
-# ./zoom-delete-records.pl user=admin,password=fruitbat,localhost:8018/IR-Explain---1 'concat(count(irspy:status/irspy:probe[@ok=1]), "/", count(irspy:status/irspy:probe))' 'count(irspy:status/irspy:probe[@ok=1]) = 0 and count(irspy:status/irspy:probe) >= 10'
+# zoom-delete-records user=admin,password=fruitbat,localhost:8018/IR-Explain---1 'concat(count(irspy:status/irspy:probe[@ok=1]), "/", count(irspy:status/irspy:probe))' 'count(irspy:status/irspy:probe[@ok=1]) = 0 and count(irspy:status/irspy:probe) >= 10'
 
-use lib '../lib';
 use XML::LibXML;
 use ZOOM;
 use strict;
@@ -26,6 +25,29 @@ foreach my $i (1 .. $n) {
     my $val = $xc->findvalue($displayXPath);
     print "Record $i/$n: $val";
     $val = $xc->findvalue($deleteXPath);
-    print " DELETE" if $val eq "true";
+    if ($val eq "true") {
+	my $id = ZOOM_record_id($rs, $i);
+	print " DELETE $id";
+	#my $p = $conn->package();
+	#$p->option(action => "deleteRecord");
+	#$p->option(recordIdOpaque => $id);
+	#$p->send("update");
+	#$p->destroy();
+    }
     print "\n";
+}
+
+sub ZOOM_record_id {
+    my($rs, $i) = @_;
+    # There is no standard way in Z39.50 to discover the opaque record
+    # ID of a given record, which is a bit silly as you need this in
+    # order to update or delete it using Extended Services.  So we
+    # adopt the convention that fetching the record with element-set
+    # "id" returns the ID.  This convention is implemented by the
+    # IRSpy database, among others.
+
+    my $old = $rs->option(elementSetName => "id");
+    my $id = $rs->record($i-1)->render();    
+    $rs->option(elementSetName => $old);
+    return $id;
 }
