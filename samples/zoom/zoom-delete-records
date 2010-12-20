@@ -29,8 +29,8 @@ foreach my $i (1 .. $n) {
 	my $id = ZOOM_record_id($rs, $i);
 	print " DELETE $id";
 	my $p = $conn->package();
-	$p->option(action => "deleteRecord");
-	$p->option(recordIdOpaque => $id);
+	$p->option(action => "recordDelete");
+	$p->option(record => $xml);
 	$p->send("update");
 	$p->destroy();
     }
