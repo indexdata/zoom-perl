@@ -1,3 +1,14 @@
+libnet-z3950-zoom-perl (1.27-2) unstable; urgency=low
+
+  * Debian control-file now specified build-dependency on libyaz4-dev
+    rather then the old (2009) libyaz3-dev, resulting in the runtime
+    dependency being on libyaz4 rather than libyaz4.  This resolves
+    dependency problems on Debian squeeze (which is now Stable), which
+    are due to the libyaz3 package depending on the now obsolete
+    libicu42.
+
+ -- Mike Taylor <mike@miketaylor.org.uk>  Tue, 08 Feb 2011 13:41:38 +0000
+
 libnet-z3950-zoom-perl (1.27-1) unstable; urgency=low
 
   * Upstream.  Changes to how packaging is done mean that this is the
