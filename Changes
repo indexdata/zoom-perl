@@ -4,6 +4,8 @@ Revision history for Perl extension Net::Z3950::ZOOM.
 	- Include the useful example program
 	  samples/zoom-delete-records which is installed as part of
 	  "make install".
+	- Fix documentation of connect() method so that it doesn't
+	  imply that it can accept options.
 
 1.28  Fri Oct 15 13:34:41 BST 2010
 	- In the test-suite, provide a more explicit report when the
