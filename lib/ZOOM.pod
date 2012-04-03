@@ -284,8 +284,8 @@ type C<ZOOM::Options> (see below), into which options may be set
 before or after the creation of the Connection.  Alternatively and
 equivalently, C<create()> may be passed a list of key-value option
 pairs directly.  The connection to the server may then be forged by
-the C<connect()> method, the arguments of which are the same as those
-of the C<new()> constructor.
+the C<connect()> method, which accepts hostname and port arguments
+like those of the C<new()> constructor.
 
 =head4 error_x() / errcode() / errmsg() / addinfo() / diagset()
 
