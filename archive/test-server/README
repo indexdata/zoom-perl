@@ -22,7 +22,9 @@ $ ssh mike@z3950.indexdata.com
 $ cd ZOOM-Perl/archive/test-server
 $ sudo /etc/init.d/zoom-perl-server stop
 $ sudo zebraidx-2.0 -c test-server.cfg init
+$ sudo zebraidx-2.0 -c test-server.cfg update ../../../idzebra/examples/gils/records
 	(This may take a few minutes!)
+$ # If desired, test with: zebrasrv-2.0 -c test-server.cfg
 $ sudo /etc/init.d/zoom-perl-server start
 $ exit
 
