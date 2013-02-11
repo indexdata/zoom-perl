@@ -388,6 +388,12 @@ int
 ZOOM_query_sortby(s, criteria)
 	ZOOM_query	s
 	const char *	criteria
+	
+int
+ZOOM_query_sortby2(s, strategy, criteria)
+	ZOOM_query	s
+	const char *	strategy
+	const char *	criteria
 
 ZOOM_scanset
 ZOOM_connection_scan(c, startterm)
