@@ -578,6 +578,14 @@ sub sortby {
 	or ZOOM::_oops(ZOOM::Error::SORTBY, $sortby);
 }
 
+sub sortby2 {
+    my $this = shift();
+    my($strategy, $sortby) = @_;
+
+    Net::Z3950::ZOOM::query_sortby2($this->_query(), $strategy, $sortby) == 0
+	or ZOOM::_oops(ZOOM::Error::SORTBY, $sortby);
+}
+
 sub destroy {
     my $this = shift();
 
