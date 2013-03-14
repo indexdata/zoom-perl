@@ -57,7 +57,7 @@ rm -fr ${RPM_BUILD_ROOT}
 %doc %{_datadir}/doc/perl-zoom
 %{_bindir}/zselect
 %{_bindir}/zoomdump
-/usr/lib64/perl5/site_perl/5.8.8
+%{perl_vendorlib}
 %doc %{_datadir}/man/man3/Net::Z3950::ZOOM.3pm.gz
 %doc %{_datadir}/man/man3/ZOOM.3pm.gz
 
