@@ -61,7 +61,7 @@ rm -fr ${RPM_BUILD_ROOT}
 %{_bindir}/zoomdump
 %doc %{_datadir}/man/man3/Net::Z3950::ZOOM.3pm.gz
 %doc %{_datadir}/man/man3/ZOOM.3pm.gz
-%{perl_vendorlib}
+%{perl_vendorarch}
 
 %changelog
 * Mon Jul 12 2010 Mike Taylor <mike@indexdata.com>
