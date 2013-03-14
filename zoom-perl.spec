@@ -36,9 +36,10 @@ code is running is reassuring.)
 
 %build
 %{__perl} Makefile.PL PREFIX=/usr INSTALLDIRS=vendor
-make
+%{__make}
 
 %install
+%{__rm} -rf %{buildroot}
 %{__make} pure_install DESTDIR=%{buildroot}
 
 # Perl's make install seems to create both uncompressed AND compressed
@@ -58,9 +59,9 @@ rm -fr ${RPM_BUILD_ROOT}
 %doc %{_datadir}/doc/perl-zoom
 %{_bindir}/zselect
 %{_bindir}/zoomdump
-%{perl_vendorlib}
 %doc %{_datadir}/man/man3/Net::Z3950::ZOOM.3pm.gz
 %doc %{_datadir}/man/man3/ZOOM.3pm.gz
+%{perl_vendorlib}
 
 %changelog
 * Mon Jul 12 2010 Mike Taylor <mike@indexdata.com>
