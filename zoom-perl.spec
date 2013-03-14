@@ -61,9 +61,6 @@ rm -fr ${RPM_BUILD_ROOT}
 %doc %{_datadir}/man/man3/Net::Z3950::ZOOM.3pm.gz
 %doc %{_datadir}/man/man3/ZOOM.3pm.gz
 
-# Why is this file in such a silly location?  This is fragile.
-#/usr/lib64/perl5/site_perl/5.8.8/x86_64-linux-thread-multi/auto/Masterkey/Admin/.packlist
-
 %changelog
 * Mon Jul 12 2010 Mike Taylor <mike@indexdata.com>
 - First Red Hat packaged version.
