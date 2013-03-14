@@ -9,7 +9,7 @@
 %define pkgname XML-LibXML-XPathContext
 %define filelist %{pkgname}-%{version}-filelist
 %define NVR %{pkgname}-%{version}-%{release}
-%define maketest 1
+%define maketest 0
 
 name:      perl-XML-LibXML-XPathContext
 summary:   XML-LibXML-XPathContext - Perl interface to libxml2's xmlXPathContext
