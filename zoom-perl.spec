@@ -35,11 +35,12 @@ code is running is reassuring.)
 %setup
 
 %build
-perl Makefile.PL PREFIX=$RPM_BUILD_ROOT/usr
+%{__perl} Makefile.PL PREFIX=/usr INSTALLDIRS=vendor
 make
 
 %install
-make pure_install
+%{__make} pure_install DESTDIR=%{buildroot}
+
 # Perl's make install seems to create both uncompressed AND compressed
 # versions of the manual pages, which confuses /usr/lib/rpm/brp-compress
 find $RPM_BUILD_ROOT/usr/share/man -name '*.gz' -exec rm -f '{}' \;
