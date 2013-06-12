@@ -8,10 +8,11 @@ Vendor: Index Data ApS <info@indexdata.com>
 Source: libnet-z3950-zoom-perl-%{version}.tar.gz
 BuildRoot: %{_tmppath}/libnet-z3950-zoom-perl-%{version}-root
 BuildRequires: perl
+BuildRequires: libyaz4-devel
 Packager: Mike Taylor <mike@indexdata.com>
 URL: http://www.indexdata.com/masterkey/
 
-Requires: libyaz4-devel
+Requires: libyaz4
 Requires: perl-MARC-Record
 Requires: perl-XML-LibXML
 Requires: perl-XML-LibXML-XPathContext
