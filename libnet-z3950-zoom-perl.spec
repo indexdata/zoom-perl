@@ -61,6 +61,7 @@ rm -fr ${RPM_BUILD_ROOT}
 %doc %{_datadir}/doc/perl-zoom
 %{_bindir}/zselect
 %{_bindir}/zoomdump
+%{_bindir}/zoom-delete-records
 %doc %{_datadir}/man/man3/Net::Z3950::ZOOM.3pm.gz
 %doc %{_datadir}/man/man3/ZOOM.3pm.gz
 %{perl_vendorarch}
