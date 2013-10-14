@@ -1,6 +1,9 @@
 Revision history for Perl extension Net::Z3950::ZOOM.
 
 [IN PROGRESS]
+	- Debian/RPM packages now built with YAZ 5.
+	- Do not depend on libyaz4-devel in Debian package
+	  (only required for building)  
 	- Include the useful example program
 	  samples/zoom-delete-records which is installed as part of
 	  "make install".
