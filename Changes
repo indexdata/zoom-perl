@@ -1,6 +1,6 @@
 Revision history for Perl extension Net::Z3950::ZOOM.
 
-[IN PROGRESS]
+1.29  Mon Oct 14 10:41:28 CEST 2013
 	- Debian/RPM packages now built with YAZ 5.
 	- Do not depend on libyaz4-devel in Debian package
 	  (only required for building)  
