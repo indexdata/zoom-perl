@@ -65,7 +65,7 @@ __EOT__
 sub MY::postamble { "debian: debian/output
 
 debian/output:
-	dpkg-buildpackage -rfakeroot -d
+	dpkg-buildpackage -us -uc -rfakeroot -d
 	rm -rf debian/output
 	mkdir debian/output
 	mv ../libnet-z3950-zoom-perl* debian/output
