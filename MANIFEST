@@ -31,7 +31,6 @@ lib/ZOOM.pm
 lib/ZOOM.pod
 lib/Net/Z3950.pm
 MANIFEST.SKIP
-META.yml                                 Module meta-data (added by MakeMaker)
 samples/README
 samples/ccl/default.bib
 samples/cql/pqf.properties
