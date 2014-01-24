@@ -2,7 +2,7 @@
 Summary: Perl implementation of the ZOOM abstract API
 Name: libnet-z3950-zoom-perl
 Version: %{idmetaversion}
-Release: 1.indexdata
+Release: 2.indexdata
 License: Perl
 Group: Applications/Internet
 Vendor: Index Data ApS <info@indexdata.com>
@@ -16,7 +16,7 @@ URL: http://www.indexdata.com/masterkey/
 Requires: libyaz5
 Requires: perl-MARC-Record
 Requires: perl-XML-LibXML
-Requires: perl-XML-LibXML-XPathContext
+%{?el5:Requires: perl-XML-LibXML-XPathContext}
 
 %description
 This module provides a nice, Perlish implementation of the ZOOM
@@ -67,6 +67,8 @@ rm -fr ${RPM_BUILD_ROOT}
 %{perl_vendorarch}
 
 %changelog
+* Fri Jan 24 2014 John Malconian <malc@indexdata.com>
+- Require perl-XML-LibXML-XPathContext on RHEL/CentOS v5 or lower only.
 * Mon Jul 12 2010 Mike Taylor <mike@indexdata.com>
 - First Red Hat packaged version.
 
