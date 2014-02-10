@@ -17,7 +17,7 @@ will also need to install "libyaz-dev" in order to build this module.
 }
 
 chomp($yazver);
-check_version($yazver, "2.1.50");
+check_version($yazver, "4.0.0");
 
 # For Windows use
 # $yazinc = '-Ic:\yaz\include';
