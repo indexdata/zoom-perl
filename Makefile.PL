@@ -5,9 +5,10 @@ use 5.008;
 use ExtUtils::MakeMaker;
 use strict;
 
-my $yazver = `yaz-config --version`;
-my $yazinc = `yaz-config --cflags threads`;
-my $yazlibs = `yaz-config --libs threads`;
+my $yazconf = "yaz-config";
+my $yazver = `$yazconf --version`;
+my $yazinc = `$yazconf --cflags threads`;
+my $yazlibs = `$yazconf --libs threads`;
 if (!$yazver || !$yazinc || !$yazlibs) {
     die qq[
 ERROR: Unable to call script: yaz-config
