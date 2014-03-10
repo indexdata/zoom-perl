@@ -27,7 +27,7 @@ ok(1, "huge array reference argument rejected");
 
 # See comments in 19-event.t
 assert_event_stream($conn, 
-		    ZOOM::Event::CONNECT,
+		    -(ZOOM::Event::CONNECT),
 		    ZOOM::Event::SEND_APDU,
 		    ZOOM::Event::SEND_DATA,
 		    ZOOM::Event::RECV_DATA,

@@ -45,7 +45,7 @@ ok(1, "huge array reference argument rejected");
 # on any of the connections we pass in.
 
 assert_event_stream($conn, 
-		    Net::Z3950::ZOOM::EVENT_CONNECT,
+		    -(Net::Z3950::ZOOM::EVENT_CONNECT),
 		    Net::Z3950::ZOOM::EVENT_SEND_APDU,
 		    Net::Z3950::ZOOM::EVENT_SEND_DATA,
 		    Net::Z3950::ZOOM::EVENT_RECV_DATA,
