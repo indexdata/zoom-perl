@@ -2,7 +2,7 @@
 Summary: Perl implementation of the ZOOM abstract API
 Name: libnet-z3950-zoom-perl
 Version: %{idmetaversion}
-Release: 2.indexdata
+Release: 1.indexdata
 License: Perl
 Group: Applications/Internet
 Vendor: Index Data ApS <info@indexdata.com>
