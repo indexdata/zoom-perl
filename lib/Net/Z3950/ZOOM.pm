@@ -11,10 +11,10 @@ XSLoader::load('Net::Z3950::ZOOM', $VERSION);
 
 my($vs, $ss) = ("x" x 100, "x" x 100); # allocate space for these strings
 my $version = Net::Z3950::ZOOM::yaz_version($vs, $ss);
-if ($version < 0x020132 && ! -f "/tmp/ignore-ZOOM-YAZ-version-mismatch") {
+if ($version < 0x040000 && ! -f "/tmp/ignore-ZOOM-YAZ-version-mismatch") {
     warn <<__EOT__;
 *** WARNING!
-ZOOM-Perl requires at least version 2.1.50 of YAZ, but is currently
+ZOOM-Perl requires at least version 4.0.0 of YAZ, but is currently
 running against only version $vs (sys-string '$ss').
 Some things may not work.
 __EOT__
