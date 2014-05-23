@@ -7,6 +7,17 @@
 # somewhere else, you'll probably need to tweak it to suit your
 # system's paths.
 
+### BEGIN INIT INFO
+# Provides:   zoom-perl-server
+# Required-Start: $local_fs $remote_fs $network $syslog $named
+# Required-Stop:  $local_fs $remote_fs
+# Default-Start:  2 3 4 5
+# Default-Stop:   0 1 6
+# Short-Description:    ZOOM-Perl test server
+# Description:    Controls the ZOOM-Perl test server
+### END INIT INFO
+
+
 PATH=/bin:/usr/bin
 logfile=/var/log/zoom-perl-test-server
 pidfile=/var/run/zoom-perl-test-server.pid
