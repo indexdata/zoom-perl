@@ -9,7 +9,8 @@ BEGIN { use_ok('Net::Z3950::ZOOM') };
 
 my($errcode, $errmsg, $addinfo) = (undef, "dummy", "dummy");
 
-my $host = "z3950.loc.gov:7090/voyager";
+#my $host = "lx2.loc.gov:210/LCDB"; # UTF-8
+my $host = "lx2.loc.gov:210/LCDB_MARC8";
 my $conn = Net::Z3950::ZOOM::connection_new($host, 0);
 $errcode = Net::Z3950::ZOOM::connection_error($conn, $errmsg, $addinfo);
 ok($errcode == 0, "connection to '$host'");
