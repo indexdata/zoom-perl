@@ -2,5 +2,5 @@ NAME=libnet-z3950-zoom-perl
 VERSION=1.30
 OMIT_FROM_DIST="archive modules"
 DEBIAN_DIST="jessie wheezy squeeze"
-UBUNTU_DIST="saucy raring quantal precise oneiric lucid"
+UBUNTU_DIST="vivid utopic trusty precise"
 CENTOS_DIST="centos5 centos6"
