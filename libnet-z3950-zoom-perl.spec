@@ -1,4 +1,4 @@
-%define idmetaversion %(. ./IDMETA; echo $VERSION|tr -d '\n')
+%define idmetaversion %(. ./IDMETA; echo $VERSION)
 Summary: Perl implementation of the ZOOM abstract API
 Name: libnet-z3950-zoom-perl
 Version: %{idmetaversion}
