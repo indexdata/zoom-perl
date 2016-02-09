@@ -139,7 +139,7 @@ ZOOM_connection_option_setl(c, key, val, len)
 # values when this function is called, otherwise an "uninitialised
 # value" warning is generated.  As far as I can see, there is no way
 # around this: no way to specify in a prototype that an argument is
-# allowed to be undefined, for example.  Since these function will
+# allowed to be undefined, for example.  Since this function will
 # never be called directly by well-behaved client code, but only by
 # our own wrapper classes, I think we can live with that.
 #
