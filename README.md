@@ -24,7 +24,7 @@ different APIs.
 
 ### INSTALLATION
 
-To install this module type the following:
+To install this module, type the following:
 
     perl Makefile.PL
     make
@@ -34,7 +34,7 @@ To install this module type the following:
 
 ### DEBIAN PACKAGES
 
-To build Debian packages issue:
+To build Debian packages, do:
 
     dh-make-perl --build
 
@@ -44,7 +44,7 @@ To build Debian packages issue:
 This module requires these other modules and libraries:
 
 - The YAZ toolkit for Z39.50 and SRW/U communication.  This is
-  available as a package on several platform -- for example, Debian
+  available as a package on several platforms -- for example, Debian
   GNU/Linux supports "apt-get install yaz".  For others, you will need
   to download and build the source-code, which is much more
   straightforward that you probably expect.  You can get it from

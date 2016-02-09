@@ -134,14 +134,14 @@ sub event_str {
 
 
 # Switch API variant depending on $type.  This works because the
-# get_string() and get_binary() functions have different returns
+# get_string() and get_binary() functions have different return
 # types, one of which is implemented as a NUL-terminated string and
 # the other as a pointer-and-length structure.
 #
 # Some Z39.50 servers, when asked for an OPAC-format record in the
 # case where no circulation information is available, will return a
 # USMARC record rather than an OPAC record containing only a
-# bibliographic part.  This non-OPAC records is not recognised by the
+# bibliographic part.  This non-OPAC record is not recognised by the
 # underlying record_get() code in ZOOM-C, which ends up returning a
 # null pointer.  To make life a little less painful when dealing with
 # such servers until ZOOM-C is fixed, this code recognises the
