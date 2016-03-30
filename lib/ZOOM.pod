@@ -340,7 +340,7 @@ carry with them a set of named options which affect their behaviour in
 certain ways.  See the ZOOM-C options documentation for details:
 
 Connection options are listed at
-http://indexdata.com/yaz/doc/zoom.tkl#zoom.connections
+http://www.indexdata.com/yaz/doc/zoom.html#zoom-connections
 
 These options are set and fetched using the C<option()> method, which
 may be called with either one or two arguments.  In the two-argument
@@ -525,7 +525,7 @@ the Connection class's C<option()> method.  There is no
 C<option_binary()> method for ResultSet objects.
 
 ResultSet options are listed at
-http://indexdata.com/yaz/doc/zoom.resultsets.tkl
+http://www.indexdata.com/yaz/doc/zoom.resultsets.html
 
 =head4 size()
 
@@ -737,7 +737,7 @@ joined with a semi-colon to make a single argument, so the third and
 fourth example invocations above are equivalent.  The second argument
 (or portion of the first argument following the semicolon) is used in
 the C<type> argument of C<ZOOM_record_get()>, as described in
-http://www.indexdata.com/yaz/doc/zoom.records.tkl
+http://www.indexdata.com/yaz/doc/zoom.records.html
 This is useful primarily for invoking the character-set transformation
 - in the examples above, from ISO Latin-1 to UTF-8 Unicode.
 
@@ -916,7 +916,7 @@ C<option_binary()> method for ScanSet objects.
 
 ScanSet options are also described, though not particularly
 informatively, at
-http://indexdata.com/yaz/doc/zoom.scan.tkl
+http://www.indexdata.com/yaz/doc/zoom.scan.html
 
 =head4 destroy()
 
@@ -948,7 +948,7 @@ thrown if the server cannot execute the requested operations; and
 finally, destroy the package.
 
 Package options are listed at
-http://indexdata.com/yaz/doc/zoom.ext.tkl
+http://www.indexdata.com/yaz/doc/zoom.ext.html
 
 The particular options that have meaning are determined by the
 top-level operation string specified as the argument to C<send()>.
@@ -988,7 +988,7 @@ the Connection class's C<option()> method.  There is no
 C<option_binary()> method for Package objects.
 
 Package options are listed at
-http://indexdata.com/yaz/doc/zoom.ext.tkl
+http://www.indexdata.com/yaz/doc/zoom.ext.html
 
 =head4 send()
 
@@ -1074,7 +1074,7 @@ same set of methods described below:
 Implements Prefix Query Format (PQF), also sometimes known as Prefix
 Query Notation (PQN).  This esoteric but rigorous and expressive
 format is described in the YAZ Manual at
-http://indexdata.com/yaz/doc/tools.tkl#PQF
+http://www.indexdata.com/yaz/doc/tools.html#PQF
 
 =item ZOOM::Query::CQL
 
@@ -1555,7 +1555,7 @@ http://perl.z3950.org/
 
 The documentation for the ZOOM-C module of the YAZ Toolkit, which this
 module is built on.  Specifically, its lists of options are useful.
-http://indexdata.com/yaz/doc/zoom.tkl
+http://www.indexdata.com/yaz/doc/zoom.html
 
 The BIB-1 diagnostic set of Z39.50,
 http://www.loc.gov/z3950/agency/defns/bib1diag.html
