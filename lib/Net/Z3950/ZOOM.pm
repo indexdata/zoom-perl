@@ -94,7 +94,7 @@ http://zoom.z3950.org/api/
 To enforce the don't-use-this-module prohibition, I am not even going
 to document it.  If you really, really, really want to use it, then it
 pretty much follows the API described in the ZOOM-C documentation at
-http://www.indexdata.dk/yaz/doc/zoom.tkl
+http://www.indexdata.com/yaz/doc/zoom.html
 
 The only additional (non-ZOOM-C) function provided by this module is
 C<event_str()>, which takes as its argument an event code such as
