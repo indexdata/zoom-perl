@@ -10,6 +10,9 @@ Source: libnet-z3950-zoom-perl-%{version}.tar.gz
 BuildRoot: %{_tmppath}/libnet-z3950-zoom-perl-%{version}-root
 BuildRequires: perl
 BuildRequires: libyaz5-devel
+%if 0%{?rhel} >= 6
+BuildRequires: perl-ExtUtils-MakeMaker
+%endif
 Packager: Mike Taylor <mike@indexdata.com>
 URL: http://www.indexdata.com/masterkey/
 
