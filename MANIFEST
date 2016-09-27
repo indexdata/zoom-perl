@@ -1,7 +1,7 @@
 Changes
 Makefile.PL
 MANIFEST
-README
+README.md
 typemap
 ZOOM.xs
 t/1-Net-Z3950-ZOOM.t
