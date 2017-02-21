@@ -1,5 +1,9 @@
 Revision history for Perl extension Net::Z3950::ZOOM.
 
+1.31  Tue Feb 21 08:46:39 UTC 2017
+	- Build for current supported Ubuntu distributions
+	- Fix some URLs in documentation
+
 1.30  Wed Mar 12 14:08:26 CET 2014
         - Update test 19-events.t and 29-events.t
           Events check: allow for multiple Connect events
