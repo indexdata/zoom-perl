@@ -8,7 +8,7 @@ different APIs.
 - If you are new to this distribution, then you should use the ZOOM
   API, and ignore the others.  It is the cleanest, most elegant and
   intuitive, and most closely follows the letter as well as the spirit
-  of the Abstract ZOOM API as specified at [http://zoom.z3950.org/api/]()
+  of the [Abstract ZOOM API](http://zoom.z3950.org/api/)
 
 - If you have used the old Net::Z3950 module and have to maintain an
   application that calls that API, then you will want to use the
@@ -48,7 +48,7 @@ This module requires these other modules and libraries:
   GNU/Linux supports "apt-get install yaz".  For others, you will need
   to download and build the source-code, which is much more
   straightforward that you probably expect.  You can get it from
-  [http://indexdata.com/yaz]()
+  [http://indexdata.com/yaz](http://indexdata.com/yaz) .
 
   NOTE THAT THE ZOOM-Perl MODULE ABSOLUTELY REQUIRES RELEASE 2.0.11 OR
   BETTER OF THE YAZ TOOLKIT.  You need version 2.1.17 or better if you
