@@ -55,6 +55,12 @@ This module requires these other modules and libraries:
   want to run clever asynchronous programs that use the END event,
   which did not exist prior to that release.
 
+
+### SOURCE CODE
+
+https://github.com/indexdata/zoom-perl
+
+
 ### COPYRIGHT AND LICENCE
 
 Copyright (C) 2005-2017 by Index Data.
