@@ -1,6 +1,6 @@
 NAME=libnet-z3950-zoom-perl
 VERSION=1.31
 OMIT_FROM_DIST="archive modules"
-DEBIAN_DIST="jessie wheezy"
-UBUNTU_DIST="yakkety xenial trusty precise"
+DEBIAN_DIST="stretch jessie wheezy"
+UBUNTU_DIST="bionic xenial trusty"
 CENTOS_DIST="centos6 centos7"
