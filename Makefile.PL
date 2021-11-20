@@ -5,10 +5,9 @@ use 5.008;
 use ExtUtils::MakeMaker;
 use strict;
 
-my $yazconf = "pkg-config";
-my $yazver = `$yazconf --modversion yaz` or die;
-my $yazinc = `$yazconf --cflags yaz` or die;
-my $yazlibs = `$yazconf --libs yaz` or die;
+my $yazver = `pkg-config --modversion yaz` or die;
+my $yazinc = `pkg-config --cflags yaz` or die;
+my $yazlibs = `pkg-config --libs yaz` or die;
 
 chomp($yazver);
 check_version($yazver, "4.0.0");
