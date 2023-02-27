@@ -12,6 +12,7 @@ jobs:
    - name: Install required and optional dependencies
      run: >
       sudo apt install perl gcc make yaz libyaz-dev pkg-config
+      libmarc-record-perl
    - name: Generate Makefile
      run: perl Makefile.PL
    - name: Run make test
