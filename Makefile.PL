@@ -5,9 +5,27 @@ use 5.008;
 use ExtUtils::MakeMaker;
 use strict;
 
-my $yazver = `pkg-config --modversion yaz` or die $!;
-my $yazinc = `pkg-config --cflags yaz` or die $!;
-my $yazlibs = `pkg-config --libs yaz` or die $!;
+my $yazver;
+my $yazinc;
+my $yazlibs;
+system("pkg-config --exists yaz");
+if ($? == 0) {
+    $yazver = `pkg-config --modversion yaz` or die $!;
+    $yazinc = `pkg-config --cflags yaz` or die $!;
+    $yazlibs = `pkg-config --libs yaz` or die $!;
+} else {
+    $yazver = `yaz-config --version`;
+    $yazinc = `yaz-config --cflags servers`;
+    $yazlibs = `yaz-config --libs server`;
+    if (!$yazver || (!$yazinc && !$yazlibs)) {
+       die qq[
+ERROR: Unable to call script: yaz-config
+If you are using a YAZ installation from the Debian package "yaz", you
+will also need to install "libyaz-dev" in order to build the
+SimpleServer module.
+];
+   }
+}
 
 chomp($yazver);
 check_version($yazver, "4.0.0");
