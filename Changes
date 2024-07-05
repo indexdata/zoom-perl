@@ -1,5 +1,9 @@
 Revision history for Perl extension Net::Z3950::ZOOM.
 
+1.32  IN PROGRESS
+	- Rework ZOOM-Perl configuration to use Debian's yaz-config
+	  when pkg-config is absent. Fixes ZOOM-29.
+
 1.31  Tue Feb 21 08:46:39 UTC 2017
 	- Build for current supported Ubuntu distributions
 	- Fix some URLs in documentation
