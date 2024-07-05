@@ -1,6 +1,7 @@
 *~
 *.swp
 MYMETA.yml
+MYMETA.json
 Makefile
 Makefile.old
 ZOOM.bs
