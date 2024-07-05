@@ -1,8 +1,10 @@
 .cvsignore
 .git
+.travis.yml
 debian
 lib/CVS
 t/CVS
+t/travis/travis-init.sh
 archive
 build-stamp
 install-stamp
