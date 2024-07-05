@@ -5,17 +5,9 @@ use 5.008;
 use ExtUtils::MakeMaker;
 use strict;
 
-my $yazconf = "yaz-config";
-my $yazver = `$yazconf --version`;
-my $yazinc = `$yazconf --cflags threads`;
-my $yazlibs = `$yazconf --libs threads`;
-if (!$yazver || !$yazinc || !$yazlibs) {
-    die qq[
-ERROR: Unable to call script: yaz-config
-If you are using a YAZ installation from the Debian package "yaz", you
-will also need to install "libyaz-dev" in order to build this module.
-];
-}
+my $yazver = `pkg-config --modversion yaz` or die;
+my $yazinc = `pkg-config --cflags yaz` or die;
+my $yazlibs = `pkg-config --libs yaz` or die;
 
 chomp($yazver);
 check_version($yazver, "4.0.0");
