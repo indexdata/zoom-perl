@@ -38,8 +38,10 @@ if (!defined $pid) {
 
 END {
     # This should run whenever we exit for any reason
-    print "Shutting down server PID $pid\n";
-    kill $pid;
+    if (defined $pid && $pid != 0) {
+	print "Shutting down server PID $pid\n";
+	kill $pid;
+    }
 }
 
 
