@@ -21,7 +21,30 @@ ok($@ && $@->isa("ZOOM::Exception") &&
     ($@->code() == ZOOM::Error::TIMEOUT && $@->addinfo() eq "")),
    "connection to non-existent host '$host' fails: \$\@=$@");
 
-$host = "z3950.indexdata.com/gils";
+my $pid = fork();
+if (!defined $pid) {
+    die "Cannot fork: $!";
+} elsif ($pid == 0) {
+    # Child process launches server
+    # Maybe use -D?
+    exec('yaz-ztest @:9996');
+    die "Cannot exec yaz-ztest: $!";
+} else {
+    # Allow time for the server to start
+    print "Waiting for server PID $pid to start\n";
+    sleep 1;
+}
+
+
+END {
+    # This should run whenever we exit for any reason
+    print "Shutting down server PID $pid\n";
+    kill $pid;
+}
+
+
+# $host = "z3950.indexdata.com/";
+$host = "localhost:9996";
 eval { $conn = new ZOOM::Connection($host, 0) };
 ok(!$@, "connection to '$host'");
 
@@ -71,14 +94,15 @@ eval { $rs = $conn->search_pqf($query) };
 ok(!$@, "search for '$query'");
 
 my $n = $rs->size($rs);
-ok($n == 1, "found 1 record as expected");
+ok($n == 23, "found 23 records as expected ($n)");
 
 my $rec = $rs->record(0);
-my $data = $rec->render();
-ok($data =~ /^245 +\$a ISOTOPIC DATES OF ROCKS AND MINERALS$/m,
-   "rendered record has expected title");
-my $raw = $rec->raw();
-ok($raw =~ /^00966n/, "raw record contains expected header");
+my $title = $rec->render();
+$title =~ s/.*245 10 \$a (.*?)\n.*/$1/s;
+ok($title eq 'How to program a computer', "rendered record has expected title ($title)");
+my $header = $rec->raw();
+$header =~ s/ .*//;
+ok($header eq '00366nam', "raw record contains expected header ($header)");
 
 $rs->destroy();
 ok(1, "destroyed result-set");
