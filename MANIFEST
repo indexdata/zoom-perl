@@ -15,6 +15,7 @@ t/26-packages.t
 t/27-logging.t
 t/28-charset.t
 t/29-events.t
+t/dummy-words
 lib/Net/Z3950/ZOOM.pm
 lib/ZOOM.pm
 lib/ZOOM.pod

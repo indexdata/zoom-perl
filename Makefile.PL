@@ -93,6 +93,6 @@ debclean:
 
 test:
 	echo '*** Test with yaz-ztest started'
-	\@yaz-ztest \@:9996 & PID=\$\$!; set -x; \$(MAKE) \$(TEST_TYPE); kill \$\$PID
+	\@yaz-ztest -w t \@:9996 & PID=\$\$!; set -x; \$(MAKE) \$(TEST_TYPE); kill \$\$PID
 __EOT__
 }
