@@ -56,6 +56,11 @@ WriteMakefile(
 );
 
 
+# Fix up the generated Makefile by deleting the standard `test` rule.
+system(q[perl -ni -e 'print unless /^\t/ and $discard or $discard = /^test ::/' Makefile]);
+
+
+
 sub check_version {
     my($got, $want) = @_;
 
@@ -73,7 +78,9 @@ __EOT__
     }
 }
 
-sub MY::postamble { "debian: debian/output
+
+sub MY::postamble { <<__EOT__
+debian: debian/output
 
 debian/output:
 	dpkg-buildpackage -us -uc -rfakeroot -d
@@ -83,5 +90,9 @@ debian/output:
 
 debclean:
 	rm -rf debian/libnet-z3950-zoom-perl debian/output
-";
+
+test:
+	echo '*** Test with yaz-ztest started'
+	\@yaz-ztest \@:9996 & PID=\$\$!; set -x; \$(MAKE) \$(TEST_TYPE); kill \$\$PID
+__EOT__
 }

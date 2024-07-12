@@ -1,5 +1,7 @@
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 2-ZOOM.t'
+#
+# Requires yaz-ztest to be running on @:9996
 
 use strict;
 use warnings;
@@ -21,31 +23,6 @@ ok($@ && $@->isa("ZOOM::Exception") &&
     ($@->code() == ZOOM::Error::TIMEOUT && $@->addinfo() eq "")),
    "connection to non-existent host '$host' fails: \$\@=$@");
 
-my $pid = fork();
-if (!defined $pid) {
-    die "Cannot fork: $!";
-} elsif ($pid == 0) {
-    # Child process launches server
-    # Maybe use -D?
-    exec('yaz-ztest @:9996');
-    die "Cannot exec yaz-ztest: $!";
-} else {
-    # Allow time for the server to start
-    print "Waiting for server PID $pid to start\n";
-    sleep 1;
-}
-
-
-END {
-    # This should run whenever we exit for any reason
-    if (defined $pid && $pid != 0) {
-	print "Shutting down server PID $pid\n";
-	kill $pid;
-    }
-}
-
-
-# $host = "z3950.indexdata.com/";
 $host = "localhost:9996";
 eval { $conn = new ZOOM::Connection($host, 0) };
 ok(!$@, "connection to '$host'");
