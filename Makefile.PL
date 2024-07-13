@@ -92,7 +92,7 @@ debclean:
 	rm -rf debian/libnet-z3950-zoom-perl debian/output
 
 test:
-	echo '*** Test with yaz-ztest started'
-	\@yaz-ztest -w t \@:9996 & PID=\$\$!; set -x; \$(MAKE) \$(TEST_TYPE); kill \$\$PID
+	\@echo '*** Starting yaz-ztest server for tests'
+	\@yaz-ztest -w t -v none \@:9996 & PID=\$\$!; set -x; \$(MAKE) \$(TEST_TYPE); kill \$\$PID
 __EOT__
 }
