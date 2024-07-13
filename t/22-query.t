@@ -65,6 +65,16 @@ $q->destroy();
 # There is no way to send a query that will result yaz-ztest returning an error: see
 # https://github.com/indexdata/yaz/blob/5263d57757507c73c7fdb32f388bc2cd98ba857f/ztest/ztest.c#L437
 # So we cannot test rejection of bad queries.
+#
+# eval { $q = new ZOOM::Query::CQL('title=utah and description=epicenter') };
+# ok(!$@, "created CQL query");
+# my $rs;
+# eval { $rs = $conn->search($q) };
+# ok($@ && $@->isa("ZOOM::Exception") &&
+#    $@->code() == 107 && $@->diagset() eq "Bib-1",
+#    "query rejected: error " . $@->code());
+# $q->destroy();
+
 
 # Client-side compiled CQL: this will fail due to lack of config-file
 ok(1, "[no need to create empty query]");
