@@ -4,7 +4,7 @@ use 5.008;
 use strict;
 use warnings;
 
-our $VERSION = '1.31';
+our $VERSION = '1.32';
 
 require XSLoader;
 XSLoader::load('Net::Z3950::ZOOM', $VERSION);
